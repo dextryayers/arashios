@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/subfinder
+  go_version: '1.23'
+  kind: go
+  source_commit: c97f25802892093060f0fc424bfc3f39e273693a
+  source_ref: v2.17.0
+category: recon
+distribution: vendor
+install:
+  path: /usr/local/bin/subfinder
+license: MIT
+license_file: LICENSE
+name: subfinder
+role: security
+source: https://github.com/projectdiscovery/subfinder.git
+source_commit: c97f25802892093060f0fc424bfc3f39e273693a
+source_ref: v2.17.0
+summary: Enumerasi subdomain pasif.
+test:
+  command:
+  - subfinder
+  kind: version
+tier: T1
+version: 2.17.0
+workflow: WF-01
+workflows:
+- WF-01

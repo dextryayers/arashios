@@ -1,0 +1,8 @@
+[package]
+name = "@NAME@"
+version = "0.1.0"
+edition = "2021"
+description = "Deskripsi proyek @NAME@"
+license = "GPL-3.0-or-later"
+
+[dependencies]

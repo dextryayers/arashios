@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: python3 -m pip install --no-deps --prefix=$PREFIX frida-tools
+  kind: python
+  source_commit: adf8be5f5b7f3840521783b628a191b62d7e6f66
+  source_ref: 17.24.3
+category: reverse
+distribution: vendor
+install:
+  path: /usr/local/bin/frida
+license: wxWindows-Licence
+license_file: LICENSE
+name: frida-tools
+role: security
+source: https://github.com/frida/frida.git
+source_commit: adf8be5f5b7f3840521783b628a191b62d7e6f66
+source_ref: 17.24.3
+summary: Instrumentasi dinamis.
+test:
+  command:
+  - frida
+  kind: version
+tier: T1
+version: 17.24.3
+workflow: WF-10
+workflows:
+- WF-10

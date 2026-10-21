@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: scalpel
+category: forensics
+distribution: iso
+install:
+  path: /usr/bin/scalpel
+license: debian
+name: scalpel
+package: scalpel
+role: security
+source: https://packages.debian.org/bookworm/scalpel
+summary: Carving file berbasis pola.
+test:
+  command:
+  - scalpel
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-09
+workflows:
+- WF-09

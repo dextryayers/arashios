@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: libimage-exiftool-perl
+category: forensics
+distribution: iso
+install:
+  path: /usr/bin/exiftool
+license: debian
+name: libimage-exiftool-perl
+package: libimage-exiftool-perl
+role: security
+source: https://packages.debian.org/bookworm/libimage-exiftool-perl
+summary: Baca dan ubah metadata media.
+test:
+  command:
+  - exiftool
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-09
+workflows:
+- WF-09

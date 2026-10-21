@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: file
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/file
+license: debian
+name: file
+package: file
+role: platform
+source: https://packages.debian.org/bookworm/file
+summary: Deteksi tipe berkas.
+test:
+  command:
+  - file
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-12
+workflows:
+- WF-12

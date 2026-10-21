@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: make -C 2.70.0 install PREFIX=$PREFIX
+  kind: source
+  source_commit: 17bb3fd2384bd814b421d73b8c8b8d08e06cfa26
+  source_ref: 2.70.0
+category: toolchain
+distribution: vendor
+install:
+  path: /usr/local/bin/fastfetch
+license: MIT
+license_file: LICENSE
+name: fastfetch
+role: platform
+source: https://github.com/fastfetch-cli/fastfetch.git
+source_commit: 17bb3fd2384bd814b421d73b8c8b8d08e06cfa26
+source_ref: 2.70.0
+summary: Pengambil informasi sistem.
+test:
+  command:
+  - fastfetch
+  kind: version
+tier: T1
+version: 2.70.0
+workflow: WF-12
+workflows:
+- WF-12

@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: dnsrecon
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/dnsrecon
+license: debian
+name: dnsrecon
+package: dnsrecon
+role: security
+source: https://packages.debian.org/bookworm/dnsrecon
+summary: Enumerasi DNS dan brute force subdomain.
+test:
+  command:
+  - dnsrecon
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01

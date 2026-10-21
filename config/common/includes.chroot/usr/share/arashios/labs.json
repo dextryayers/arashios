@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-22",
+  "policy": {
+    "digest_required": true,
+    "network_default": "bridge",
+    "privileged": false,
+    "note": "Image lab hanya berjalan sebagai container rootless. Tanpa digest, image ditolak."
+  },
+  "labs": [
+    {
+      "name": "dvwa",
+      "image": "docker.io/vulnerables/web-dvwa",
+      "tag": "latest",
+      "digest": "sha256:dae203fe11646a86937bf04db0079adef295f426da68a92b40e3b181f337daa7",
+      "purpose": "Lab aplikasi web rentan untuk latihan pengujian web.",
+      "ports": ["127.0.0.1:8080:80"],
+      "risk": "medium",
+      "status": "pinned"
+    },
+    {
+      "name": "juice-shop",
+      "image": "docker.io/juice-shop/juice-shop",
+      "tag": "latest",
+      "digest": "",
+      "purpose": "Lab e-commerce rentan untuk latihan.",
+      "ports": ["127.0.0.1:3000:3000"],
+      "risk": "medium",
+      "status": "digest-required",
+      "notes": "Digest belum terkunci. Jalankan arashios-lab lock untuk mengambil digest upstream."
+    },
+    {
+      "name": "debian-base",
+      "image": "docker.io/library/debian",
+      "tag": "12-slim",
+      "digest": "sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8",
+      "purpose": "Basis container untuk latihan dan pengujian tool.",
+      "ports": [],
+      "risk": "low",
+      "status": "pinned"
+    },
+    {
+      "name": "kali-rolling",
+      "image": "docker.io/kalilinux/kali-rolling",
+      "tag": "latest",
+      "digest": "sha256:4be87f78671419c13dcf4f207ead1cfc0de178ea281b3f69c0f49b69ba4e79b1",
+      "purpose": "Tool security untuk versi yang butuh glibc lebih baru.",
+      "ports": [],
+      "risk": "high",
+      "status": "pinned",
+      "notes": "Berisi tool offensive dan command and control. Gunakan hanya pada lab sendiri."
+    }
+  ]
+}

@@ -106,6 +106,15 @@ printf '\nTool test:\n'
 check_command qemu-system-x86_64 qemu-system-x86 test
 check_command qemu-img qemu-utils test
 
+printf '\nTool toolstack:\n'
+check_command python3 python3 build
+python3 -c "import yaml" >/dev/null 2>&1 && {
+    printf '  OK    %-22s %s\n' "python3-yaml" "$(python3 -c 'import yaml; print(yaml.__file__)')"
+} || {
+    printf '  MISS  %-22s paket: python3-yaml\n' "python3-yaml"
+    MISSING_BUILD+=("python3-yaml")
+}
+
 printf '\nTool opsional:\n'
 for tool in shellcheck minisign git rsync; do
     if have "$tool"; then
@@ -194,7 +203,8 @@ if [ "${#MISSING_BUILD[@]}" -gt 0 ] || [ "${#MISSING_TEST[@]}" -gt 0 ]; then
     printf '  sudo apt install -y live-build debootstrap xorriso squashfs-tools \\\n'
     printf '    isolinux syslinux-common syslinux-utils syslinux-efi \\\n'
     printf '    grub-pc-bin grub-efi-amd64-bin mtools dosfstools \\\n'
-    printf '    qemu-system-x86 qemu-utils ovmf apt-cacher-ng shellcheck\n'
+    printf '    qemu-system-x86 qemu-utils ovmf apt-cacher-ng shellcheck \\\n'
+    printf '    python3-yaml\n'
     printf '\n'
 fi
 

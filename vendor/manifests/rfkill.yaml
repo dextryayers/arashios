@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: rfkill
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/rfkill
+license: debian
+name: rfkill
+package: rfkill
+role: security
+source: https://packages.debian.org/bookworm/rfkill
+summary: Status dan kontrol radio nirkabel.
+test:
+  command:
+  - rfkill
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-06
+workflows:
+- WF-06

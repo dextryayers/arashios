@@ -1,0 +1,31 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: mitmproxy
+category: web
+distribution: iso
+install:
+  path: /usr/bin/mitmproxy
+license: debian
+name: mitmproxy
+package: mitmproxy
+role: security
+source: https://packages.debian.org/bookworm/mitmproxy
+summary: Interception HTTP untuk pengujian.
+test:
+  command:
+  - mitmproxy
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-02
+workflows:
+- WF-02
+- WF-07

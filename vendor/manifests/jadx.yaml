@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: java -jar jadx.jar
+  kind: java
+  source_commit: 4c0ac37699aa8c9803f1c73cfaacd9205acb044b
+  source_ref: v1.5.6
+category: reverse
+distribution: vendor
+install:
+  path: /usr/local/bin/jadx
+license: Apache-2.0
+license_file: LICENSE
+name: jadx
+role: security
+source: https://github.com/skylot/jadx.git
+source_commit: 4c0ac37699aa8c9803f1c73cfaacd9205acb044b
+source_ref: v1.5.6
+summary: Decompiler Java dan Android.
+test:
+  command:
+  - jadx
+  kind: version
+tier: T1
+version: 1.5.6
+workflow: WF-10
+workflows:
+- WF-10

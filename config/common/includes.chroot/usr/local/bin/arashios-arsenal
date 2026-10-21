@@ -1,0 +1,458 @@
+#!/usr/bin/env python3
+"""ArashiOS Arsenal: catalog, install, remove, and verify for the toolstack.
+
+The command never installs a third-party apt repository. Tier 0 tools come
+from Debian bookworm, tier 1 tools come from the ArashiOS vendor cache with
+checksum verification, tier 2 tools are user managed, and tier 3 tools run
+as containers.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+sys.path.insert(
+    0,
+    str(Path(__file__).resolve().parent.parent / "lib" / "arashios"),
+)
+
+from toolstack import (  # noqa: E402
+    catalog_candidates,
+    coverage,
+    find_tool,
+    forget_install,
+    installed_entries,
+    load_catalog,
+    record_install,
+    run_tool_test,
+    sha256_file,
+    state_dir,
+    tool_workflows,
+    tools_of,
+    verify_tool,
+    vendor_cache,
+    workflows_of,
+)
+
+BANNER = "ArashiOS Arsenal"
+
+
+def emit(payload: dict, as_json: bool, text: str) -> None:
+    if as_json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(text)
+
+
+def command_list(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    tools = tools_of(catalog)
+    if args.tier:
+        tools = [tool for tool in tools if tool["tier"] == args.tier.upper()]
+    if args.workflow:
+        wanted = args.workflow.upper()
+        tools = [tool for tool in tools if wanted in tool_workflows(tool)]
+    if args.role:
+        tools = [tool for tool in tools if tool.get("role") == args.role]
+    payload = {
+        "count": len(tools),
+        "tools": [
+            {
+                "name": tool["name"],
+                "tier": tool["tier"],
+                "workflow": tool.get("workflow", ""),
+                "category": tool.get("category", ""),
+                "license": tool.get("license", ""),
+                "summary": tool.get("summary", ""),
+            }
+            for tool in tools
+        ],
+    }
+    if args.json:
+        emit(payload, True, "")
+        return 0
+    if not tools:
+        print("Tidak ada tool yang cocok.")
+        return 0
+    width = max(len(tool["name"]) for tool in tools)
+    for tool in tools:
+        print(
+            f"{tool['name']:<{width}}  {tool['tier']:<3} "
+            f"{tool.get('workflow', ''):<6} {tool.get('summary', '')}"
+        )
+    print(f"\n{len(tools)} tool.")
+    return 0
+
+
+def command_info(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    tool = find_tool(catalog, args.name)
+    if tool is None:
+        print(f"ERROR: tool tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    lines = [
+        f"Tool      : {tool['name']}",
+        f"Tier      : {tool['tier']}",
+        f"Alur kerja: {', '.join(tool_workflows(tool))}",
+        f"Kategori  : {tool.get('category', '')}",
+        f"Lisensi   : {tool.get('license', '')}",
+        f"Distribusi: {tool.get('distribution', '')}",
+        f"Ringkasan  : {tool.get('summary', '')}",
+    ]
+    if tool.get("package"):
+        lines.append(f"Paket     : {tool['package']}")
+    if tool.get("version"):
+        lines.append(f"Versi     : {tool['version']}")
+    if tool.get("source"):
+        lines.append(f"Sumber    : {tool['source']}")
+    if tool.get("source_ref"):
+        lines.append(f"Ref       : {tool['source_ref']}")
+    if tool.get("source_commit"):
+        lines.append(f"Commit    : {tool['source_commit']}")
+    if tool.get("install_path"):
+        lines.append(f"Install   : {tool['install_path']}")
+    if tool.get("notes"):
+        lines.append(f"Catatan   : {tool['notes']}")
+    emit(tool, args.json, "\n".join(lines))
+    return 0
+
+
+def command_workflows(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    data = coverage(catalog)
+    names = workflows_of(catalog)
+    if args.json:
+        emit({"workflows": data}, True, "")
+        return 0
+    for workflow in sorted(data):
+        entry = data[workflow]
+        print(f"{workflow} {names.get(workflow, '')}")
+        print(f"  T0: {', '.join(entry['T0']) or '-'}")
+        print(f"  T1: {', '.join(entry['T1']) or '-'}")
+    return 0
+
+
+def command_verify(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    tools = tools_of(catalog)
+    if args.name:
+        tool = find_tool(catalog, args.name)
+        if tool is None:
+            print(f"ERROR: tool tidak dikenal: {args.name}", file=sys.stderr)
+            return 2
+        tools = [tool]
+    if args.tier:
+        tools = [tool for tool in tools if tool["tier"] == args.tier.upper()]
+    results = [verify_tool(tool) for tool in tools]
+    failures = [item for item in results if item["status"] in {"missing", "corrupt"}]
+    pending = [item for item in results if item["status"] == "pending"]
+    payload = {
+        "checked": len(results),
+        "failures": len(failures),
+        "pending": len(pending),
+        "results": results,
+    }
+    if args.json:
+        emit(payload, True, "")
+    else:
+        for item in results:
+            print(f"{item['status']:<14} {item['tier']:<3} {item['name']:<22} {item['detail']}")
+        print(f"\n{len(results)} diperiksa, {len(failures)} gagal, {len(pending)} belum dibangun.")
+    if failures and args.strict:
+        return 1
+    return 0
+
+
+def apt_install(tool: dict) -> int:
+    package = tool.get("package", "")
+    if os.geteuid() != 0:
+        print(
+            f"ERROR: tool T0 {tool['name']} dipasang lewat apt dan butuh hak root.\n"
+            f"Jalankan: sudo apt-get install -y {package}",
+            file=sys.stderr,
+        )
+        return 2
+    result = subprocess.run(
+        ["apt-get", "install", "-y", package],
+        check=False,
+    )
+    if result.returncode == 0:
+        record_install(tool["name"], "apt", package)
+    return result.returncode
+
+
+def install_t1(tool: dict, source: str | None, dry_run: bool) -> int:
+    cache = vendor_cache()
+    expected = str(tool.get("artifact_sha256", "") or "")
+    artifact = Path(source) if source else None
+    if artifact is None:
+        candidates = sorted(cache.glob(f"{tool['name']}*"))
+        if candidates:
+            artifact = candidates[0]
+    if artifact is None or not artifact.is_file():
+        print(
+            f"ERROR: artefak vendor untuk {tool['name']} tidak ditemukan.\n"
+            f"Cache yang diharapkan: {cache}\n"
+            f"Bangun artefak lebih dulu dengan scripts/build-vendor-tools.sh, "
+            f"lalu jalankan ulang dengan --from <berkas>.",
+            file=sys.stderr,
+        )
+        return 2
+    digest = sha256_file(artifact)
+    if expected and digest != expected:
+        print(
+            f"ERROR: checksum {tool['name']} tidak cocok.\n"
+            f"Harapan: {expected}\n"
+            f"Aktual : {digest}",
+            file=sys.stderr,
+        )
+        return 1
+    target_dir = Path(os.environ.get("ARASHIOS_TOOL_PREFIX", Path.home() / ".local" / "bin"))
+    target = target_dir / tool["name"]
+    if dry_run:
+        print(f"DRY RUN: {artifact} -> {target}")
+        return 0
+    target_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(artifact, target)
+    target.chmod(0o755)
+    record_install(
+        tool["name"],
+        "vendor",
+        str(target),
+        {"sha256": digest, "source": str(artifact)},
+    )
+    print(f"{tool['name']} dipasang ke {target}")
+    return 0
+
+
+def command_install(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    tool = find_tool(catalog, args.name)
+    if tool is None:
+        print(f"ERROR: tool tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    tier = tool["tier"]
+    if args.dry_run:
+        if tier == "T0":
+            print(f"DRY RUN: apt-get install -y {tool.get('package', '')}")
+        elif tier == "T1":
+            print(f"DRY RUN: pasang {tool['name']} dari cache {vendor_cache()}")
+        elif tier == "T2":
+            print(f"DRY RUN: unduh {tool['name']} dari upstream, tidak ada paket Debian")
+        else:
+            print(f"DRY RUN: jalankan {tool['name']} sebagai container")
+        return 0
+    if tier == "T0":
+        return apt_install(tool)
+    if tier == "T1":
+        return install_t1(tool, args.from_file, False)
+    if tier == "T2":
+        print(
+            f"Tool {tool['name']} bersifat T2 dan tidak didistribusikan ArashiOS.\n"
+            f"Unduh dari upstream resmi, verifikasi checksum, lalu jalankan manual.",
+            file=sys.stderr,
+        )
+        return 3
+    print(
+        f"Tool {tool['name']} bersifat T3 dan berjalan sebagai container.\n"
+        f"Gunakan: arashios-lab run {tool['name']}",
+        file=sys.stderr,
+    )
+    return 3
+
+
+def command_remove(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    tool = find_tool(catalog, args.name)
+    if tool is None:
+        print(f"ERROR: tool tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    entry = installed_entries().get(tool["name"])
+    if tool["tier"] == "T0":
+        package = tool.get("package", "")
+        if not entry:
+            print(
+                f"{tool['name']} berasal dari Debian dan tidak dipasang oleh Arsenal.\n"
+                f"Jalankan: sudo apt-get remove {package}",
+                file=sys.stderr,
+            )
+            return 2
+        if os.geteuid() != 0:
+            print("ERROR: penghapusan paket Debian butuh hak root.", file=sys.stderr)
+            return 2
+        result = subprocess.run(["apt-get", "remove", "-y", package], check=False)
+        if result.returncode == 0:
+            forget_install(tool["name"])
+        return result.returncode
+    if not entry:
+        print(f"{tool['name']} tidak tercatat sebagai hasil instalasi Arsenal.", file=sys.stderr)
+        return 2
+    target = Path(entry.get("target", ""))
+    if target.is_file() and entry.get("kind") == "vendor":
+        target.unlink()
+    forget_install(tool["name"])
+    print(f"{tool['name']} dihapus dari {target}")
+    return 0
+
+
+def command_doctor(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    data = coverage(catalog)
+    problems: list[str] = []
+    notes: list[str] = []
+    installed = 0
+    missing: list[str] = []
+    for tool in tools_of(catalog):
+        if tool["tier"] != "T0":
+            continue
+        record = verify_tool(tool)
+        if record["status"] == "ok":
+            installed += 1
+        else:
+            missing.append(tool["name"])
+    for workflow, entry in data.items():
+        if not entry["T0"]:
+            problems.append(f"alur kerja {workflow} tidak punya tool T0")
+        if not entry["T1"]:
+            problems.append(f"alur kerja {workflow} tidak punya tool T1")
+    installed_system = Path("/etc/arashios").is_dir()
+    if shutil.which("podman") is None:
+        message = "podman tidak tersedia, container T3 tidak bisa dipakai"
+        if installed_system:
+            problems.append(message)
+        else:
+            notes.append(message)
+    else:
+        notes.append("podman tersedia")
+    wordlist_paths = [
+        Path("/usr/share/wordlists/arashios"),
+        Path(__file__).resolve().parents[2] / "share" / "wordlists" / "arashios",
+    ]
+    if any(path.is_dir() for path in wordlist_paths):
+        notes.append("wordlist ArashiOS tersedia")
+    else:
+        problems.append("wordlist ArashiOS tidak ditemukan")
+    notes.append(f"{installed} tool T0 terpasang")
+    if missing:
+        notes.append(f"{len(missing)} tool T0 belum ada di PATH")
+    notes.append(f"state: {state_dir()}")
+    payload = {"problems": problems, "notes": notes, "missing": missing}
+    if args.json:
+        emit(payload, True, "")
+    else:
+        for note in notes:
+            print(f"INFO  {note}")
+        for problem in problems:
+            print(f"PROBLEM {problem}")
+    return 1 if problems else 0
+
+
+def command_smoke(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.catalog)
+    tools = tools_of(catalog)
+    if args.tier:
+        tools = [tool for tool in tools if tool["tier"] == args.tier.upper()]
+    if args.name:
+        tool = find_tool(catalog, args.name)
+        if tool is None:
+            print(f"ERROR: tool tidak dikenal: {args.name}", file=sys.stderr)
+            return 2
+        tools = [tool]
+    results = [run_tool_test(tool) for tool in tools]
+    failures = [item for item in results if item["status"] in {"failed", "missing", "timeout"}]
+    payload = {
+        "checked": len(results),
+        "failures": len(failures),
+        "results": results,
+    }
+    if args.output:
+        path = Path(args.output)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.json:
+        emit(payload, True, "")
+    else:
+        for item in results:
+            print(f"{item['status']:<9} {item['tier']:<3} {item['name']:<22} {item['detail'][:60]}")
+        print(f"\n{len(results)} diuji, {len(failures)} gagal.")
+    return 1 if failures else 0
+
+
+def common_options() -> argparse.ArgumentParser:
+    shared = argparse.ArgumentParser(add_help=False)
+    shared.add_argument(
+        "--catalog",
+        default=argparse.SUPPRESS,
+        help="lintak katalog toolstack",
+    )
+    shared.add_argument(
+        "--json",
+        action="store_true",
+        default=argparse.SUPPRESS,
+        help="keluaran JSON",
+    )
+    return shared
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="arashios-arsenal", description=f"{BANNER} untuk tool ArashiOS")
+    parser.add_argument("--catalog", help="lintak katalog toolstack")
+    parser.add_argument("--json", action="store_true", help="keluaran JSON")
+    shared = common_options()
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    listing = sub.add_parser("list", parents=[shared], help="daftar tool")
+    listing.add_argument("--tier", help="filter tier, contoh T0")
+    listing.add_argument("--workflow", help="filter alur kerja, contoh WF-02")
+    listing.add_argument("--role", help="filter peran, contoh security")
+    listing.set_defaults(func=command_list)
+
+    info = sub.add_parser("info", parents=[shared], help="detail satu tool")
+    info.add_argument("name")
+    info.set_defaults(func=command_info)
+
+    workflows = sub.add_parser("workflows", parents=[shared], help="coverage alur kerja")
+    workflows.set_defaults(func=command_workflows)
+
+    verify = sub.add_parser("verify", parents=[shared], help="verifikasi checksum dan keberadaan tool")
+    verify.add_argument("name", nargs="?")
+    verify.add_argument("--tier")
+    verify.add_argument("--strict", action="store_true")
+    verify.set_defaults(func=command_verify)
+
+    install = sub.add_parser("install", parents=[shared], help="pasang tool")
+    install.add_argument("name")
+    install.add_argument("--dry-run", action="store_true")
+    install.add_argument("--from", dest="from_file", help="berkas artefak vendor")
+    install.set_defaults(func=command_install)
+
+    remove = sub.add_parser("remove", parents=[shared], help="hapus tool yang dipasang Arsenal")
+    remove.add_argument("name")
+    remove.set_defaults(func=command_remove)
+
+    doctor = sub.add_parser("doctor", parents=[shared], help="periksa kesiapan toolstack")
+    doctor.set_defaults(func=command_doctor)
+
+    smoke = sub.add_parser("smoke", parents=[shared], help="jalankan smoke test tool")
+    smoke.add_argument("name", nargs="?")
+    smoke.add_argument("--tier")
+    smoke.add_argument("--output", help="tulis laporan JSON")
+    smoke.set_defaults(func=command_smoke)
+
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

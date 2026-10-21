@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: shellcheck
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/shellcheck
+license: debian
+name: shellcheck
+package: shellcheck
+role: platform
+source: https://packages.debian.org/bookworm/shellcheck
+summary: Analisis statis shell.
+test:
+  command:
+  - shellcheck
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

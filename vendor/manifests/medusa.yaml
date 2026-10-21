@@ -1,0 +1,32 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: medusa
+category: password
+distribution: iso
+install:
+  path: /usr/bin/medusa
+license: debian
+name: medusa
+package: medusa
+role: security
+source: https://packages.debian.org/bookworm/medusa
+summary: Brute force paralel multi protokol.
+test:
+  command:
+  - medusa
+  kind: presence
+  version_args:
+  - -h
+tier: T0
+version: debian-bookworm
+workflow: WF-04
+workflows:
+- WF-04

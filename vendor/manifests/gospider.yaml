@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/gospider
+  go_version: '1.23'
+  kind: go
+  source_commit: 006cce2fc415e65044f9ba4a10a3e7acba04d38c
+  source_ref: v1.1.6
+category: web
+distribution: vendor
+install:
+  path: /usr/local/bin/gospider
+license: MIT
+license_file: LICENSE
+name: gospider
+role: security
+source: https://github.com/jaeles-project/gospider.git
+source_commit: 006cce2fc415e65044f9ba4a10a3e7acba04d38c
+source_ref: v1.1.6
+summary: Crawler web yang cepat.
+test:
+  command:
+  - gospider
+  kind: version
+tier: T1
+version: 1.1.6
+workflow: WF-02
+workflows:
+- WF-02

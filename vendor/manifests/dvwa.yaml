@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Container memakai digest. Arsenal menolak tag yang belum dikunci.
+  sha256: ''
+  status: digest-required
+build:
+  kind: container
+category: lab
+distribution: container
+install:
+  image: docker.io/library/dvwa
+license: proprietary
+name: dvwa
+role: security
+source: docker.io/library/dvwa
+summary: Lab web rentan untuk latihan.
+test:
+  command:
+  - none
+  kind: none
+tier: T3
+version: digest-pinned
+workflow: WF-02
+workflows:
+- WF-02

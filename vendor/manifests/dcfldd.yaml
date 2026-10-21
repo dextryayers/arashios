@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: dcfldd
+category: forensics
+distribution: iso
+install:
+  path: /usr/bin/dcfldd
+license: debian
+name: dcfldd
+package: dcfldd
+role: security
+source: https://packages.debian.org/bookworm/dcfldd
+summary: Duplikat forensik dengan verifikasi.
+test:
+  command:
+  - dcfldd
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-09
+workflows:
+- WF-09

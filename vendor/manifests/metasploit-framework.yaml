@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: gem install --install-dir=$PREFIX metasploit-framework
+  kind: ruby
+  source_commit: d1dde11225376661c484f394d554457c8f475974
+  source_ref: v4.11.7
+category: exploitation
+distribution: vendor
+install:
+  path: /opt/arashios/tools/metasploit-framework
+license: BSD-3-Clause
+license_file: LICENSE
+name: metasploit-framework
+role: security
+source: https://github.com/rapid7/metasploit-framework.git
+source_commit: d1dde11225376661c484f394d554457c8f475974
+source_ref: v4.11.7
+summary: Kerangka kerja eksploitasi.
+test:
+  command:
+  - msfconsole
+  kind: version
+tier: T1
+version: 4.11.7
+workflow: WF-03
+workflows:
+- WF-03

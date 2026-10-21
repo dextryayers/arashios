@@ -1,0 +1,32 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: netcat-openbsd
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/nc
+license: debian
+name: netcat-openbsd
+package: netcat-openbsd
+role: security
+source: https://packages.debian.org/bookworm/netcat-openbsd
+summary: Koneksi TCP dan UDP untuk uji konfigurasi.
+test:
+  command:
+  - nc
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01
+- WF-07
+- WF-08

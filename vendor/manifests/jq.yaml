@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: jq
+category: reporting
+distribution: iso
+install:
+  path: /usr/bin/jq
+license: debian
+name: jq
+package: jq
+role: security
+source: https://packages.debian.org/bookworm/jq
+summary: Pemroses JSON.
+test:
+  command:
+  - jq
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-12
+workflows:
+- WF-12

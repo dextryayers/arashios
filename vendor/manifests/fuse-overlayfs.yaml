@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: fuse-overlayfs
+category: container
+distribution: iso
+install:
+  path: /usr/bin/fuse-overlayfs
+license: debian
+name: fuse-overlayfs
+package: fuse-overlayfs
+role: security
+source: https://packages.debian.org/bookworm/fuse-overlayfs
+summary: Lapisan filesystem untuk rootless.
+test:
+  command:
+  - fuse-overlayfs
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-11
+workflows:
+- WF-11

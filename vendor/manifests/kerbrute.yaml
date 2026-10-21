@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/kerbrute
+  go_version: '1.23'
+  kind: go
+  source_commit: de7f8f411e537e0eb86896fa961df5b54b52e77b
+  source_ref: v1.0.3
+category: active-directory
+distribution: vendor
+install:
+  path: /usr/local/bin/kerbrute
+license: GPL-3.0-only
+license_file: LICENSE
+name: kerbrute
+role: security
+source: https://github.com/ropnop/kerbrute.git
+source_commit: de7f8f411e537e0eb86896fa961df5b54b52e77b
+source_ref: v1.0.3
+summary: Brute force Kerberos.
+test:
+  command:
+  - kerbrute
+  kind: version
+tier: T1
+version: 1.0.3
+workflow: WF-05
+workflows:
+- WF-05

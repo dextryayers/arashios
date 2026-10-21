@@ -267,5 +267,62 @@ else
     fail 'Podman tidak tersedia'
 fi
 
+printf '\nArsenal dan toolstack:\n'
+for tool in arashios-arsenal arashios-tool-smoke arashios-lab arashios-container \
+            arashios-toolchain arashios-new-project arashios-coding-smoke \
+            arashios-doctor arashios-help; do
+    check_cmd "$tool"
+done
+check_file /usr/share/arashios/toolstack/catalog.json
+check_file /usr/share/arashios/toolchain/catalog.json
+check_file /usr/share/arashios/labs.json
+check_file /usr/local/lib/arashios/toolstack.py
+check_file /usr/share/wordlists/arashios/manifest.json
+check_file /usr/share/wordlists/arashios/common-paths.txt
+check_file /usr/share/wordlists/arashios/common-passwords.txt
+check_file /usr/share/doc/arashios/TOOLSTACK.md
+check_file /usr/share/doc/arashios/CODING.md
+check_file /usr/share/doc/arashios/ARSENAL.md
+check_file /usr/share/doc/arashios/CONTAINERS.md
+check_file /usr/share/doc/arashios/VENDORING.md
+check_file /usr/share/doc/arashios/LICENSES.md
+check_file /etc/containers/containers.conf
+check_file /etc/containers/policy.json
+check_file /etc/containers/registries.conf
+if arashios-arsenal list --json >/dev/null 2>&1; then
+    pass 'katalog toolstack terbaca'
+else
+    fail 'katalog toolstack tidak terbaca'
+fi
+if arashios-arsenal workflows --json 2>/dev/null | python3 -c "
+import json, sys
+data = json.load(sys.stdin)['workflows']
+assert len(data) == 12, data
+assert all(entry['T0'] and entry['T1'] for entry in data.values()), data
+" 2>/dev/null; then
+    pass 'coverage 12 alur kerja lengkap'
+else
+    fail 'coverage alur kerja tidak lengkap'
+fi
+if arashios-toolchain list --json 2>/dev/null | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+assert data['components'], data
+" 2>/dev/null; then
+    pass 'katalog toolchain terbaca'
+else
+    fail 'katalog toolchain tidak terbaca'
+fi
+if arashios-tool-smoke --tier T0 --output /tmp/arashios-toolstack-smoke.json >/dev/null 2>&1; then
+    pass 'smoke test toolstack T0'
+else
+    fail 'smoke test toolstack T0 gagal'
+fi
+if arashios-coding-smoke --output /tmp/arashios-coding-smoke.json >/dev/null 2>&1; then
+    pass 'smoke test bahasa'
+else
+    fail 'smoke test bahasa gagal'
+fi
+
 printf '\nRingkasan: %s lulus, %s gagal.\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

@@ -15,6 +15,24 @@ lisensi masing-masing. Metadata lisensi paket tersebut tersedia di
 /usr/share/doc pada sistem terpasang.
 
 --------------------------------------------------------------------------
+Wordlist ArashiOS
+/usr/share/wordlists/arashios
+
+Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA-4.0)
+
+Kontributor: ArashiOS Project
+Sumber: kurasi internal, bukan salinan dataset pihak ketiga.
+Teks lisensi lengkap tersedia di /usr/share/wordlists/arashios/LICENSE dan
+https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+--------------------------------------------------------------------------
+Tool tier 1 ArashiOS
+
+Tool yang dibangun dari sumber upstream dikunci pada commit tertentu dan
+memiliki lisensi masing-masing. Matriks lisensi lengkap tersedia di
+/usr/share/doc/arashios/LICENSES.md dan di NOTICE paket branding.
+
+--------------------------------------------------------------------------
 Kanagawa.nvim
 https://github.com/rebelot/kanagawa.nvim
 

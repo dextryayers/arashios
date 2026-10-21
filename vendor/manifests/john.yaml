@@ -1,0 +1,33 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: john
+category: password
+distribution: iso
+install:
+  path: /usr/bin/john
+license: debian
+name: john
+package: john
+role: security
+source: https://packages.debian.org/bookworm/john
+summary: Pemecahan hash offline.
+test:
+  command:
+  - john
+  kind: presence
+  version_args:
+  - --list=build-info
+tier: T0
+version: debian-bookworm
+workflow: WF-04
+workflows:
+- WF-04
+- WF-10

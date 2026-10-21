@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: iproute2
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/ip
+license: debian
+name: iproute2
+package: iproute2
+role: security
+source: https://packages.debian.org/bookworm/iproute2
+summary: Konfigurasi dan inspeksi jaringan.
+test:
+  command:
+  - ip
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01

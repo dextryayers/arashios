@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: libffi-dev
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/pkg-config
+license: debian
+name: libffi-dev
+package: libffi-dev
+role: platform
+source: https://packages.debian.org/bookworm/libffi-dev
+summary: Header development libffi.
+test:
+  command:
+  - pkg-config
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

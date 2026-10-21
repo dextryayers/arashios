@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: ruby-full
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/ruby
+license: debian
+name: ruby-full
+package: ruby-full
+role: platform
+source: https://packages.debian.org/bookworm/ruby-full
+summary: Runtime Ruby.
+test:
+  command:
+  - ruby
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

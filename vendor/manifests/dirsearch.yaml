@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: dirsearch
+category: web
+distribution: iso
+install:
+  path: /usr/bin/dirsearch
+license: debian
+name: dirsearch
+package: dirsearch
+role: security
+source: https://packages.debian.org/bookworm/dirsearch
+summary: Discovery path dan file pada aplikasi web.
+test:
+  command:
+  - dirsearch
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-02
+workflows:
+- WF-02

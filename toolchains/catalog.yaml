@@ -1,0 +1,159 @@
+schema_version: 1
+updated: "2026-10-22"
+
+# Katalog toolchain user level ArashiOS. Semua komponen dipasang tanpa sudo ke
+# ~/.local/share/arashios/toolchains dan tidak menyentuh paket sistem.
+# Checksum dikunci di toolchains/lock.yaml dan di-refresh dengan
+# scripts/refresh-toolchain-lock.py.
+
+components:
+  - name: uv
+    version: "0.13.4"
+    role: python
+    kind: archive
+    format: tar.gz
+    license: MIT
+    homepage: https://github.com/astral-sh/uv
+    summary: "Pengelola proyek Python dan environment virtual."
+    binaries: [uv, uvx]
+    targets:
+      amd64:
+        url: https://github.com/astral-sh/uv/releases/download/0.13.4/uv-x86_64-unknown-linux-gnu.tar.gz
+        checksum_url: https://github.com/astral-sh/uv/releases/download/0.13.4/uv-x86_64-unknown-linux-gnu.tar.gz.sha256
+      arm64:
+        url: https://github.com/astral-sh/uv/releases/download/0.13.4/uv-aarch64-unknown-linux-gnu.tar.gz
+        checksum_url: https://github.com/astral-sh/uv/releases/download/0.13.4/uv-aarch64-unknown-linux-gnu.tar.gz.sha256
+      i386:
+        url: https://github.com/astral-sh/uv/releases/download/0.13.4/uv-i686-unknown-linux-gnu.tar.gz
+        checksum_url: https://github.com/astral-sh/uv/releases/download/0.13.4/uv-i686-unknown-linux-gnu.tar.gz.sha256
+
+  - name: fnm
+    version: "1.39.0"
+    role: node
+    kind: archive
+    format: zip
+    license: MIT
+    homepage: https://github.com/Schniz/fnm
+    summary: "Pengelola versi Node.js."
+    binaries: [fnm]
+    targets:
+      amd64:
+        url: https://github.com/Schniz/fnm/releases/download/v1.39.0/fnm-linux.zip
+      arm64:
+        url: https://github.com/Schniz/fnm/releases/download/v1.39.0/fnm-arm64.zip
+      i386:
+        url: https://github.com/Schniz/fnm/releases/download/v1.39.0/fnm-arm32.zip
+
+  - name: node
+    version: "22"
+    role: node
+    kind: manager
+    manager: fnm
+    license: MIT
+    homepage: https://nodejs.org
+    summary: "Node.js LTS melalui fnm."
+    binaries: [node, npm, npx]
+
+  - name: rustup
+    version: "1.28.2"
+    role: rust
+    kind: binary
+    license: MIT
+    homepage: https://rustup.rs
+    summary: "Pengelola toolchain Rust."
+    binaries: [rustup, cargo, rustc, rustfmt, clippy-driver]
+    targets:
+      amd64:
+        url: https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
+        checksum_url: https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init.sha256
+      arm64:
+        url: https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init
+        checksum_url: https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init.sha256
+      i386:
+        url: https://static.rust-lang.org/rustup/dist/i686-unknown-linux-gnu/rustup-init
+        checksum_url: https://static.rust-lang.org/rustup/dist/i686-unknown-linux-gnu/rustup-init.sha256
+
+  - name: rust
+    version: "stable"
+    role: rust
+    kind: manager
+    manager: rustup
+    license: MIT
+    homepage: https://www.rust-lang.org
+    summary: "Toolchain Rust stabil melalui rustup."
+    binaries: [cargo, rustc]
+
+  - name: go
+    version: "1.27.3"
+    role: go
+    kind: archive
+    format: tar.gz
+    license: BSD-3-Clause
+    homepage: https://go.dev
+    summary: "Toolchain Go modern, terpisah dari paket Debian."
+    binaries: [go, gofmt]
+    targets:
+      amd64:
+        url: https://go.dev/dl/go1.27.3.linux-amd64.tar.gz
+        checksum_url: https://go.dev/dl/?mode=json&include=all
+        checksum_style: go-index
+      arm64:
+        url: https://go.dev/dl/go1.27.3.linux-arm64.tar.gz
+        checksum_url: https://go.dev/dl/?mode=json&include=all
+        checksum_style: go-index
+      i386:
+        url: https://go.dev/dl/go1.27.3.linux-386.tar.gz
+        checksum_url: https://go.dev/dl/?mode=json&include=all
+        checksum_style: go-index
+
+  - name: starship
+    version: "1.27.0"
+    role: shell
+    kind: archive
+    format: tar.gz
+    license: Apache-2.0
+    homepage: https://starship.rs
+    summary: "Prompt shell dengan palet Kage."
+    binaries: [starship]
+    targets:
+      amd64:
+        url: https://github.com/starship/starship/releases/download/v1.27.0/starship-x86_64-unknown-linux-gnu.tar.gz
+        checksum_url: https://github.com/starship/starship/releases/download/v1.27.0/starship-x86_64-unknown-linux-gnu.tar.gz.sha256
+      arm64:
+        url: https://github.com/starship/starship/releases/download/v1.27.0/starship-aarch64-unknown-linux-musl.tar.gz
+        checksum_url: https://github.com/starship/starship/releases/download/v1.27.0/starship-aarch64-unknown-linux-musl.tar.gz.sha256
+      i386:
+        url: https://github.com/starship/starship/releases/download/v1.27.0/starship-i686-unknown-linux-musl.tar.gz
+        checksum_url: https://github.com/starship/starship/releases/download/v1.27.0/starship-i686-unknown-linux-musl.tar.gz.sha256
+
+  - name: eza
+    version: "0.23.5"
+    role: shell
+    kind: archive
+    format: tar.gz
+    license: MIT
+    homepage: https://github.com/eza-community/eza
+    summary: "Perintah lsmodern dengan warna dan icon."
+    binaries: [eza]
+    targets:
+      amd64:
+        url: https://github.com/eza-community/eza/releases/download/v0.23.5/eza_x86_64-unknown-linux-gnu.tar.gz
+      arm64:
+        url: https://github.com/eza-community/eza/releases/download/v0.23.5/eza_aarch64-unknown-linux-gnu.tar.gz
+
+  - name: vscodium
+    version: "1.140.06880"
+    role: editor
+    kind: archive
+    format: tar.gz
+    license: MIT
+    homepage: https://vscodium.com
+    summary: "Editor VSCodium tanpa telemetry bawaan."
+    binaries: [codium]
+    targets:
+      amd64:
+        url: https://github.com/VSCodium/vscodium/releases/download/1.140.06880/VSCodium-linux-x64-1.140.06880.tar.gz
+        checksum_url: https://github.com/VSCodium/vscodium/releases/download/1.140.06880/VSCodium-linux-x64-1.140.06880.tar.gz.sha256
+      arm64:
+        url: https://github.com/VSCodium/vscodium/releases/download/1.140.06880/VSCodium-linux-arm64-1.140.06880.tar.gz
+        checksum_url: https://github.com/VSCodium/vscodium/releases/download/1.140.06880/VSCodium-linux-arm64-1.140.06880.tar.gz.sha256

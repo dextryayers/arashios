@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: openjdk-17-jdk
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/javac
+license: debian
+name: openjdk-17-jdk
+package: openjdk-17-jdk
+role: platform
+source: https://packages.debian.org/bookworm/openjdk-17-jdk
+summary: JDK 17.
+test:
+  command:
+  - javac
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

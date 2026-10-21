@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: bash-completion
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/bash
+license: debian
+name: bash-completion
+package: bash-completion
+role: platform
+source: https://packages.debian.org/bookworm/bash-completion
+summary: Pelengkapan shell Bash.
+test:
+  command:
+  - bash
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-12
+workflows:
+- WF-12

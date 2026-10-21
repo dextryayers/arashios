@@ -1,0 +1,295 @@
+schema_version: 1
+updated: "2026-10-22"
+
+# Pin sumber upstream untuk tool T1. Nilai ini di-refresh dengan
+# scripts/refresh-source-pins.py. Setiap entri memakai tag rilis dan commit
+# yang dapat diverifikasi, bukan branch yang bergerak.
+
+sources:
+  metasploit-framework:
+    kind: git
+    url: https://github.com/rapid7/metasploit-framework.git
+    ref: v4.11.7
+    commit: d1dde11225376661c484f394d554457c8f475974
+    version: "4.11.7"
+    license_file: LICENSE
+  exploitdb:
+    kind: git
+    url: https://github.com/offensive-security/exploitdb.git
+    ref: master
+    commit: f36dd3d4d512ecd7197e079d87eb69ee7cd9d6b0
+    version: "2026.10.22"
+    license_file: README.md
+  seclists-core:
+    kind: git
+    url: https://github.com/danielmiessler/SecLists.git
+    ref: 2026.1
+    commit: 190c6f7bd58c847ceadfe57d9853592737f059e8
+    version: "2026.1"
+    license_file: LICENSE
+  nuclei:
+    kind: git
+    url: https://github.com/projectdiscovery/nuclei.git
+    ref: v3.11.1
+    commit: a8c88feb4a1c8e961b7902534ce3af97e9d524a4
+    version: "3.11.1"
+    license_file: LICENSE.md
+  subfinder:
+    kind: git
+    url: https://github.com/projectdiscovery/subfinder.git
+    ref: v2.17.0
+    commit: c97f25802892093060f0fc424bfc3f39e273693a
+    version: "2.17.0"
+    license_file: LICENSE
+  httpx:
+    kind: git
+    url: https://github.com/projectdiscovery/httpx.git
+    ref: v1.12.0
+    commit: 4b6a9a9d476f94a4f3a630f37051f5671ecfb1f8
+    version: "1.12.0"
+    license_file: LICENSE.md
+  naabu:
+    kind: git
+    url: https://github.com/projectdiscovery/naabu.git
+    ref: v2.6.1
+    commit: 5a0ca8bde91b5bb16213e9e8b5c6871eac954bd8
+    version: "2.6.1"
+    license_file: LICENSE.md
+  dnsx:
+    kind: git
+    url: https://github.com/projectdiscovery/dnsx.git
+    ref: v1.3.1
+    commit: 01e315f216db7d36198ec326fac13dd7846b1bec
+    version: "1.3.1"
+    license_file: LICENSE.md
+  katana:
+    kind: git
+    url: https://github.com/projectdiscovery/katana.git
+    ref: v1.8.0
+    commit: 35267ac5c8ff1db9694a319d0eb466ed97b0969f
+    version: "1.8.0"
+    license_file: LICENSE.md
+  amass:
+    kind: git
+    url: https://github.com/owasp-amass/amass.git
+    ref: v5.1.1
+    commit: 79299dce87b0085db0f2f4ef3e9c52cccb49f514
+    version: "5.1.1"
+    license_file: LICENSE
+  feroxbuster:
+    kind: git
+    url: https://github.com/epi052/feroxbuster.git
+    ref: v2.13.1
+    commit: aa8e1335801e91d98ce0d4fd148c2159a667a83b
+    version: "2.13.1"
+    license_file: LICENSE
+  wpscan:
+    kind: git
+    url: https://github.com/wpscanteam/wpscan.git
+    ref: v4.1.0
+    commit: f6169f00652c07feb45f57ff2a10e38949c28d56
+    version: "4.1.0"
+    license_file: LICENSE
+  dalfox:
+    kind: git
+    url: https://github.com/hahwul/dalfox.git
+    ref: v3.2.4
+    commit: da19527f9c82d8525e911ca3669fc456daeb50f2
+    version: "3.2.4"
+    license_file: LICENSE
+  commix:
+    kind: git
+    url: https://github.com/commixproject/commix.git
+    ref: v4.1
+    commit: 06beb622db6f9b8ffe4e51f7dea4414303c750ce
+    version: "4.1"
+    license_file: LICENSE
+  gospider:
+    kind: git
+    url: https://github.com/jaeles-project/gospider.git
+    ref: v1.1.6
+    commit: 006cce2fc415e65044f9ba4a10a3e7acba04d38c
+    version: "1.1.6"
+    license_file: LICENSE
+  hakrawler:
+    kind: git
+    url: https://github.com/hakluke/hakrawler.git
+    ref: 2.1
+    commit: 61905593d82e8bac87ff7a7cca32b2adde42bb60
+    version: "2.1"
+    license_file: LICENSE
+  gau:
+    kind: git
+    url: https://github.com/lc/gau.git
+    ref: v2.2.4
+    commit: 5d4e1270e632732756fe98717520c43c86e8bd18
+    version: "2.2.4"
+    license_file: LICENSE
+  waybackurls:
+    kind: git
+    url: https://github.com/tomnomnom/waybackurls.git
+    ref: v0.1.0
+    commit: 86aeb97852707e1a6fb3bcd33e61d5433a6476c5
+    version: "0.1.0"
+    license_file: LICENSE
+  netexec:
+    kind: git
+    url: https://github.com/Pennyw0rth/NetExec.git
+    ref: v1.5.1
+    commit: c7dc286ba65daf10402cdc470e531b84e6d3d911
+    version: "1.5.1"
+    license_file: LICENSE
+  evil-winrm:
+    kind: git
+    url: https://github.com/Hackplayers/evil-winrm.git
+    ref: v4.1
+    commit: 64d8e0f962d239643c4efadacce9f716bd5cb775
+    version: "4.1"
+    license_file: LICENSE
+  enum4linux-ng:
+    kind: git
+    url: https://github.com/CiscoCXSecurity/enum4linux-ng.git
+    ref: master
+    commit: a0924d3c5dab113095602017d74383c5221967d7
+    version: "2026.10.22"
+    license_file: LICENSE
+  kerbrute:
+    kind: git
+    url: https://github.com/ropnop/kerbrute.git
+    ref: v1.0.3
+    commit: de7f8f411e537e0eb86896fa961df5b54b52e77b
+    version: "1.0.3"
+    license_file: LICENSE
+  certipy:
+    kind: git
+    url: https://github.com/ly4k/Certipy.git
+    ref: 5.1.0
+    commit: e916eefe46f4e493d6bde3f0a7b4c42ea8384cde
+    version: "5.1.0"
+    license_file: LICENSE
+  ldapdomaindump:
+    kind: git
+    url: https://github.com/dirkjanm/ldapdomaindump.git
+    ref: v0.10.0
+    commit: 35b357e1286470d39ee472d3fdd10b11c0e00fdc
+    version: "0.10.0"
+    license_file: LICENSE
+  responder:
+    kind: git
+    url: https://github.com/lgandx/Responder.git
+    ref: v3.2.2.0
+    commit: 61a028e8413053a2ead258824737609811a726cb
+    version: "3.2.2.0"
+    license_file: LICENSE
+  chisel:
+    kind: git
+    url: https://github.com/jpillora/chisel.git
+    ref: v1.13.0
+    commit: b86c288c8cc297d350f7d9de2df20cef4fcefb51
+    version: "1.13.0"
+    license_file: LICENSE
+  ligolo-ng:
+    kind: git
+    url: https://github.com/nicocha30/ligolo-ng.git
+    ref: v0.9.2
+    commit: e543732f4be6dc899096ae322ae620bf010bfbfc
+    version: "0.9.2"
+    license_file: LICENSE
+  volatility3:
+    kind: git
+    url: https://github.com/volatilityfoundation/volatility3.git
+    ref: v2.28.2
+    commit: 881e970121c16f0932fb9d16fbd5fb258cbcbf75
+    version: "2.28.2"
+    license_file: LICENSE
+  radare2:
+    kind: git
+    url: https://github.com/radareorg/radare2.git
+    ref: 6.2.4
+    commit: 485e5e205b190fc297a2a95a6f982ff5d9f54039
+    version: "6.2.4"
+    license_file: LICENCE
+  rizin:
+    kind: git
+    url: https://github.com/rizinorg/rizin.git
+    ref: v0.9.1
+    commit: c3a90e9226d977f58f4e9c75f78fa6b07afe13c7
+    version: "0.9.1"
+    license_file: COPYING
+  cutter:
+    kind: git
+    url: https://github.com/rizinorg/cutter.git
+    ref: v2.5.0
+    commit: a6f6ad7bed987c56735ab763970bb405df0a4cfc
+    version: "2.5.0"
+    license_file: COPYING
+  jadx:
+    kind: git
+    url: https://github.com/skylot/jadx.git
+    ref: v1.5.6
+    commit: 4c0ac37699aa8c9803f1c73cfaacd9205acb044b
+    version: "1.5.6"
+    license_file: LICENSE
+  pwndbg:
+    kind: git
+    url: https://github.com/pwndbg/pwndbg.git
+    ref: 2026.10.22
+    commit: f6fed0cb49495f58a1dd4f972f2f610cf16b1754
+    version: "2026.10.22"
+    license_file: LICENSES
+  frida-tools:
+    kind: git
+    url: https://github.com/frida/frida.git
+    ref: 17.24.3
+    commit: adf8be5f5b7f3840521783b628a191b62d7e6f66
+    version: "17.24.3"
+    license_file: LICENSE
+  upx:
+    kind: git
+    url: https://github.com/upx/upx.git
+    ref: v5.2.1
+    commit: 4660eead74e3241983a12dbbd5b59efea9bed0f1
+    version: "5.2.1"
+    license_file: LICENSE
+  trivy:
+    kind: git
+    url: https://github.com/aquasecurity/trivy.git
+    ref: v0.76.1
+    commit: e713f67f7d54decdcd9b3132c9751833dcced698
+    version: "0.76.1"
+    license_file: LICENSE
+  helm:
+    kind: git
+    url: https://github.com/helm/helm.git
+    ref: v4.3.1
+    commit: b77ca75bfc1de35db606a8c06c42aedb4f751182
+    version: "4.3.1"
+    license_file: LICENSE
+  kismet:
+    kind: git
+    url: https://github.com/kismetwireless/kismet.git
+    ref: kismet-2025-09-R1
+    commit: 7a3b5d207e6b15d7dcbb8fa916e121e51d3280e0
+    version: "2025.09"
+    license_file: LICENSE
+  zaproxy:
+    kind: git
+    url: https://github.com/zaproxy/zaproxy.git
+    ref: w2026-10-15
+    commit: 1af83afeaa52e5b8389af494fcb9b7a540b82bf5
+    version: "2026.10.15"
+    license_file: LICENSE
+  fastfetch:
+    kind: git
+    url: https://github.com/fastfetch-cli/fastfetch.git
+    ref: 2.70.0
+    commit: 17bb3fd2384bd814b421d73b8c8b8d08e06cfa26
+    version: "2.70.0"
+    license_file: LICENSE
+  termshark:
+    kind: git
+    url: https://github.com/gcla/termshark.git
+    ref: v2.4.0
+    commit: e436160ef4f7bac030a9bddd5674d3159ebdd792
+    version: "2.4.0"
+    license_file: LICENSE

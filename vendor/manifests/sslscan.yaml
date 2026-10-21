@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: sslscan
+category: web
+distribution: iso
+install:
+  path: /usr/bin/sslscan
+license: debian
+name: sslscan
+package: sslscan
+role: security
+source: https://packages.debian.org/bookworm/sslscan
+summary: Audit konfigurasi TLS.
+test:
+  command:
+  - sslscan
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-02
+workflows:
+- WF-02

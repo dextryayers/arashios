@@ -1,0 +1,33 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: hashcat
+category: password
+distribution: iso
+install:
+  path: /usr/bin/hashcat
+license: debian
+name: hashcat
+package: hashcat
+role: security
+source: https://packages.debian.org/bookworm/hashcat
+summary: Pemecahan hash dengan GPU dan CPU.
+test:
+  command:
+  - hashcat
+  kind: presence
+  version_args:
+  - --help
+tier: T0
+version: debian-bookworm
+workflow: WF-04
+workflows:
+- WF-04
+- WF-10

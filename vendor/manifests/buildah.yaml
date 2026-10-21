@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: buildah
+category: container
+distribution: iso
+install:
+  path: /usr/bin/buildah
+license: debian
+name: buildah
+package: buildah
+role: security
+source: https://packages.debian.org/bookworm/buildah
+summary: Build image OCI tanpa daemon.
+test:
+  command:
+  - buildah
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-11
+workflows:
+- WF-11

@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+"""ArashiOS system doctor.
+
+The doctor inspects the running system and reports problems that affect the
+security, coding, and daily use promises of ArashiOS. It never changes system
+state.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+TOOLSTACK_CATALOG = Path(
+    os.environ.get("ARASHIOS_TOOLSTACK_CATALOG", "/usr/share/arashios/toolstack/catalog.json")
+)
+TOOLCHAIN_CATALOG = Path(
+    os.environ.get("ARASHIOS_TOOLCHAIN_CATALOG", "/usr/share/arashios/toolchain/catalog.json")
+)
+
+
+def read_os_release() -> dict:
+    values: dict[str, str] = {}
+    path = Path("/etc/os-release")
+    if not path.is_file():
+        return values
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        values[key] = value.strip().strip('"')
+    return values
+
+
+def service_active(name: str) -> bool:
+    if not shutil.which("systemctl"):
+        return False
+    result = subprocess.run(
+        ["systemctl", "is-active", "--quiet", name],
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return result.returncode == 0
+
+
+def binary_version(binary: str) -> str:
+    path = shutil.which(binary)
+    if path is None:
+        return ""
+    result = subprocess.run(
+        [binary, "--version"],
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=20,
+    )
+    output = (result.stdout + result.stderr).strip().splitlines()
+    return output[0][:120] if output else ""
+
+
+def check_identity(problems: list[str], notes: list[str]) -> None:
+    release = read_os_release()
+    if release.get("ID") != "arashios":
+        problems.append(f"ID sistem {release.get('ID', 'tidak diketahui')}, seharusnya arashios")
+    else:
+        notes.append(f"os-release: {release.get('PRETTY_NAME', 'arashios')}")
+    version = Path("/etc/arashios/version")
+    if version.is_file():
+        notes.append(f"versi: {version.read_text(encoding='utf-8').strip()}")
+    else:
+        problems.append("berkas /etc/arashios/version tidak ditemukan")
+
+
+def check_toolstack(problems: list[str], notes: list[str]) -> None:
+    if not TOOLSTACK_CATALOG.is_file():
+        problems.append("katalog toolstack tidak ditemukan")
+        return
+    with TOOLSTACK_CATALOG.open(encoding="utf-8") as handle:
+        catalog = json.load(handle)
+    tools = catalog.get("tools", [])
+    counts: dict[str, int] = {}
+    for tool in tools:
+        counts[tool["tier"]] = counts.get(tool["tier"], 0) + 1
+    notes.append(
+        "toolstack: "
+        + ", ".join(f"{tier} {counts.get(tier, 0)}" for tier in ("T0", "T1", "T2", "T3"))
+    )
+    workflows = catalog.get("workflows", {})
+    covered = {workflow: 0 for workflow in workflows}
+    for tool in tools:
+        for workflow in tool.get("workflows", [tool.get("workflow", "")]):
+            if workflow in covered:
+                covered[workflow] += 1
+    for workflow, count in covered.items():
+        if count == 0:
+            problems.append(f"alur kerja {workflow} tidak punya tool")
+    missing = []
+    for tool in tools:
+        if tool["tier"] != "T0":
+            continue
+        binary = tool.get("test", {}).get("command", [""])[0]
+        if binary and binary != "none" and shutil.which(binary) is None:
+            missing.append(tool["name"])
+    if missing:
+        notes.append(f"{len(missing)} tool T0 tidak ada di PATH")
+
+
+def check_toolchain(problems: list[str], notes: list[str]) -> None:
+    if not TOOLCHAIN_CATALOG.is_file():
+        problems.append("katalog toolchain tidak ditemukan")
+        return
+    with TOOLCHAIN_CATALOG.open(encoding="utf-8") as handle:
+        catalog = json.load(handle)
+    names = ", ".join(component["name"] for component in catalog.get("components", []))
+    notes.append(f"toolchain: {names}")
+    for binary in ("python3", "gcc", "go", "rustc", "node", "java", "php", "ruby", "lua5.4"):
+        if shutil.which(binary) is None:
+            problems.append(f"toolchain {binary} tidak tersedia")
+
+
+def check_container(problems: list[str], notes: list[str]) -> None:
+    if shutil.which("podman") is None:
+        problems.append("podman tidak tersedia")
+        return
+    notes.append("podman tersedia")
+    if not Path("/etc/subuid").is_file():
+        problems.append("/etc/subuid tidak ada, container rootless tidak bisa dipetakan")
+
+
+def check_security(problems: list[str], notes: list[str]) -> None:
+    if service_active("ufw"):
+        notes.append("ufw aktif")
+    if service_active("apparmor"):
+        notes.append("apparmor aktif")
+    if Path("/usr/sbin/sshd").exists() and service_active("ssh"):
+        problems.append("sshd berjalan, tidak sesuai kebijakan ArashiOS")
+    if Path("/etc/flatpak").is_dir():
+        remotes = Path("/etc/flatpak/remotes.d")
+        if remotes.is_dir() and any(remotes.iterdir()):
+            problems.append("flatpak punya remote bawaan, kebijakan melarang remote default")
+
+
+def check_storage(problems: list[str], notes: list[str]) -> None:
+    stat = os.statvfs("/")
+    free_gib = stat.f_bavail * stat.f_frsize / (1024**3)
+    notes.append(f"ruang bebas: {free_gib:.1f} GiB")
+    if free_gib < 5:
+        problems.append("ruang disk kurang dari 5 GiB")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Pemeriksaan kesehatan sistem ArashiOS")
+    parser.add_argument("--json", action="store_true")
+    args = parser.parse_args()
+
+    problems: list[str] = []
+    notes: list[str] = []
+    check_identity(problems, notes)
+    check_toolstack(problems, notes)
+    check_toolchain(problems, notes)
+    check_container(problems, notes)
+    check_security(problems, notes)
+    check_storage(problems, notes)
+
+    payload = {"problems": problems, "notes": notes}
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print("ArashiOS doctor")
+        for note in notes:
+            print(f"INFO  {note}")
+        for problem in problems:
+            print(f"PROBLEM {problem}")
+        if not problems:
+            print("Status: tidak ada masalah yang terdeteksi.")
+    return 1 if problems else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

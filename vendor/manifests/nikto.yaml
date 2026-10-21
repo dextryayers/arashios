@@ -1,0 +1,32 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: nikto
+category: web
+distribution: iso
+install:
+  path: /usr/bin/nikto
+license: debian
+name: nikto
+package: nikto
+role: security
+source: https://packages.debian.org/bookworm/nikto
+summary: Scanner konfigurasi server web.
+test:
+  command:
+  - nikto
+  kind: presence
+  version_args:
+  - -Version
+tier: T0
+version: debian-bookworm
+workflow: WF-02
+workflows:
+- WF-02

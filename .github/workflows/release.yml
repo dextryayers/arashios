@@ -55,6 +55,15 @@ jobs:
       - name: Check build host
         run: ./scripts/check-env.sh --release
 
+      - name: Validate source
+        run: |
+          ./scripts/check-toolstack.py
+          ./scripts/check-wordlists.py
+          ./scripts/check-licenses.py
+          ./scripts/generate-toolstack.py --check
+          ./scripts/generate-toolchain.py --check
+          ./scripts/refresh-toolchain-lock.py --check
+
       - name: Build ISO
         run: ./build.sh --edition ${{ matrix.edition }} --arch ${{ matrix.arch }} --version ${{ inputs.version }}
 

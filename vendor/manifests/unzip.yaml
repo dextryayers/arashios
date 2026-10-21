@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: unzip
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/unzip
+license: debian
+name: unzip
+package: unzip
+role: platform
+source: https://packages.debian.org/bookworm/unzip
+summary: Ekstraksi arsip zip.
+test:
+  command:
+  - unzip
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-12
+workflows:
+- WF-12

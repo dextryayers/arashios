@@ -1,0 +1,14 @@
+{
+  "name": "@NAME@",
+  "version": "0.1.0",
+  "description": "Deskripsi proyek @NAME@",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

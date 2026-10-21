@@ -24,8 +24,9 @@ jobs:
       - name: Install lint tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck python3 python3-gi \
-            gir1.2-gtk-3.0 gir1.2-gtk-4.0 libgtk-4-1 dconf-cli dpkg-dev
+          sudo apt-get install -y shellcheck python3 python3-yaml python3-gi \
+            gir1.2-gtk-3.0 gir1.2-gtk-4.0 libgtk-4-1 dconf-cli dpkg-dev \
+            python3-pip golang rustc nodejs gcc g++ make
 
       - name: Shell syntax
         run: |
@@ -65,6 +66,36 @@ jobs:
 
       - name: Validate branding package
         run: ./tests/branding-package.sh
+
+      - name: Generate toolstack catalog
+        run: ./scripts/generate-toolstack.py
+
+      - name: Verify toolstack catalog is current
+        run: ./scripts/generate-toolstack.py --check
+
+      - name: Generate toolchain catalog
+        run: ./scripts/generate-toolchain.py
+
+      - name: Verify toolchain catalog is current
+        run: ./scripts/generate-toolchain.py --check
+
+      - name: Validate toolstack and vendor manifests
+        run: ./scripts/check-toolstack.py
+
+      - name: Validate wordlists
+        run: ./scripts/check-wordlists.py
+
+      - name: Validate license metadata
+        run: ./scripts/check-licenses.py
+
+      - name: Validate toolchain lock
+        run: ./scripts/refresh-toolchain-lock.py --check
+
+      - name: Validate toolstack behaviour
+        run: ./tests/toolstack.sh
+
+      - name: Validate coding environment
+        run: ./tests/coding.sh
 
       - name: Validate build configuration
         run: ./scripts/validate-config.sh

@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: pkg-config
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/pkg-config
+license: debian
+name: pkg-config
+package: pkg-config
+role: platform
+source: https://packages.debian.org/bookworm/pkg-config
+summary: Lokasi pustaka development.
+test:
+  command:
+  - pkg-config
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

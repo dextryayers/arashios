@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: python3-venv
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/python3
+license: debian
+name: python3-venv
+package: python3-venv
+role: platform
+source: https://packages.debian.org/bookworm/python3-venv
+summary: Lingkungan virtual Python.
+test:
+  command:
+  - python3
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

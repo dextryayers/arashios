@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: testssl.sh
+category: web
+distribution: iso
+install:
+  path: /usr/bin/testssl.sh
+license: debian
+name: testssl.sh
+package: testssl.sh
+role: security
+source: https://packages.debian.org/bookworm/testssl.sh
+summary: Analisis kelemahan HTTPS.
+test:
+  command:
+  - testssl.sh
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-02
+workflows:
+- WF-02

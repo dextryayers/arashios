@@ -7,7 +7,8 @@ ISO ?= $(firstword $(wildcard out/*.iso))
 BOOT_MODE ?= uefi
 
 .PHONY: help env env-strict tokens brand-assets theme theme-check desktop-check \
-        package package-check design config config-matrix build verify test smoke lint clean distclean
+        package package-check design config config-matrix build verify test smoke lint clean distclean \
+        toolstack toolstack-check wordlists licenses toolchain-lock toolchain-check coding-check
 
 help:
 	@printf '%s\n' \
@@ -52,6 +53,29 @@ package-check:
 
 design: theme package
 
+toolstack:
+	./scripts/generate-toolstack.py
+	./scripts/generate-toolchain.py
+
+toolstack-check:
+	./tests/toolstack.sh
+
+wordlists:
+	./scripts/check-wordlists.py --update
+
+licenses:
+	./scripts/check-licenses.py --update
+
+toolchain-lock:
+	./scripts/refresh-toolchain-lock.py --cache $(HOME)/.cache/arashios/vendor
+
+toolchain-check:
+	./scripts/generate-toolchain.py --check
+	./scripts/refresh-toolchain-lock.py --check
+
+coding-check:
+	./tests/coding.sh
+
 env:
 	./scripts/check-env.sh
 
@@ -89,6 +113,8 @@ lint: theme
 	./tests/theme.sh
 	./tests/desktop-matrix.sh
 	./tests/branding-package.sh
+	./tests/toolstack.sh
+	./tests/coding.sh
 
 clean:
 	rm -rf build out

@@ -1,0 +1,252 @@
+{
+  "components": [
+    {
+      "binaries": [
+        "uv",
+        "uvx"
+      ],
+      "format": "tar.gz",
+      "homepage": "https://github.com/astral-sh/uv",
+      "kind": "archive",
+      "license": "MIT",
+      "manager": "",
+      "name": "uv",
+      "role": "python",
+      "summary": "Pengelola proyek Python dan environment virtual.",
+      "targets": {
+        "amd64": {
+          "origin": "upstream",
+          "sha256": "2b428396f12572d4429cf210ca234dd599a33b3af0958a4d5ed569d63e3f344f",
+          "url": "https://github.com/astral-sh/uv/releases/download/0.13.4/uv-x86_64-unknown-linux-gnu.tar.gz"
+        },
+        "arm64": {
+          "origin": "upstream",
+          "sha256": "1ae72b4718729e2ccc4f1ae2c6d1e531ca8467800e0546e9130b3886023a60ab",
+          "url": "https://github.com/astral-sh/uv/releases/download/0.13.4/uv-aarch64-unknown-linux-gnu.tar.gz"
+        },
+        "i386": {
+          "origin": "upstream",
+          "sha256": "8c72700f224979886ab41003a46cbac5a8ba070ff5857717026a3b4b144c5686",
+          "url": "https://github.com/astral-sh/uv/releases/download/0.13.4/uv-i686-unknown-linux-gnu.tar.gz"
+        }
+      },
+      "version": "0.13.4"
+    },
+    {
+      "binaries": [
+        "fnm"
+      ],
+      "format": "zip",
+      "homepage": "https://github.com/Schniz/fnm",
+      "kind": "archive",
+      "license": "MIT",
+      "manager": "",
+      "name": "fnm",
+      "role": "node",
+      "summary": "Pengelola versi Node.js.",
+      "targets": {
+        "amd64": {
+          "origin": "computed",
+          "sha256": "7807664f39d39fc518da1c35ba0181e4b3267603c4b1dedeb4b5fc6ae440a224",
+          "url": "https://github.com/Schniz/fnm/releases/download/v1.39.0/fnm-linux.zip"
+        },
+        "arm64": {
+          "origin": "computed",
+          "sha256": "4eaff58b2c5bf30d0934027572dd0b5bbb60d2a1af309230b53662d4b1d45599",
+          "url": "https://github.com/Schniz/fnm/releases/download/v1.39.0/fnm-arm64.zip"
+        },
+        "i386": {
+          "origin": "computed",
+          "sha256": "3d11d96a49d49cb3f11051a1aabf968fce30db665e79ee7d81851059731fa4ac",
+          "url": "https://github.com/Schniz/fnm/releases/download/v1.39.0/fnm-arm32.zip"
+        }
+      },
+      "version": "1.39.0"
+    },
+    {
+      "binaries": [
+        "node",
+        "npm",
+        "npx"
+      ],
+      "format": "",
+      "homepage": "https://nodejs.org",
+      "kind": "manager",
+      "license": "MIT",
+      "manager": "fnm",
+      "name": "node",
+      "role": "node",
+      "summary": "Node.js LTS melalui fnm.",
+      "targets": {},
+      "version": "22"
+    },
+    {
+      "binaries": [
+        "rustup",
+        "cargo",
+        "rustc",
+        "rustfmt",
+        "clippy-driver"
+      ],
+      "format": "",
+      "homepage": "https://rustup.rs",
+      "kind": "binary",
+      "license": "MIT",
+      "manager": "",
+      "name": "rustup",
+      "role": "rust",
+      "summary": "Pengelola toolchain Rust.",
+      "targets": {
+        "amd64": {
+          "origin": "upstream",
+          "sha256": "5be191e8c70a5007074254cb74d78dbfdd25cd5a61c27de7b8e5410122ec24f4",
+          "url": "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"
+        },
+        "arm64": {
+          "origin": "upstream",
+          "sha256": "a9c168dbea81a84671c6b7a5c1795cb0eb699020110d107ddfca427bd797e697",
+          "url": "https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init"
+        },
+        "i386": {
+          "origin": "upstream",
+          "sha256": "01c158bbee6bf70a57bd2642349b6f70e0be8b98b366fc4bbe38dfe7f82e1acb",
+          "url": "https://static.rust-lang.org/rustup/dist/i686-unknown-linux-gnu/rustup-init"
+        }
+      },
+      "version": "1.28.2"
+    },
+    {
+      "binaries": [
+        "cargo",
+        "rustc"
+      ],
+      "format": "",
+      "homepage": "https://www.rust-lang.org",
+      "kind": "manager",
+      "license": "MIT",
+      "manager": "rustup",
+      "name": "rust",
+      "role": "rust",
+      "summary": "Toolchain Rust stabil melalui rustup.",
+      "targets": {},
+      "version": "stable"
+    },
+    {
+      "binaries": [
+        "go",
+        "gofmt"
+      ],
+      "format": "tar.gz",
+      "homepage": "https://go.dev",
+      "kind": "archive",
+      "license": "BSD-3-Clause",
+      "manager": "",
+      "name": "go",
+      "role": "go",
+      "summary": "Toolchain Go modern, terpisah dari paket Debian.",
+      "targets": {
+        "amd64": {
+          "origin": "upstream",
+          "sha256": "65efbc80fdc1fa2cd2631cad5b481777a68e8725f34e89f50fc6ac714e379b40",
+          "url": "https://go.dev/dl/go1.27.3.linux-amd64.tar.gz"
+        },
+        "arm64": {
+          "origin": "upstream",
+          "sha256": "a06e99309dbcbdca1a8ccd2282c3ee146e55930886e26b4f1193269587165f49",
+          "url": "https://go.dev/dl/go1.27.3.linux-arm64.tar.gz"
+        },
+        "i386": {
+          "origin": "upstream",
+          "sha256": "cfc243057c03dd131413b91269d16b5061f87f312059c1ed78681cbb95d6afbf",
+          "url": "https://go.dev/dl/go1.27.3.linux-386.tar.gz"
+        }
+      },
+      "version": "1.27.3"
+    },
+    {
+      "binaries": [
+        "starship"
+      ],
+      "format": "tar.gz",
+      "homepage": "https://starship.rs",
+      "kind": "archive",
+      "license": "Apache-2.0",
+      "manager": "",
+      "name": "starship",
+      "role": "shell",
+      "summary": "Prompt shell dengan palet Kage.",
+      "targets": {
+        "amd64": {
+          "origin": "upstream",
+          "sha256": "3b94758850901717eb36aa1b53f8492c1322506ec6d41273bc6151e79ed8e4a1",
+          "url": "https://github.com/starship/starship/releases/download/v1.27.0/starship-x86_64-unknown-linux-gnu.tar.gz"
+        },
+        "arm64": {
+          "origin": "upstream",
+          "sha256": "341f5cbf24699fa0b27ec88965ad25f862ea09e15d35a543fd6ffdff1d2aa00d",
+          "url": "https://github.com/starship/starship/releases/download/v1.27.0/starship-aarch64-unknown-linux-musl.tar.gz"
+        },
+        "i386": {
+          "origin": "upstream",
+          "sha256": "3ccbd2aca8e8189f13272e71d51549001694bceb82191b28d009efe1ef597f7f",
+          "url": "https://github.com/starship/starship/releases/download/v1.27.0/starship-i686-unknown-linux-musl.tar.gz"
+        }
+      },
+      "version": "1.27.0"
+    },
+    {
+      "binaries": [
+        "eza"
+      ],
+      "format": "tar.gz",
+      "homepage": "https://github.com/eza-community/eza",
+      "kind": "archive",
+      "license": "MIT",
+      "manager": "",
+      "name": "eza",
+      "role": "shell",
+      "summary": "Perintah lsmodern dengan warna dan icon.",
+      "targets": {
+        "amd64": {
+          "origin": "computed",
+          "sha256": "35c70c5c43c29108075e58b893234c67ef585f0b53a7eaf8e9e7d4eec9f339b4",
+          "url": "https://github.com/eza-community/eza/releases/download/v0.23.5/eza_x86_64-unknown-linux-gnu.tar.gz"
+        },
+        "arm64": {
+          "origin": "computed",
+          "sha256": "40b87ae8628aa2ff0f0d2dc24ab52f689631366385c3da630bae745671fd71ec",
+          "url": "https://github.com/eza-community/eza/releases/download/v0.23.5/eza_aarch64-unknown-linux-gnu.tar.gz"
+        }
+      },
+      "version": "0.23.5"
+    },
+    {
+      "binaries": [
+        "codium"
+      ],
+      "format": "tar.gz",
+      "homepage": "https://vscodium.com",
+      "kind": "archive",
+      "license": "MIT",
+      "manager": "",
+      "name": "vscodium",
+      "role": "editor",
+      "summary": "Editor VSCodium tanpa telemetry bawaan.",
+      "targets": {
+        "amd64": {
+          "origin": "upstream",
+          "sha256": "61223b74f9e40834117311ec4177cb386d09b84c1aae4f9e674c96580569cef3",
+          "url": "https://github.com/VSCodium/vscodium/releases/download/1.140.06880/VSCodium-linux-x64-1.140.06880.tar.gz"
+        },
+        "arm64": {
+          "origin": "upstream",
+          "sha256": "a57be0d528adf7d6508318e37dbd982d695bf91501e324c37e97e11d5b375811",
+          "url": "https://github.com/VSCodium/vscodium/releases/download/1.140.06880/VSCodium-linux-arm64-1.140.06880.tar.gz"
+        }
+      },
+      "version": "1.140.06880"
+    }
+  ],
+  "schema_version": 1,
+  "updated": "2026-10-22"
+}

@@ -1,0 +1,9 @@
+# ArashiOS container untuk pengembangan Python.
+FROM docker.io/library/python@sha256:f06d01d4ba3f8ad5af45a3ec87df19c1d317d8e8961edc0fabda61811af6f7cf
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN useradd --create-home --uid 1000 --shell /bin/bash arashi
+USER arashi
+WORKDIR /workspace
+
+CMD ["/bin/bash"]

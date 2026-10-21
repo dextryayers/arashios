@@ -1,0 +1,33 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: wireshark
+category: interception
+distribution: iso
+install:
+  path: /usr/bin/wireshark
+license: debian
+name: wireshark
+package: wireshark
+role: security
+source: https://packages.debian.org/bookworm/wireshark
+summary: Analisis paket berbasis GUI.
+test:
+  command:
+  - wireshark
+  kind: presence
+  version_args:
+  - -v
+tier: T0
+version: debian-bookworm
+workflow: WF-07
+workflows:
+- WF-07
+- WF-09

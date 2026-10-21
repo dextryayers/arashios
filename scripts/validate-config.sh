@@ -101,6 +101,24 @@ require_file scripts/generate-theme.py
 require_file scripts/check-theme.py
 require_file scripts/check-desktop.py
 require_file scripts/build-branding-package.sh
+require_file scripts/generate-toolstack.py
+require_file scripts/check-toolstack.py
+require_file scripts/generate-toolchain.py
+require_file scripts/check-wordlists.py
+require_file scripts/check-licenses.py
+require_file scripts/refresh-toolchain-lock.py
+require_file scripts/build-vendor-tools.sh
+require_file scripts/check-glibc.py
+require_file tools/catalog.yaml
+require_file tools/source-pins.yaml
+require_file toolchains/catalog.yaml
+require_file toolchains/lock.yaml
+require_file docs/TOOLSTACK.md
+require_file docs/CODING.md
+require_file docs/ARSENAL.md
+require_file docs/CONTAINERS.md
+require_file docs/VENDORING.md
+require_file docs/LICENSES.md
 require_file branding/theme/templates/gtk-3.0/gtk.css.in
 require_file branding/theme/templates/gtk-4.0/gtk.css.in
 require_file branding/theme/templates/cinnamon/cinnamon.css.in
@@ -133,7 +151,24 @@ done
 require_exec config/common/includes.chroot/usr/local/bin/arashios-wallpaper
 require_exec config/common/includes.chroot/usr/local/bin/arashios-accessibility
 require_exec config/common/includes.chroot/usr/local/bin/kage-contrast
+require_exec config/common/includes.chroot/usr/local/bin/arashios-arsenal
+require_exec config/common/includes.chroot/usr/local/bin/arashios-tool-smoke
+require_exec config/common/includes.chroot/usr/local/bin/arashios-lab
+require_exec config/common/includes.chroot/usr/local/bin/arashios-container
+require_exec config/common/includes.chroot/usr/local/bin/arashios-toolchain
+require_exec config/common/includes.chroot/usr/local/bin/arashios-new-project
+require_exec config/common/includes.chroot/usr/local/bin/arashios-coding-smoke
+require_exec config/common/includes.chroot/usr/local/bin/arashios-doctor
+require_exec config/common/includes.chroot/usr/local/bin/arashios-help
 require_exec config/common/includes.chroot/lib/live/config/9990-arashios-shell
+require_file config/common/includes.chroot/usr/local/lib/arashios/toolstack.py
+require_file config/common/includes.chroot/usr/share/arashios/toolstack/catalog.json
+require_file config/common/includes.chroot/usr/share/arashios/toolchain/catalog.json
+require_file config/common/includes.chroot/usr/share/arashios/labs.json
+require_file config/common/includes.chroot/usr/share/wordlists/arashios/manifest.json
+require_file config/common/includes.chroot/etc/containers/containers.conf
+require_file config/common/includes.chroot/etc/containers/policy.json
+require_file config/common/includes.chroot/etc/containers/registries.conf
 
 printf '\nMetadata sistem:\n'
 if grep -q '^ID=arashios$' "$ROOT/config/common/includes.chroot/etc/os-release"; then
@@ -283,6 +318,16 @@ if "$ROOT/scripts/generate-theme.py" --check >/dev/null 2>&1; then
     ok "tema desktop sinkron"
 else
     fail "tema desktop kedaluwarsa atau hilang, jalankan scripts/generate-theme.py"
+fi
+if "$ROOT/scripts/generate-toolstack.py" --check >/dev/null 2>&1; then
+    ok "katalog toolstack sinkron"
+else
+    fail "katalog toolstack kedaluwarsa, jalankan scripts/generate-toolstack.py"
+fi
+if "$ROOT/scripts/generate-toolchain.py" --check >/dev/null 2>&1; then
+    ok "katalog toolchain sinkron"
+else
+    fail "katalog toolchain kedaluwarsa, jalankan scripts/generate-toolchain.py"
 fi
 
 printf '\n'

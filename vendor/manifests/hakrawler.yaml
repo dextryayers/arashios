@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/hakrawler
+  go_version: '1.23'
+  kind: go
+  source_commit: 61905593d82e8bac87ff7a7cca32b2adde42bb60
+  source_ref: 2.1
+category: web
+distribution: vendor
+install:
+  path: /usr/local/bin/hakrawler
+license: MIT
+license_file: LICENSE
+name: hakrawler
+role: security
+source: https://github.com/hakluke/hakrawler.git
+source_commit: 61905593d82e8bac87ff7a7cca32b2adde42bb60
+source_ref: 2.1
+summary: Crawler endpoint dan subdomain.
+test:
+  command:
+  - hakrawler
+  kind: version
+tier: T1
+version: '2.1'
+workflow: WF-02
+workflows:
+- WF-02

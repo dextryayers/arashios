@@ -21,6 +21,9 @@ Batasan yang memengaruhi arsitektur:
 | Aplikasi                                                         |
 | tool keamanan, tool coding, aplikasi harian, arsenal             |
 +------------------------------------------------------------------+
+| Toolstack dan toolchain                                         |
+| katalog tool, manifest vendor, arsenal, toolchain user level      |
++------------------------------------------------------------------+
 | Desktop                                                          |
 | Cinnamon / XFCE / LXQt, LightDM, tema Kage                       |
 +------------------------------------------------------------------+
@@ -88,7 +91,7 @@ Daftar paket memakai awalan numerik untuk urutan baca, bukan urutan instalasi ya
 |---|---|---|
 | `00-base.list.chroot` | Semua edisi | live-boot, live-config, APT, firmware, UFW, AppArmor, utilitas dasar |
 | `10-desktop-common.list.chroot` | Semua edisi | Xorg, LightDM, font, icon theme, PulseAudio, NetworkManager |
-| `20-security.list.chroot` | Semua edisi | Recon, web, password, wireless, forensics, container |
+| `20-security.list.chroot` | Semua edisi | Recon, web, password, wireless, forensics, AD, exploitation, container |
 | `30-dev-core.list.chroot` | Semua edisi | GCC, Python, Git, Neovim, tmux, database client |
 | `40-daily.list.chroot` | Semua edisi | Firefox ESR, LibreOffice, VLC, GIMP, KeePassXC, Timeshift |
 | `50-desktop.list.chroot` | Per edisi | Cinnamon, XFCE, atau LXQt dan aplikasi khasnya |
@@ -107,6 +110,39 @@ Jumlah paket unik pada validasi terakhir:
 Angka ini adalah irisan paket dari daftar, bukan ukuran image terpasang. Dependency resolution dapat menambah paket. Kombinasi Cinnamon arm64 dan i386 tidak didukung pada v1. arm64 tidak memuat `ltrace` dan `thermald` karena kedua paket tidak dibangun untuk arm64.
 
 Lab virtual pada amd64 memakai QEMU dan qemu-utils. libvirt dan virt-manager ditunda ke Fase 4 sebagai paket opsional pada sistem terpasang agar image live tidak menjalankan daemon tambahan.
+
+### 3.3 Lapisan Toolstack dan Toolchain
+
+Fase 4 dan Fase 5 menambah dua lapis konfigurasi yang berada di luar overlay
+live-build. Keduanya berbasis berkas sumber yang dapat diaudit.
+
+```text
+tools/
+├── catalog.yaml            katalog 215 tool, tier, alur kerja, lisensi
+└── source-pins.yaml        commit upstream untuk 41 tool tier 1
+toolchains/
+├── catalog.yaml            9 komponen toolchain user level
+└── lock.yaml               SHA-256 per komponen dan arsitektur
+vendor/
+└── manifests/<tool>.yaml   manifest per tool, hasil generate
+```
+
+Alur generate dan audit:
+
+```text
+scripts/generate-toolstack.py   -> vendor/manifests dan katalog runtime
+scripts/generate-toolchain.py   -> katalog runtime toolchain
+scripts/check-toolstack.py      -> konsistensi katalog, paket, lisensi
+scripts/check-wordlists.py      -> isi, checksum, lisensi wordlist
+scripts/check-licenses.py       -> lisensi tool dan atribusi
+scripts/check-glibc.py          -> kompatibilitas glibc binary vendor
+scripts/build-vendor-tools.sh   -> build tool tier 1 dari commit terkunci
+```
+
+Runtime image menerima katalog hasil generate, modul Arsenal, harness smoke
+test, wordlist, template proyek, template container, dan konfigurasi container
+rootless. Semua perintah berasal dari satu direktori
+`/usr/local/bin` dan satu modul `/usr/local/lib/arashios/toolstack.py`.
 
 ## 4. Alur Boot
 
@@ -336,8 +372,8 @@ Batas pengujian:
 |---|---|
 | 2 | Tema Kage, GRUB dan Plymouth final, QA boot. Implementasi statis selesai, QA boot menunggu ISO |
 | 3 | Tiga edisi desktop dengan tema dan layout. Implementasi statis selesai, QA sesi menunggu ISO |
-| 4 | Arsenal tool keamanan, manifest vendored, verifikasi checksum |
-| 5 | Toolchain coding lengkap dan profil container |
+| 4 | Arsenal tool keamanan, manifest vendored, verifikasi checksum. Implementasi statis selesai, artefak T1 dan runtime menunggu ISO |
+| 5 | Toolchain coding lengkap dan profil container. Implementasi statis selesai, runtime menunggu ISO |
 | 6 | Aplikasi harian, printer, dan integrasi desktop |
 | 7 | Calamares, partisi, enkripsi, persistence, recovery |
 | 8 | Repository ArashiOS, mirror, dan mekanisme update |

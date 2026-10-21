@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Tool T2 tidak didistribusikan. Pengguna unduh sendiri dari upstream.
+  sha256: ''
+  status: user-download
+build:
+  kind: installer
+category: reporting
+distribution: installer
+install:
+  path: ''
+license: proprietary
+name: obsidian
+role: security
+source: upstream
+summary: Editor catatan, opt-in.
+test:
+  command:
+  - obsidian
+  kind: presence
+tier: T2
+version: user-managed
+workflow: WF-12
+workflows:
+- WF-12

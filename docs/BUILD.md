@@ -51,6 +51,7 @@ Host turunan Debian seperti LMDE 7 dapat dipakai untuk pengembangan, tetapi buka
 | `ovmf` | firmware OVMF | UEFI virtual |
 | `apt-cacher-ng` | `apt-cacher-ng` | Cache paket opsional |
 | `shellcheck` | `shellcheck` | Lint shell |
+| `python3-yaml` | `python3` | Membaca katalog tool dan toolchain |
 
 Pasang:
 
@@ -60,7 +61,7 @@ sudo apt install -y \
   live-build debootstrap xorriso squashfs-tools \
   isolinux syslinux-common syslinux-utils syslinux-efi \
   grub-pc-bin grub-efi-amd64-bin mtools dosfstools \
-  qemu-system-x86 qemu-utils ovmf apt-cacher-ng shellcheck
+  qemu-system-x86 qemu-utils ovmf apt-cacher-ng shellcheck python3-yaml
 ```
 
 Verifikasi:
@@ -100,9 +101,10 @@ Aturan cache:
 # 1. Periksa host
 make env
 
-# 2. Hasilkan token, aset brand, tema, dan paket branding
+# 2. Hasilkan token, aset brand, tema, paket branding, dan katalog tool
 make theme
 make package
+make toolstack
 
 # 3. Validasi konfigurasi tanpa membangun ISO
 make config EDITION=cinnamon ARCH=amd64
@@ -135,7 +137,32 @@ Perkiraan waktu:
 
 Jika waktu melebihi 90 menit, periksa mirror, cache, dan ruang disk.
 
-## 6. Referensi Perintah
+## 6. Perintah Toolstack dan Coding
+
+```bash
+# Perbarui katalog runtime dari sumber
+make toolstack
+
+# Periksa katalog, manifest, wordlist, lisensi, dan lock toolchain
+make toolstack-check
+make coding-check
+
+# Perbarui lock checksum toolchain dari upstream
+make toolchain-lock
+
+# Perbarui dokumen lisensi dari katalog
+make licenses
+
+# Bangun tool tier 1 dari commit terkunci
+./scripts/build-vendor-tools.sh --list
+./scripts/build-vendor-tools.sh --tool nuclei --arch amd64
+```
+
+Pemeriksaan lock toolchain memakai jaringan hanya pada saat refresh. Mode
+`--check` hanya membaca berkas lock sehingga dapat dipakai di CI tanpa
+internet.
+
+## 7. Referensi Perintah
 
 ```bash
 ./build.sh --edition <cinnamon|xfce|lxqt> --arch <amd64|arm64|i386> [opsi]
@@ -165,7 +192,7 @@ Contoh:
 
 `build.sh` menolak edisi, arsitektur, versi, dan jumlah job yang tidak valid. Versi paket branding lokal mengikuti nilai `--version`. Build sebagai root memberi peringatan. Jalankan sebagai user biasa.
 
-## 7. Variabel Lingkungan
+## 8. Variabel Lingkungan
 
 | Variabel | Default | Fungsi |
 |---|---|---|
@@ -191,7 +218,7 @@ Contoh timestamp tetap:
 SOURCE_DATE_EPOCH=1792540800 make build EDITION=cinnamon ARCH=amd64
 ```
 
-## 8. Pipeline Build
+## 9. Pipeline Build
 
 ```text
 1. Validasi argumen, versi, edisi, arsitektur, job
@@ -243,7 +270,7 @@ Metadata ini dapat dibaca dari sesi live:
 cat /etc/arashios/build-info
 ```
 
-## 9. Nama dan Edisi
+## 10. Nama dan Edisi
 
 | Arsitektur | Edisi default | Sufiks | Contoh |
 |---|---|---|---|
@@ -263,7 +290,7 @@ ARASHIOS_V1_10_21
 
 Panjang volume ID dibatasi 32 karakter. Build gagal jika melebihi batas.
 
-## 10. Verifikasi Artefak
+## 11. Verifikasi Artefak
 
 ```bash
 make verify ISO=out/ArashiOS-amd64-V1.10.21.iso
@@ -291,7 +318,7 @@ Batas ukuran:
 
 Batas ini adalah anggaran, bukan target. Jika ISO melebihi batas, audit paket dan pertimbangkan memindahkan tool ke Fase 4.
 
-## 11. Uji Boot QEMU
+## 12. Uji Boot QEMU
 
 ```bash
 make test ISO=out/ArashiOS-amd64-V1.10.21.iso BOOT_MODE=uefi
@@ -333,7 +360,7 @@ out/qemu-amd64-uefi.log
 
 Uji ini membuktikan firmware dapat memuat bootloader dan kernel serta mencapai layar grafis. Uji ini tidak membuktikan kompatibilitas perangkat keras, audio, Wi-Fi, atau suspend.
 
-## 12. Smoke Test Runtime
+## 13. Smoke Test Runtime
 
 Di dalam sesi live, jalankan sebagai user `arashi`:
 
@@ -365,7 +392,7 @@ Smoke test mengembalikan status 1 jika ada pemeriksaan gagal. Simpan output ke b
 arashios-smoke 2>&1 | tee ~/arashios-smoke.log
 ```
 
-## 13. Lint dan Validasi
+## 14. Lint dan Validasi
 
 ```bash
 make lint
@@ -382,6 +409,8 @@ Perintah ini menjalankan:
 7. `tests/theme.sh` untuk tema, manifest, XML, dan parser CSS GTK3 serta GTK4.
 8. `tests/desktop-matrix.sh` untuk konfigurasi Cinnamon, XFCE, LXQt, Openbox, dan aksesibilitas.
 9. `tests/branding-package.sh` untuk isi, metadata, `md5sums`, dan reproduksibilitas paket.
+10. `tests/toolstack.sh` untuk katalog tool, manifest vendor, wordlist, lisensi, Arsenal, dan lab.
+11. `tests/coding.sh` untuk katalog toolchain, lock checksum, template proyek, smoke test bahasa, dan startup shell.
 
 Validasi individual:
 
@@ -395,6 +424,14 @@ Validasi individual:
 ./tests/theme.sh
 ./tests/desktop-matrix.sh
 ./tests/branding-package.sh
+./tests/toolstack.sh
+./tests/coding.sh
+./scripts/check-toolstack.py
+./scripts/check-wordlists.py
+./scripts/check-licenses.py
+./scripts/generate-toolstack.py --check
+./scripts/generate-toolchain.py --check
+./scripts/refresh-toolchain-lock.py --check
 ```
 
 Validasi konfigurasi `live-build` untuk semua kombinasi:
@@ -405,7 +442,7 @@ make config-matrix
 
 Perintah ini menjalankan `build.sh --dry-run` untuk tujuh kombinasi di `SUPPORTED_COMBINATIONS`, lalu memeriksa `os-release`, metadata build, sesi LightDM, paket branding, splash GRUB dan syslinux, konfigurasi GTK, MIME, bootloader, dan kernel flavour. Perintah ini memerlukan `live-build` dan tidak memerlukan akses root.
 
-## 14. Reproducibility
+## 15. Reproducibility
 
 Reproducibility penuh belum aktif pada Fase 1. Yang sudah tersedia:
 
@@ -425,7 +462,7 @@ Yang belum tersedia:
 
 Jangan mengklaim reproducible build sebelum dua build pada host dan snapshot yang sama menghasilkan hash identik.
 
-## 15. CI dan Rilis
+## 16. CI dan Rilis
 
 CI berjalan pada push ke `main`, pull request, dan manual. Pekerjaan lint berjalan pada Ubuntu 24.04. Pekerjaan config matrix berjalan pada container Debian 12 dan menguji tujuh kombinasi arsitektur dan edisi yang didukung.
 
@@ -443,7 +480,7 @@ Release workflow berjalan manual pada self-hosted runner dengan label `arashios-
 
 Setiap artefak diverifikasi sebelum diunggah. Release job menggabungkan checksum dan menerbitkan GitHub Release jika input `publish` bernilai true.
 
-## 16. Troubleshooting
+## 17. Troubleshooting
 
 | Gejala | Kemungkinan penyebab | Tindakan |
 |---|---|---|
@@ -477,7 +514,7 @@ make clean
 
 `make clean` menghapus `build/` dan `out/`. Sumber, token, dan aset yang sudah di-commit tidak dihapus.
 
-## 17. Menambah Paket
+## 18. Menambah Paket
 
 1. Tentukan edisi dan arsitektur.
 2. Tambahkan nama paket Debian ke daftar yang sesuai.
@@ -500,7 +537,7 @@ Aturan penamaan paket:
 4. Tidak ada paket dari repository Kali.
 5. Paket yang hanya tersedia di backports harus diberi komentar dan alasan.
 
-## 18. Menambah Edisi atau Arsitektur
+## 19. Menambah Edisi atau Arsitektur
 
 Edisi baru memerlukan:
 
@@ -522,7 +559,7 @@ Arsitektur baru memerlukan:
 
 `build.sh` menolak kombinasi arsitektur dan edisi yang tidak tercantum di `SUPPORTED_COMBINATIONS`. Matriks rilis berisi tujuh artefak; Fase 1 membangun dan menguji amd64, sedangkan arm64 dan i386 divalidasi konfigurasinya dan dibangun pada Fase 10.
 
-## 19. Keamanan Build
+## 20. Keamanan Build
 
 1. Build host harus bersih dan hanya dipakai untuk build.
 2. Jangan menjalankan build sebagai root kecuali terpaksa.
@@ -532,7 +569,7 @@ Arsitektur baru memerlukan:
 6. Simpan log build dan `build-info` untuk audit.
 7. Tool vendored pada Fase 4 harus memiliki manifest, checksum, dan sumber.
 
-## 20. Exit Gate Fase 1
+## 21. Exit Gate Fase 1
 
 | Kriteria | Status |
 |---|---|
@@ -547,14 +584,22 @@ Arsitektur baru memerlukan:
 
 Fase 1 belum selesai sampai seluruh baris berstatus lulus.
 
-## 21. Status Fase 2 dan Fase 3
+## 22. Status Fase 2 dan Fase 3
 
 Fase 2 dan Fase 3 sudah memiliki implementasi statis: tema Kage, paket
 branding, konfigurasi Cinnamon, XFCE, dan LXQt, serta pemeriksaan otomatis.
 Exit gate runtime belum lulus karena ISO belum dibangun dan boot belum diuji.
 Rincian ada di [PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md).
 
-## 22. Referensi
+## 23. Status Fase 4 dan Fase 5
+
+Fase 4 dan Fase 5 sudah memiliki implementasi statis: katalog tool 215 entri,
+41 manifest tool tier 1 dengan sumber terkunci, Arsenal, harness smoke test,
+wordlist, toolchain user level dengan lock checksum, template proyek, dan
+konfigurasi container rootless. Exit gate runtime belum lulus karena ISO belum
+dibangun. Rincian ada di [PHASE-4-5-REPORT.md](PHASE-4-5-REPORT.md).
+
+## 24. Referensi
 
 - [plan.md](../plan.md)
 - [ARCHITECTURE.md](ARCHITECTURE.md)
@@ -562,5 +607,11 @@ Rincian ada di [PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md).
 - [PHASE-0-1-REPORT.md](PHASE-0-1-REPORT.md)
 - [PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md)
 - [DESKTOP.md](DESKTOP.md)
+- [TOOLSTACK.md](TOOLSTACK.md)
+- [CODING.md](CODING.md)
+- [ARSENAL.md](ARSENAL.md)
+- [CONTAINERS.md](CONTAINERS.md)
+- [VENDORING.md](VENDORING.md)
+- [PHASE-4-5-REPORT.md](PHASE-4-5-REPORT.md)
 - [ADR index](adr/README.md)
 - [README](../README.md)

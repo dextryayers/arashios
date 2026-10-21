@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: unsupported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: ltrace
+category: reverse
+distribution: iso
+install:
+  path: /usr/bin/ltrace
+license: debian
+name: ltrace
+package: ltrace
+role: security
+source: https://packages.debian.org/bookworm/ltrace
+summary: Jejak panggilan pustaka.
+test:
+  command:
+  - ltrace
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

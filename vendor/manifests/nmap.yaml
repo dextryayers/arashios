@@ -1,0 +1,33 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: nmap
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/nmap
+license: debian
+name: nmap
+package: nmap
+role: security
+source: https://packages.debian.org/bookworm/nmap
+summary: Pemindai port, layanan, dan deteksi OS.
+test:
+  command:
+  - nmap
+  kind: presence
+  version_args:
+  - --version
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01
+- WF-11

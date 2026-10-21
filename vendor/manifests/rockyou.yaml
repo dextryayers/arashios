@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Tool T2 tidak didistribusikan. Pengguna unduh sendiri dari upstream.
+  sha256: ''
+  status: user-download
+build:
+  kind: installer
+category: wordlist
+distribution: installer
+install:
+  path: ''
+license: proprietary
+name: rockyou
+role: security
+source: upstream
+summary: Wordlist rockyou tanpa lisensi jelas, opt-in dengan peringatan.
+test:
+  command:
+  - none
+  kind: none
+tier: T2
+version: user-managed
+workflow: WF-04
+workflows:
+- WF-04

@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: meson
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/meson
+license: debian
+name: meson
+package: meson
+role: platform
+source: https://packages.debian.org/bookworm/meson
+summary: Sistem build berbasis deklarasi.
+test:
+  command:
+  - meson
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

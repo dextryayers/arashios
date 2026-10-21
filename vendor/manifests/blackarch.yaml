@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Container memakai digest. Arsenal menolak tag yang belum dikunci.
+  sha256: ''
+  status: digest-required
+build:
+  kind: container
+category: container
+distribution: container
+install:
+  image: docker.io/blackarchlinux/blackarch
+license: proprietary
+name: blackarch
+role: security
+source: docker.io/blackarchlinux/blackarch
+summary: Tool Linux ArchArmor untuk tool spesifik.
+test:
+  command:
+  - none
+  kind: none
+tier: T3
+version: digest-pinned
+workflow: WF-03
+workflows:
+- WF-03

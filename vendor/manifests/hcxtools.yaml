@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: hcxtools
+category: wireless
+distribution: iso
+install:
+  path: /usr/bin/hcxpcapng
+license: debian
+name: hcxtools
+package: hcxtools
+role: security
+source: https://packages.debian.org/bookworm/hcxtools
+summary: Penangkapan dan konversi hash WPA.
+test:
+  command:
+  - hcxpcapng
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-06
+workflows:
+- WF-06

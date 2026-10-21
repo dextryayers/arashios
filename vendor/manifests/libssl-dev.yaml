@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: libssl-dev
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/openssl
+license: debian
+name: libssl-dev
+package: libssl-dev
+role: platform
+source: https://packages.debian.org/bookworm/libssl-dev
+summary: Header development OpenSSL.
+test:
+  command:
+  - openssl
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

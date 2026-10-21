@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: java -jar zaproxy.jar
+  kind: java
+  source_commit: 1af83afeaa52e5b8389af494fcb9b7a540b82bf5
+  source_ref: w2026-10-15
+category: web
+distribution: vendor
+install:
+  path: /usr/local/bin/zap.sh
+license: Apache-2.0
+license_file: LICENSE
+name: zaproxy
+role: security
+source: https://github.com/zaproxy/zaproxy.git
+source_commit: 1af83afeaa52e5b8389af494fcb9b7a540b82bf5
+source_ref: w2026-10-15
+summary: Proxy pengujian OWASP.
+test:
+  command:
+  - zap.sh
+  kind: version
+tier: T1
+version: 2026.10.15
+workflow: WF-02
+workflows:
+- WF-02

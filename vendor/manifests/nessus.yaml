@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Tool T2 tidak didistribusikan. Pengguna unduh sendiri dari upstream.
+  sha256: ''
+  status: user-download
+build:
+  kind: installer
+category: recon
+distribution: installer
+install:
+  path: ''
+license: proprietary
+name: nessus
+role: security
+source: upstream
+summary: Scanner kerentanan, opt-in.
+test:
+  command:
+  - nessus
+  kind: presence
+tier: T2
+version: user-managed
+workflow: WF-01
+workflows:
+- WF-01

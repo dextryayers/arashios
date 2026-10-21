@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: python3-pip
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/pip3
+license: debian
+name: python3-pip
+package: python3-pip
+role: platform
+source: https://packages.debian.org/bookworm/python3-pip
+summary: Pengelola paket Python.
+test:
+  command:
+  - pip3
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

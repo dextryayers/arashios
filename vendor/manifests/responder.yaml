@@ -1,0 +1,36 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: python3 -m pip install --no-deps --prefix=$PREFIX responder
+  kind: python
+  source_commit: 61a028e8413053a2ead258824737609811a726cb
+  source_ref: v3.2.2.0
+category: interception
+distribution: vendor
+install:
+  path: /usr/local/bin/responder
+license: GPL-3.0-only
+license_file: LICENSE
+name: responder
+role: security
+source: https://github.com/lgandx/Responder.git
+source_commit: 61a028e8413053a2ead258824737609811a726cb
+source_ref: v3.2.2.0
+summary: Serangan LLMNR, NBT-NS, dan mDNS.
+test:
+  command:
+  - responder
+  kind: version
+  version_args:
+  - -h
+tier: T1
+version: 3.2.2.0
+workflow: WF-07
+workflows:
+- WF-07

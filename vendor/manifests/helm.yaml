@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/helm
+  go_version: '1.23'
+  kind: go
+  source_commit: b77ca75bfc1de35db606a8c06c42aedb4f751182
+  source_ref: v4.3.1
+category: cloud
+distribution: vendor
+install:
+  path: /usr/local/bin/helm
+license: Apache-2.0
+license_file: LICENSE
+name: helm
+role: security
+source: https://github.com/helm/helm.git
+source_commit: b77ca75bfc1de35db606a8c06c42aedb4f751182
+source_ref: v4.3.1
+summary: Manajer paket Kubernetes.
+test:
+  command:
+  - helm
+  kind: version
+tier: T1
+version: 4.3.1
+workflow: WF-11
+workflows:
+- WF-11

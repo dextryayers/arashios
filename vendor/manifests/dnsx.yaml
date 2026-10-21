@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/dnsx
+  go_version: '1.23'
+  kind: go
+  source_commit: 01e315f216db7d36198ec326fac13dd7846b1bec
+  source_ref: v1.3.1
+category: recon
+distribution: vendor
+install:
+  path: /usr/local/bin/dnsx
+license: MIT
+license_file: LICENSE.md
+name: dnsx
+role: security
+source: https://github.com/projectdiscovery/dnsx.git
+source_commit: 01e315f216db7d36198ec326fac13dd7846b1bec
+source_ref: v1.3.1
+summary: Resolver dan enumerasi DNS.
+test:
+  command:
+  - dnsx
+  kind: version
+tier: T1
+version: 1.3.1
+workflow: WF-01
+workflows:
+- WF-01

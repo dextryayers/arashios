@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/amass
+  go_version: '1.23'
+  kind: go
+  source_commit: 79299dce87b0085db0f2f4ef3e9c52cccb49f514
+  source_ref: v5.1.1
+category: recon
+distribution: vendor
+install:
+  path: /usr/local/bin/amass
+license: Apache-2.0
+license_file: LICENSE
+name: amass
+role: security
+source: https://github.com/owasp-amass/amass.git
+source_commit: 79299dce87b0085db0f2f4ef3e9c52cccb49f514
+source_ref: v5.1.1
+summary: Pemetaan attack surface.
+test:
+  command:
+  - amass
+  kind: version
+tier: T1
+version: 5.1.1
+workflow: WF-01
+workflows:
+- WF-01

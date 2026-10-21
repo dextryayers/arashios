@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/katana
+  go_version: '1.23'
+  kind: go
+  source_commit: 35267ac5c8ff1db9694a319d0eb466ed97b0969f
+  source_ref: v1.8.0
+category: web
+distribution: vendor
+install:
+  path: /usr/local/bin/katana
+license: MIT
+license_file: LICENSE.md
+name: katana
+role: security
+source: https://github.com/projectdiscovery/katana.git
+source_commit: 35267ac5c8ff1db9694a319d0eb466ed97b0969f
+source_ref: v1.8.0
+summary: Crawler web dan endpoint finder.
+test:
+  command:
+  - katana
+  kind: version
+tier: T1
+version: 1.8.0
+workflow: WF-02
+workflows:
+- WF-02

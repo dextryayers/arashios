@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: lua5.4
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/lua5.4
+license: debian
+name: lua5.4
+package: lua5.4
+role: platform
+source: https://packages.debian.org/bookworm/lua5.4
+summary: Interpreter Lua.
+test:
+  command:
+  - lua5.4
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

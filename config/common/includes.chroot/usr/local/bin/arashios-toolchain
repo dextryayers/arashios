@@ -1,0 +1,447 @@
+#!/usr/bin/env python3
+"""ArashiOS toolchain manager for user level language toolchains.
+
+Every component is installed without sudo into ~/.local/share/arashios and
+verified against the checksum lock before anything is executed. Components
+without a pinned checksum are refused.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import tarfile
+import time
+import urllib.error
+import urllib.request
+import zipfile
+from pathlib import Path
+
+CATALOG_CANDIDATES = [
+    Path(os.environ.get("ARASHIOS_TOOLCHAIN_CATALOG", "/usr/share/arashios/toolchain/catalog.json")),
+    Path(__file__).resolve().parents[2] / "share" / "arashios" / "toolchain" / "catalog.json",
+]
+USER_AGENT = "ArashiOS-toolchain/1.0"
+ARCH_MAP = {
+    "x86_64": "amd64",
+    "amd64": "amd64",
+    "aarch64": "arm64",
+    "arm64": "arm64",
+    "i386": "i386",
+    "i686": "i386",
+}
+
+
+def data_home() -> Path:
+    base = os.environ.get("XDG_DATA_HOME")
+    if base:
+        return Path(base)
+    return Path.home() / ".local" / "share"
+
+
+def toolchain_root() -> Path:
+    override = os.environ.get("ARASHIOS_TOOLCHAIN_ROOT")
+    if override:
+        return Path(override)
+    return data_home() / "arashios" / "toolchains"
+
+
+def bin_dir() -> Path:
+    override = os.environ.get("ARASHIOS_TOOL_PREFIX")
+    if override:
+        return Path(override)
+    return Path.home() / ".local" / "bin"
+
+
+def cache_dir() -> Path:
+    override = os.environ.get("ARASHIOS_VENDOR_CACHE")
+    if override:
+        return Path(override)
+    return Path.home() / ".cache" / "arashios" / "vendor"
+
+
+def state_file() -> Path:
+    return data_home() / "arashios" / "toolchain-state.json"
+
+
+def current_arch() -> str:
+    return ARCH_MAP.get(platform.machine().lower(), platform.machine().lower())
+
+
+def load_catalog() -> dict:
+    for candidate in CATALOG_CANDIDATES:
+        if candidate.is_file():
+            with candidate.open(encoding="utf-8") as handle:
+                return json.load(handle)
+    raise SystemExit("ERROR: katalog toolchain tidak ditemukan.")
+
+
+def load_state() -> dict:
+    path = state_file()
+    if not path.is_file():
+        return {"installed": {}}
+    try:
+        with path.open(encoding="utf-8") as handle:
+            data = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        return {"installed": {}}
+    data.setdefault("installed", {})
+    return data
+
+
+def save_state(state: dict) -> None:
+    path = state_file()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        json.dump(state, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+
+
+def find_component(catalog: dict, name: str) -> dict | None:
+    for component in catalog.get("components", []):
+        if component["name"] == name:
+            return component
+    return None
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def download(url: str, target: Path, offline: bool, timeout: int = 600) -> bool:
+    if offline:
+        return target.is_file()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    last: Exception | None = None
+    for attempt in range(4):
+        try:
+            request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(request, timeout=timeout) as response, target.open("wb") as handle:
+                shutil.copyfileobj(response, handle)
+            return True
+        except (urllib.error.URLError, OSError, TimeoutError) as error:
+            last = error
+            time.sleep(3 * (attempt + 1))
+    print(f"ERROR: unduhan gagal: {url} ({last})", file=sys.stderr)
+    return False
+
+
+def safe_extract(archive: Path, destination: Path, fmt: str) -> None:
+    destination.mkdir(parents=True, exist_ok=True)
+    resolved = destination.resolve()
+    if fmt == "zip":
+        with zipfile.ZipFile(archive) as handle:
+            for member in handle.namelist():
+                target = (destination / member).resolve()
+                if not str(target).startswith(str(resolved)):
+                    raise SystemExit(f"ERROR: arsip mencoba keluar dari direktori target: {member}")
+            handle.extractall(destination)
+        return
+    with tarfile.open(archive) as handle:
+        for member in handle.getmembers():
+            target = (destination / member.name).resolve()
+            if not str(target).startswith(str(resolved)):
+                raise SystemExit(f"ERROR: arsip mencoba keluar dari direktori target: {member.name}")
+            if member.issym() or member.islnk():
+                link = member.linkname
+                if link.startswith("/"):
+                    raise SystemExit(f"ERROR: tautan absolut tidak diizinkan: {member.name}")
+        handle.extractall(destination)
+
+
+def locate_binary(root: Path, binary: str) -> Path | None:
+    for candidate in sorted(root.rglob(binary)):
+        if candidate.is_file() and os.access(candidate, os.X_OK):
+            return candidate
+    return None
+
+
+def install_archive(component: dict, target_info: dict, args: argparse.Namespace) -> int:
+    arch = current_arch()
+    target_info = target_info
+    digest = str(target_info.get("sha256", "") or "")
+    if not digest:
+        print(
+            f"ERROR: checksum untuk {component['name']} ({arch}) belum terkunci.\n"
+            "Jalankan scripts/refresh-toolchain-lock.py pada host build.",
+            file=sys.stderr,
+        )
+        return 2
+    url = target_info["url"]
+    filename = url.rsplit("/", 1)[-1]
+    cache = cache_dir()
+    archive = cache / filename
+    if args.dry_run:
+        print(f"DRY RUN: unduh {url}")
+        print(f"DRY RUN: verifikasi sha256 {digest}")
+        print(f"DRY RUN: pasang ke {toolchain_root() / component['name']}")
+        return 0
+    if not archive.is_file():
+        if not download(url, archive, args.offline):
+            return 1
+    actual = sha256_file(archive)
+    if actual != digest:
+        print(
+            f"ERROR: checksum {component['name']} tidak cocok.\n"
+            f"Harapan: {digest}\nAktual : {actual}",
+            file=sys.stderr,
+        )
+        archive.unlink(missing_ok=True)
+        return 1
+    destination = toolchain_root() / component["name"] / component["version"]
+    if destination.exists():
+        shutil.rmtree(destination)
+    fmt = component.get("format") or ("zip" if filename.endswith(".zip") else "tar.gz")
+    safe_extract(archive, destination, fmt)
+    linked = []
+    for binary in component.get("binaries", []):
+        found = locate_binary(destination, binary)
+        if found is None:
+            continue
+        target = bin_dir() / binary
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists() or target.is_symlink():
+            target.unlink()
+        target.symlink_to(found)
+        linked.append(str(target))
+    state = load_state()
+    state["installed"][component["name"]] = {
+        "version": component["version"],
+        "path": str(destination),
+        "sha256": digest,
+        "linked": linked,
+        "installed_at": int(time.time()),
+    }
+    save_state(state)
+    print(f"{component['name']} {component['version']} dipasang ke {destination}")
+    for link in linked:
+        print(f"  tautan {link}")
+    return 0
+
+
+def install_manager(component: dict, args: argparse.Namespace) -> int:
+    manager = component.get("manager", "")
+    version = component["version"]
+    if manager == "fnm":
+        binary = shutil.which("fnm")
+        if binary is None:
+            print("ERROR: fnm belum terpasang. Jalankan: arashios-toolchain install fnm", file=sys.stderr)
+            return 2
+        if args.dry_run:
+            print(f"DRY RUN: fnm install {version} && fnm default {version}")
+            return 0
+        result = subprocess.run([binary, "install", version], check=False)
+        if result.returncode != 0:
+            return result.returncode
+        subprocess.run([binary, "default", version], check=False)
+        return 0
+    if manager == "rustup":
+        binary = shutil.which("rustup")
+        if binary is None:
+            print("ERROR: rustup belum terpasang. Jalankan: arashios-toolchain install rustup", file=sys.stderr)
+            return 2
+        if args.dry_run:
+            print(f"DRY RUN: rustup toolchain install {version} && rustup default {version}")
+            return 0
+        result = subprocess.run([binary, "toolchain", "install", version], check=False)
+        if result.returncode != 0:
+            return result.returncode
+        subprocess.run([binary, "default", version], check=False)
+        return 0
+    print(f"ERROR: manager tidak dikenal: {manager}", file=sys.stderr)
+    return 2
+
+
+def command_list(args: argparse.Namespace) -> int:
+    catalog = load_catalog()
+    arch = current_arch()
+    payload = {"arch": arch, "components": []}
+    for component in catalog.get("components", []):
+        target = component.get("targets", {}).get(arch, {})
+        payload["components"].append(
+            {
+                "name": component["name"],
+                "version": component["version"],
+                "role": component["role"],
+                "kind": component["kind"],
+                "supported": bool(target) or component["kind"] == "manager",
+                "sha256": target.get("sha256", ""),
+                "summary": component["summary"],
+            }
+        )
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+    for entry in payload["components"]:
+        state = "tersedia" if entry["supported"] else "tidak tersedia"
+        print(f"{entry['name']:<12} {entry['version']:<10} {entry['role']:<10} {state:<16} {entry['summary']}")
+    return 0
+
+
+def command_status(args: argparse.Namespace) -> int:
+    catalog = load_catalog()
+    state = load_state()
+    arch = current_arch()
+    payload = {"arch": arch, "installed": state.get("installed", {}), "available": []}
+    for component in catalog.get("components", []):
+        target = component.get("targets", {}).get(arch, {})
+        payload["available"].append(
+            {
+                "name": component["name"],
+                "version": component["version"],
+                "supported": bool(target) or component["kind"] == "manager",
+                "locked": bool(target.get("sha256")),
+            }
+        )
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+    print(f"Arsitektur: {arch}")
+    for entry in payload["available"]:
+        marker = "terpasang" if entry["name"] in payload["installed"] else "belum"
+        print(f"{entry['name']:<12} {entry['version']:<10} {marker:<10} checksum {'ya' if entry['locked'] else 'tidak'}")
+    return 0
+
+
+def command_install(args: argparse.Namespace) -> int:
+    catalog = load_catalog()
+    component = find_component(catalog, args.name)
+    if component is None:
+        print(f"ERROR: komponen tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    arch = current_arch()
+    if component["kind"] == "manager":
+        return install_manager(component, args)
+    target = component.get("targets", {}).get(arch)
+    if target is None:
+        print(
+            f"ERROR: {component['name']} tidak tersedia untuk arsitektur {arch}.",
+            file=sys.stderr,
+        )
+        return 2
+    return install_archive(component, target, args)
+
+
+def command_remove(args: argparse.Namespace) -> int:
+    catalog = load_catalog()
+    component = find_component(catalog, args.name)
+    if component is None:
+        print(f"ERROR: komponen tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    state = load_state()
+    entry = state.get("installed", {}).get(args.name)
+    if not entry:
+        print(f"{args.name} tidak tercatat sebagai hasil instalasi toolchain.", file=sys.stderr)
+        return 2
+    for link in entry.get("linked", []):
+        path = Path(link)
+        if path.is_symlink():
+            path.unlink()
+    root = toolchain_root() / args.name
+    if root.exists():
+        shutil.rmtree(root)
+    state["installed"].pop(args.name, None)
+    save_state(state)
+    print(f"{args.name} dihapus.")
+    return 0
+
+
+def command_doctor(args: argparse.Namespace) -> int:
+    catalog = load_catalog()
+    arch = current_arch()
+    problems: list[str] = []
+    notes: list[str] = []
+    for component in catalog.get("components", []):
+        if component["kind"] == "manager":
+            continue
+        target = component.get("targets", {}).get(arch, {})
+        if not target:
+            notes.append(f"{component['name']}: tidak tersedia untuk {arch}")
+            continue
+        if not target.get("sha256"):
+            problems.append(f"{component['name']}: checksum belum terkunci")
+    installed_system = Path("/etc/arashios").is_dir()
+    required = ("python3", "go", "rustc", "node", "gcc")
+    optional = ("java", "php", "ruby", "lua5.4")
+    for binary in required + optional:
+        path = shutil.which(binary)
+        if path is not None:
+            notes.append(f"{binary}: {path}")
+        elif binary in required or installed_system:
+            problems.append(f"biner sistem {binary} tidak ditemukan")
+        else:
+            notes.append(f"{binary} tidak tersedia")
+    if shutil.which("podman") is None:
+        message = "podman tidak tersedia"
+        if installed_system:
+            problems.append(message)
+        else:
+            notes.append(message)
+    notes.append(f"akar toolchain: {toolchain_root()}")
+    payload = {"problems": problems, "notes": notes}
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        for note in notes:
+            print(f"INFO  {note}")
+        for problem in problems:
+            print(f"PROBLEM {problem}")
+    return 1 if problems else 0
+
+
+def command_env(args: argparse.Namespace) -> int:
+    print("export PATH=\"$HOME/.local/bin:$PATH\"")
+    print(f"export ARASHIOS_TOOLCHAIN_ROOT={toolchain_root()}")
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Pengelola toolchain ArashiOS")
+    parser.add_argument("--json", action="store_true")
+    shared = argparse.ArgumentParser(add_help=False)
+    shared.add_argument("--json", action="store_true", default=argparse.SUPPRESS, help="keluaran JSON")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    listing = sub.add_parser("list", parents=[shared], help="daftar komponen toolchain")
+    listing.set_defaults(func=command_list)
+
+    status = sub.add_parser("status", parents=[shared], help="status instalasi toolchain")
+    status.set_defaults(func=command_status)
+
+    install = sub.add_parser("install", parents=[shared], help="pasang komponen toolchain")
+    install.add_argument("name")
+    install.add_argument("--dry-run", action="store_true")
+    install.add_argument("--offline", action="store_true")
+    install.set_defaults(func=command_install)
+
+    remove = sub.add_parser("remove", parents=[shared], help="hapus komponen toolchain")
+    remove.add_argument("name")
+    remove.set_defaults(func=command_remove)
+
+    doctor = sub.add_parser("doctor", parents=[shared], help="periksa kesiapan toolchain")
+    doctor.set_defaults(func=command_doctor)
+
+    env = sub.add_parser("env", parents=[shared], help="cetak variabel PATH untuk toolchain")
+    env.set_defaults(func=command_env)
+
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

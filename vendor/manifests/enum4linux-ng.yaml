@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: python3 -m pip install --no-deps --prefix=$PREFIX enum4linux-ng
+  kind: python
+  source_commit: a0924d3c5dab113095602017d74383c5221967d7
+  source_ref: master
+category: active-directory
+distribution: vendor
+install:
+  path: /usr/local/bin/enum4linux-ng
+license: GPL-3.0-only
+license_file: LICENSE
+name: enum4linux-ng
+role: security
+source: https://github.com/CiscoCXSecurity/enum4linux-ng.git
+source_commit: a0924d3c5dab113095602017d74383c5221967d7
+source_ref: master
+summary: Enumerasi SMB.
+test:
+  command:
+  - enum4linux-ng
+  kind: version
+tier: T1
+version: 2026.10.22
+workflow: WF-05
+workflows:
+- WF-05

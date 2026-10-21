@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: python3 -m pip install --no-deps --prefix=$PREFIX ldapdomaindump
+  kind: python
+  source_commit: 35b357e1286470d39ee472d3fdd10b11c0e00fdc
+  source_ref: v0.10.0
+category: active-directory
+distribution: vendor
+install:
+  path: /usr/local/bin/ldapdomaindump
+license: Apache-2.0
+license_file: LICENSE
+name: ldapdomaindump
+role: security
+source: https://github.com/dirkjanm/ldapdomaindump.git
+source_commit: 35b357e1286470d39ee472d3fdd10b11c0e00fdc
+source_ref: v0.10.0
+summary: Dump struktur LDAP.
+test:
+  command:
+  - ldapdomaindump
+  kind: version
+tier: T1
+version: 0.10.0
+workflow: WF-05
+workflows:
+- WF-05

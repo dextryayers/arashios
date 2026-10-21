@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: make -C kismet-2025-09-R1 install PREFIX=$PREFIX
+  kind: source
+  source_commit: 7a3b5d207e6b15d7dcbb8fa916e121e51d3280e0
+  source_ref: kismet-2025-09-R1
+category: wireless
+distribution: vendor
+install:
+  path: /usr/local/bin/kismet
+license: GPL-3.0-only
+license_file: LICENSE
+name: kismet
+role: security
+source: https://github.com/kismetwireless/kismet.git
+source_commit: 7a3b5d207e6b15d7dcbb8fa916e121e51d3280e0
+source_ref: kismet-2025-09-R1
+summary: Deteksi nirkabel pasif.
+test:
+  command:
+  - kismet
+  kind: version
+tier: T1
+version: '2025.09'
+workflow: WF-06
+workflows:
+- WF-06

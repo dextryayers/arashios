@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: python3 -m pip install --no-deps --prefix=$PREFIX certipy
+  kind: python
+  source_commit: e916eefe46f4e493d6bde3f0a7b4c42ea8384cde
+  source_ref: 5.1.0
+category: active-directory
+distribution: vendor
+install:
+  path: /usr/local/bin/certipy
+license: GPL-3.0-only
+license_file: LICENSE
+name: certipy
+role: security
+source: https://github.com/ly4k/Certipy.git
+source_commit: e916eefe46f4e493d6bde3f0a7b4c42ea8384cde
+source_ref: 5.1.0
+summary: Audit dan eksploitasi Active Directory Certificate Services.
+test:
+  command:
+  - certipy
+  kind: version
+tier: T1
+version: 5.1.0
+workflow: WF-05
+workflows:
+- WF-05

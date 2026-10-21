@@ -12,8 +12,8 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 | 1 | Baseline live ISO amd64, branding, smoke test, QEMU harness | Implementasi selesai, menunggu build host |
 | 2 | Tema desktop penuh dan integrasi Kage | Implementasi statis selesai, validasi runtime menunggu ISO |
 | 3 | Tiga edisi desktop dan matriks QA | Integrasi statis selesai, QA runtime menunggu ISO |
-| 4 | Arsenal tool keamanan, termasuk tool vendored | Direncanakan |
-| 5 | Toolchain coding lengkap dan container | Direncanakan |
+| 4 | Arsenal tool keamanan, termasuk tool vendored | Implementasi statis selesai, artefak T1 dan runtime menunggu ISO |
+| 5 | Toolchain coding lengkap dan container | Implementasi statis selesai, runtime menunggu ISO |
 | 6 | Aplikasi harian dan printer | Direncanakan |
 | 7 | Calamares, enkripsi, persistence, recovery | Direncanakan |
 | 8 | Update, repository, dan mirror | Direncanakan |
@@ -22,7 +22,7 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 | 11 | Dokumentasi publik, situs, dan komunitas | Direncanakan |
 | 12 | RC, rilis, dan pemeliharaan | Direncanakan |
 
-Fase 1 menargetkan ISO live yang dapat boot pada QEMU UEFI dan BIOS. Fase 2 dan Fase 3 sudah memiliki tema, paket branding, dan konfigurasi tiga desktop pada tingkat statis. Installer Calamares, tool vendored, signing produksi, dan validasi boot belum aktif. Rencana lengkap ada di [plan.md](plan.md). Status terperinci ada di [laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md) dan [laporan Fase 2 dan 3](docs/PHASE-2-3-REPORT.md).
+Fase 1 menargetkan ISO live yang dapat boot pada QEMU UEFI dan BIOS. Fase 2 dan Fase 3 sudah memiliki tema, paket branding, dan konfigurasi tiga desktop pada tingkat statis. Fase 4 dan Fase 5 menambahkan katalog tool 215 entri, 41 manifest tool tier 1 dengan sumber terkunci, Arsenal, wordlist, toolchain user level dengan checksum, template proyek, dan container rootless pada tingkat statis. Installer Calamares, artefak binary tier 1, signing produksi, dan validasi boot belum aktif. Rencana lengkap ada di [plan.md](plan.md). Status terperinci ada di [laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md), [laporan Fase 2 dan 3](docs/PHASE-2-3-REPORT.md), dan [laporan Fase 4 dan 5](docs/PHASE-4-5-REPORT.md).
 
 ## Edisi
 
@@ -170,12 +170,14 @@ Validasi konfigurasi semua kombinasi:
 make config-matrix
 ```
 
-Pemeriksaan tema dan desktop:
+Pemeriksaan tema, desktop, toolstack, dan coding:
 
 ```bash
 make theme-check
 make desktop-check
 make package-check
+make toolstack-check
+make coding-check
 ```
 
 Lint dan validasi statis:
@@ -184,7 +186,39 @@ Lint dan validasi statis:
 make lint
 ```
 
-`make lint` menghasilkan ulang tema, menjalankan shellcheck, pemeriksaan sintaks Python, pemeriksaan dokumen, traceability requirement, validasi token, validasi konfigurasi live-build, parser CSS GTK3 dan GTK4, pemeriksaan desktop, dan pemeriksaan paket branding. `make package` membangun paket branding lokal secara terpisah.
+`make lint` menghasilkan ulang tema, menjalankan shellcheck, pemeriksaan sintaks Python, pemeriksaan dokumen, traceability requirement, validasi token, validasi konfigurasi live-build, parser CSS GTK3 dan GTK4, pemeriksaan desktop, pemeriksaan paket branding, pemeriksaan toolstack, dan pemeriksaan lingkungan coding. `make package` membangun paket branding lokal secara terpisah.
+
+## Toolstack dan Arsenal
+
+Katalog tool adalah sumber kebenaran tunggal di `tools/catalog.yaml`. Katalog
+runtime, manifest per tool, dan katalog toolchain dibuat dari berkas itu.
+
+```bash
+arashios-arsenal list --workflow WF-05
+arashios-arsenal info nuclei
+arashios-arsenal verify --tier T1 --strict
+arashios-arsenal doctor
+arashios-tool-smoke --tier T0 --output build/toolstack-smoke.json
+```
+
+Arsenal memasang tool tier 0 dari Debian, tool tier 1 dari cache vendor dengan
+verifikasi checksum, tool tier 2 secara manual, dan tool tier 3 sebagai
+container dengan digest terkunci. Tidak ada repository pihak ketiga yang
+ditambahkan ke sistem terpasang.
+
+## Lingkungan Coding
+
+```bash
+arashios-toolchain list
+arashios-toolchain install uv
+arashios-new-project create python ~/proyek/analisis
+arashios-coding-smoke
+arashios-container build python
+```
+
+Toolchain user level dipasang tanpa sudo ke `~/.local/share/arashios` dan
+setiap unduhan diverifikasi dengan checksum yang dikunci di
+`toolchains/lock.yaml`.
 
 ## Struktur Repository
 
@@ -195,7 +229,10 @@ make lint
 │   ├── arches/               Overlay paket khusus arsitektur
 │   ├── common/               Paket, archive, include, hook bersama
 │   └── editions/             Overlay Cinnamon, XFCE, LXQt
-├── docs/                     Arsitektur, build, desain, legal, ADR
+├── docs/                     Arsitektur, build, desain, legal, ADR, laporan fase
+├── tools/                    Katalog tool dan pin sumber upstream
+├── toolchains/               Katalog toolchain user level dan lock checksum
+├── vendor/                   Manifest tool tier 1 per tool
 ├── scripts/                  Generator token, aset, tema, validator, pemeriksaan host
 ├── tests/                    QEMU harness, verifikasi artefak, smoke test, tema, paket
 ├── build.sh                  Wrapper live-build
@@ -233,7 +270,7 @@ Aset raster GRUB, Plymouth, dan wallpaper dihasilkan oleh `scripts/generate-bran
 - AppArmor aktif.
 - sysctl hardening diterapkan melalui `/etc/sysctl.d/99-arashios-hardening.conf`.
 - Autologin hanya untuk sesi live. Calamares akan menghapus konfigurasi autologin pada Fase 7.
-- Tool yang membutuhkan repository pihak ketiga akan di-vendor dengan manifest dan checksum pada Fase 4.
+- Tool yang membutuhkan repository pihak ketiga di-vendor dengan manifest, commit terkunci, dan checksum. Daftar tool yang boleh masuk image ada di `tools/catalog.yaml`.
 
 Laporkan kerentanan melalui prosedur di [SECURITY.md](SECURITY.md). Jangan membuka issue publik untuk kerentanan yang belum diperbaiki.
 
@@ -254,6 +291,13 @@ Kode berlisensi GPL-3.0-or-later. Aset visual berlisensi CC-BY-SA-4.0. Dokumenta
 - [Laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md)
 - [Laporan Fase 2 dan 3](docs/PHASE-2-3-REPORT.md)
 - [Integrasi desktop](docs/DESKTOP.md)
+- [Toolstack keamanan](docs/TOOLSTACK.md)
+- [Arsenal](docs/ARSENAL.md)
+- [Lingkungan coding](docs/CODING.md)
+- [Container dan lab](docs/CONTAINERS.md)
+- [Kebijakan vendoring](docs/VENDORING.md)
+- [Matriks lisensi](docs/LICENSES.md)
+- [Laporan Fase 4 dan 5](docs/PHASE-4-5-REPORT.md)
 - [Architecture Decision Records](docs/adr/README.md)
 - [Kontribusi](CONTRIBUTING.md)
 - [Kode etik](CODE_OF_CONDUCT.md)
@@ -265,7 +309,7 @@ Kode berlisensi GPL-3.0-or-later. Aset visual berlisensi CC-BY-SA-4.0. Dokumenta
 - ISO belum dibangun pada host ini karena toolchain `lb`, `debootstrap`, `xorriso`, dan QEMU belum tersedia.
 - Boot GRUB, Plymouth, LightDM, login desktop, panel XFCE, Openbox, dan rendering Kvantum belum diuji pada sesi nyata.
 - Calamares belum tersedia, sehingga ISO hanya berjalan sebagai live session.
-- Tool T1, T2, dan T3 belum di-vendor.
+- Artefak binary tool T1 belum dibangun, sehingga `artifact.sha256` pada manifest masih kosong.
 - Signing produksi belum aktif.
 - Repository ArashiOS dan mekanisme update mandiri belum aktif.
 - Pengujian dilakukan pada QEMU. Uji perangkat keras nyata masuk checklist RC.

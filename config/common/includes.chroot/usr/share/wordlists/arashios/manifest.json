@@ -1,0 +1,49 @@
+{
+  "files": {
+    "common-parameters.txt": {
+      "bytes": 544,
+      "entries": 68,
+      "license": "CC-BY-SA-4.0",
+      "sha256": "a39a8bd22a88b273507fabf54806d4f010110a47b91c14393911f6ee201f0a54",
+      "source": "kurasi internal ArashiOS"
+    },
+    "common-passwords.txt": {
+      "bytes": 819,
+      "entries": 84,
+      "license": "CC-BY-SA-4.0",
+      "sha256": "fc45abd51e4f4d4354a7b2c257eb47a92caccb2d002abe9f2779ef16fd6f8c64",
+      "source": "kurasi internal ArashiOS"
+    },
+    "common-paths.txt": {
+      "bytes": 961,
+      "entries": 129,
+      "license": "CC-BY-SA-4.0",
+      "sha256": "2e970653c8d285e9fa0208fffc00178aa55059ccfb0c66bc1320dc1c3a2f8dd6",
+      "source": "kurasi internal ArashiOS"
+    },
+    "common-subdomains.txt": {
+      "bytes": 872,
+      "entries": 129,
+      "license": "CC-BY-SA-4.0",
+      "sha256": "2f75da31cc78e585cc58174d8aad533682710f251342ed047583641fcbc5d23b",
+      "source": "kurasi internal ArashiOS"
+    },
+    "common-usernames.txt": {
+      "bytes": 515,
+      "entries": 60,
+      "license": "CC-BY-SA-4.0",
+      "sha256": "b67808ebb603f623da7bf60ff13b77f278c1bad5424840e5056f5e8ad7c19af1",
+      "source": "kurasi internal ArashiOS"
+    },
+    "detection-payloads.txt": {
+      "bytes": 552,
+      "entries": 29,
+      "license": "CC-BY-SA-4.0",
+      "sha256": "8a338c4e9dbc02ef8fbe236430c744a6bc62349d47395ddf40ef960bfd440237",
+      "source": "kurasi internal ArashiOS"
+    }
+  },
+  "license": "CC-BY-SA-4.0",
+  "schema_version": 1,
+  "total_bytes": 4263
+}

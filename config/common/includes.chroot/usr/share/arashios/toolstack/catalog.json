@@ -1,0 +1,6569 @@
+{
+  "catalog_version": "1.10.21",
+  "debian_codename": "bookworm",
+  "schema_version": 1,
+  "tools": [
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "wireless",
+      "distribution": "iso",
+      "install_path": "/usr/bin/aircrack-ng",
+      "license": "debian",
+      "name": "aircrack-ng",
+      "package": "aircrack-ng",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/aircrack-ng",
+      "summary": "Suite pengujian nirkabel.",
+      "test": {
+        "command": [
+          "aircrack-ng"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "--help"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "recon",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/amass",
+      "license": "Apache-2.0",
+      "name": "amass",
+      "role": "security",
+      "source": "https://github.com/owasp-amass/amass.git",
+      "source_commit": "79299dce87b0085db0f2f4ef3e9c52cccb49f514",
+      "source_ref": "v5.1.1",
+      "summary": "Pemetaan attack surface.",
+      "test": {
+        "command": [
+          "amass"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "5.1.1",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "cloud",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ansible-playbook",
+      "license": "debian",
+      "name": "ansible",
+      "package": "ansible",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/ansible",
+      "summary": "Otomasi konfigurasi.",
+      "test": {
+        "command": [
+          "ansible-playbook"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reverse",
+      "distribution": "iso",
+      "install_path": "/usr/bin/apktool",
+      "license": "debian",
+      "name": "apktool",
+      "package": "apktool",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/apktool",
+      "summary": "Decompile dan rebuild paket Android.",
+      "test": {
+        "command": [
+          "apktool"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02",
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/arp-scan",
+      "license": "debian",
+      "name": "arp-scan",
+      "package": "arp-scan",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/arp-scan",
+      "summary": "Discovery layer dua pada jaringan lokal.",
+      "test": {
+        "command": [
+          "arp-scan"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/arping",
+      "license": "debian",
+      "name": "arping",
+      "package": "arping",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/arping",
+      "summary": "Probe ARP untuk menemukan host aktif.",
+      "test": {
+        "command": [
+          "arping"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/autoconf",
+      "license": "debian",
+      "name": "autoconf",
+      "package": "autoconf",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/autoconf",
+      "summary": "Pembuat skrip configure.",
+      "test": {
+        "command": [
+          "autoconf"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/automake",
+      "license": "debian",
+      "name": "automake",
+      "package": "automake",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/automake",
+      "summary": "Pembuat Makefile.",
+      "test": {
+        "command": [
+          "automake"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/autopsy",
+      "license": "debian",
+      "name": "autopsy",
+      "package": "autopsy",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/autopsy",
+      "summary": "GUI forensik disk.",
+      "test": {
+        "command": [
+          "autopsy"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "cloud",
+      "distribution": "iso",
+      "install_path": "/usr/bin/aws",
+      "license": "debian",
+      "name": "awscli",
+      "package": "awscli",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/awscli",
+      "summary": "Klien AWS.",
+      "test": {
+        "command": [
+          "aws"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "cloud",
+      "distribution": "iso",
+      "install_path": "/usr/bin/az",
+      "license": "debian",
+      "name": "azure-cli",
+      "package": "azure-cli",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/azure-cli",
+      "summary": "Klien Azure.",
+      "test": {
+        "command": [
+          "az"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/bash",
+      "license": "debian",
+      "name": "bash-completion",
+      "package": "bash-completion",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/bash-completion",
+      "summary": "Pelengkapan shell Bash.",
+      "test": {
+        "command": [
+          "bash"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/batcat",
+      "license": "debian",
+      "name": "bat",
+      "package": "bat",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/bat",
+      "summary": "Penampil berkas dengan sintaks.",
+      "test": {
+        "command": [
+          "batcat"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "interception",
+      "distribution": "iso",
+      "install_path": "/usr/bin/bettercap",
+      "license": "debian",
+      "name": "bettercap",
+      "package": "bettercap",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/bettercap",
+      "summary": "Kerangka kerja MITM.",
+      "test": {
+        "command": [
+          "bettercap"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "-h"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reverse",
+      "distribution": "iso",
+      "install_path": "/usr/bin/binwalk",
+      "license": "debian",
+      "name": "binwalk",
+      "package": "binwalk",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/binwalk",
+      "summary": "Analisis firmware dan ekstraksi berkas.",
+      "test": {
+        "command": [
+          "binwalk"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09",
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "digest-required",
+      "category": "container",
+      "distribution": "container",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "blackarch",
+      "role": "security",
+      "source": "docker.io/blackarchlinux/blackarch",
+      "summary": "Tool Linux ArchArmor untuk tool spesifik.",
+      "test": {
+        "command": [
+          "none"
+        ],
+        "kind": "none"
+      },
+      "tier": "T3",
+      "version": "digest-pinned",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "active-directory",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "MIT",
+      "name": "bloodhound-ce",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Visualisasi Active Directory, opt-in.",
+      "test": {
+        "command": [
+          "BloodHound"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/gcc",
+      "license": "debian",
+      "name": "build-essential",
+      "package": "build-essential",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/build-essential",
+      "summary": "Kompilator C, C++, dan make.",
+      "test": {
+        "command": [
+          "gcc"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "container",
+      "distribution": "iso",
+      "install_path": "/usr/bin/buildah",
+      "license": "debian",
+      "name": "buildah",
+      "package": "buildah",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/buildah",
+      "summary": "Build image OCI tanpa daemon.",
+      "test": {
+        "command": [
+          "buildah"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "web",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "burpsuite",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Proxy pengujian web, opt-in.",
+      "test": {
+        "command": [
+          "burpsuite"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/cargo",
+      "license": "debian",
+      "name": "cargo",
+      "package": "cargo",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/cargo",
+      "summary": "Pengelola paket Rust.",
+      "test": {
+        "command": [
+          "cargo"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "active-directory",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/certipy",
+      "license": "GPL-3.0-only",
+      "name": "certipy",
+      "role": "security",
+      "source": "https://github.com/ly4k/Certipy.git",
+      "source_commit": "e916eefe46f4e493d6bde3f0a7b4c42ea8384cde",
+      "source_ref": "5.1.0",
+      "summary": "Audit dan eksploitasi Active Directory Certificate Services.",
+      "test": {
+        "command": [
+          "certipy"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "5.1.0",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "password",
+      "distribution": "iso",
+      "install_path": "/usr/bin/cewl",
+      "license": "debian",
+      "name": "cewl",
+      "package": "cewl",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/cewl",
+      "summary": "Kamus kata dari halaman web.",
+      "test": {
+        "command": [
+          "cewl"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-04",
+      "workflows": [
+        "WF-04"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "pivoting",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/chisel",
+      "license": "MIT",
+      "name": "chisel",
+      "role": "security",
+      "source": "https://github.com/jpillora/chisel.git",
+      "source_commit": "b86c288c8cc297d350f7d9de2df20cef4fcefb51",
+      "source_ref": "v1.13.0",
+      "summary": "Tunnel TCP untuk pivot.",
+      "test": {
+        "command": [
+          "chisel"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.13.0",
+      "workflow": "WF-08",
+      "workflows": [
+        "WF-08"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/clang",
+      "license": "debian",
+      "name": "clang",
+      "package": "clang",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/clang",
+      "summary": "Kompilator LLVM.",
+      "test": {
+        "command": [
+          "clang"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/clang-format",
+      "license": "debian",
+      "name": "clang-format",
+      "package": "clang-format",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/clang-format",
+      "summary": "Pemformat kode.",
+      "test": {
+        "command": [
+          "clang-format"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/cmake",
+      "license": "debian",
+      "name": "cmake",
+      "package": "cmake",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/cmake",
+      "summary": "Sistem build multi bahasa.",
+      "test": {
+        "command": [
+          "cmake"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/commix",
+      "license": "GPL-2.0-only",
+      "name": "commix",
+      "role": "security",
+      "source": "https://github.com/commixproject/commix.git",
+      "source_commit": "06beb622db6f9b8ffe4e51f7dea4414303c750ce",
+      "source_ref": "v4.1",
+      "summary": "Deteksi command injection.",
+      "test": {
+        "command": [
+          "commix"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "4.1",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "container",
+      "distribution": "iso",
+      "install_path": "/usr/bin/crun",
+      "license": "debian",
+      "name": "crun",
+      "package": "crun",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/crun",
+      "summary": "Runtime OCI ringan.",
+      "test": {
+        "command": [
+          "crun"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "password",
+      "distribution": "iso",
+      "install_path": "/usr/bin/crunch",
+      "license": "debian",
+      "name": "crunch",
+      "package": "crunch",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/crunch",
+      "summary": "Pembuat kamus dari mask karakter.",
+      "test": {
+        "command": [
+          "crunch"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-04",
+      "workflows": [
+        "WF-04"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/curl",
+      "license": "debian",
+      "name": "curl",
+      "package": "curl",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/curl",
+      "summary": "Klien HTTP dengan dukungan skrip.",
+      "test": {
+        "command": [
+          "curl"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "reverse",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/cutter",
+      "license": "GPL-2.0-only",
+      "name": "cutter",
+      "role": "security",
+      "source": "https://github.com/rizinorg/cutter.git",
+      "source_commit": "a6f6ad7bed987c56735ab763970bb405df0a4cfc",
+      "source_ref": "v2.5.0",
+      "summary": "GUI untuk rizin.",
+      "test": {
+        "command": [
+          "cutter"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.5.0",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/dalfox",
+      "license": "MIT",
+      "name": "dalfox",
+      "role": "security",
+      "source": "https://github.com/hahwul/dalfox.git",
+      "source_commit": "da19527f9c82d8525e911ca3669fc456daeb50f2",
+      "source_ref": "v3.2.4",
+      "summary": "Deteksi dan eksploitasi XSS.",
+      "test": {
+        "command": [
+          "dalfox"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "3.2.4",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/dcfldd",
+      "license": "debian",
+      "name": "dcfldd",
+      "package": "dcfldd",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/dcfldd",
+      "summary": "Duplikat forensik dengan verifikasi.",
+      "test": {
+        "command": [
+          "dcfldd"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/dirb",
+      "license": "debian",
+      "name": "dirb",
+      "package": "dirb",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/dirb",
+      "summary": "Brute force direktori dengan wordlist.",
+      "test": {
+        "command": [
+          "dirb"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/direnv",
+      "license": "debian",
+      "name": "direnv",
+      "package": "direnv",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/direnv",
+      "summary": "Lingkungan per direktori.",
+      "test": {
+        "command": [
+          "direnv"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/dirsearch",
+      "license": "debian",
+      "name": "dirsearch",
+      "package": "dirsearch",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/dirsearch",
+      "summary": "Discovery path dan file pada aplikasi web.",
+      "test": {
+        "command": [
+          "dirsearch"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/dnsenum",
+      "license": "debian",
+      "name": "dnsenum",
+      "package": "dnsenum",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/dnsenum",
+      "summary": "Enumerasi server nama dan brute force.",
+      "test": {
+        "command": [
+          "dnsenum"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/dnsrecon",
+      "license": "debian",
+      "name": "dnsrecon",
+      "package": "dnsrecon",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/dnsrecon",
+      "summary": "Enumerasi DNS dan brute force subdomain.",
+      "test": {
+        "command": [
+          "dnsrecon"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/dig",
+      "license": "debian",
+      "name": "dnsutils",
+      "package": "dnsutils",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/dnsutils",
+      "summary": "Kueri DNS, NS, MX, dan zone transfer.",
+      "test": {
+        "command": [
+          "dig"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "recon",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/dnsx",
+      "license": "MIT",
+      "name": "dnsx",
+      "role": "security",
+      "source": "https://github.com/projectdiscovery/dnsx.git",
+      "source_commit": "01e315f216db7d36198ec326fac13dd7846b1bec",
+      "source_ref": "v1.3.1",
+      "summary": "Resolver dan enumerasi DNS.",
+      "test": {
+        "command": [
+          "dnsx"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.3.1",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "container",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "Apache-2.0",
+      "name": "docker",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Docker engine, opt-in.",
+      "test": {
+        "command": [
+          "docker"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "digest-required",
+      "category": "lab",
+      "distribution": "container",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "dvwa",
+      "role": "security",
+      "source": "docker.io/library/dvwa",
+      "summary": "Lab web rentan untuk latihan.",
+      "test": {
+        "command": [
+          "none"
+        ],
+        "kind": "none"
+      },
+      "tier": "T3",
+      "version": "digest-pinned",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "active-directory",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/enum4linux-ng",
+      "license": "GPL-3.0-only",
+      "name": "enum4linux-ng",
+      "role": "security",
+      "source": "https://github.com/CiscoCXSecurity/enum4linux-ng.git",
+      "source_commit": "a0924d3c5dab113095602017d74383c5221967d7",
+      "source_ref": "master",
+      "summary": "Enumerasi SMB.",
+      "test": {
+        "command": [
+          "enum4linux-ng"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2026.10.22",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "interception",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ettercap",
+      "license": "debian",
+      "name": "ettercap-text-only",
+      "package": "ettercap-text-only",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/ettercap-text-only",
+      "summary": "MITM klasik tanpa GUI.",
+      "test": {
+        "command": [
+          "ettercap"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "active-directory",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/evil-winrm",
+      "license": "GPL-3.0-only",
+      "name": "evil-winrm",
+      "role": "security",
+      "source": "https://github.com/Hackplayers/evil-winrm.git",
+      "source_commit": "64d8e0f962d239643c4efadacce9f716bd5cb775",
+      "source_ref": "v4.1",
+      "summary": "Shell WinRM untuk Windows.",
+      "test": {
+        "command": [
+          "evil-winrm"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "4.1",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/exa",
+      "license": "debian",
+      "name": "exa",
+      "package": "exa",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/exa",
+      "summary": "Alternatif ls dengan warna.",
+      "test": {
+        "command": [
+          "exa"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "exploitation",
+      "distribution": "vendor",
+      "install_path": "/usr/share/exploitdb",
+      "license": "GPL-2.0-only",
+      "name": "exploitdb",
+      "role": "security",
+      "source": "https://github.com/offensive-security/exploitdb.git",
+      "source_commit": "f36dd3d4d512ecd7197e079d87eb69ee7cd9d6b0",
+      "source_ref": "master",
+      "summary": "Database exploit dan searchsploit.",
+      "test": {
+        "command": [
+          "searchsploit"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2026.10.22",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "toolchain",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/fastfetch",
+      "license": "MIT",
+      "name": "fastfetch",
+      "role": "platform",
+      "source": "https://github.com/fastfetch-cli/fastfetch.git",
+      "source_commit": "17bb3fd2384bd814b421d73b8c8b8d08e06cfa26",
+      "source_ref": "2.70.0",
+      "summary": "Pengambil informasi sistem.",
+      "test": {
+        "command": [
+          "fastfetch"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.70.0",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/fdfind",
+      "license": "debian",
+      "name": "fd-find",
+      "package": "fd-find",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/fd-find",
+      "summary": "Penelusuran berkas modern.",
+      "test": {
+        "command": [
+          "fdfind"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/feroxbuster",
+      "license": "MIT",
+      "name": "feroxbuster",
+      "role": "security",
+      "source": "https://github.com/epi052/feroxbuster.git",
+      "source_commit": "aa8e1335801e91d98ce0d4fd148c2159a667a83b",
+      "source_ref": "v2.13.1",
+      "summary": "Content discovery.",
+      "test": {
+        "command": [
+          "feroxbuster"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.13.1",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ffuf",
+      "license": "debian",
+      "name": "ffuf",
+      "package": "ffuf",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/ffuf",
+      "summary": "Fuzzer berbasis dictionary web.",
+      "test": {
+        "command": [
+          "ffuf"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "-h"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/file",
+      "license": "debian",
+      "name": "file",
+      "package": "file",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/file",
+      "summary": "Deteksi tipe berkas.",
+      "test": {
+        "command": [
+          "file"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/foremost",
+      "license": "debian",
+      "name": "foremost",
+      "package": "foremost",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/foremost",
+      "summary": "Carving file dari media.",
+      "test": {
+        "command": [
+          "foremost"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "reverse",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/frida",
+      "license": "wxWindows-Licence",
+      "name": "frida-tools",
+      "role": "security",
+      "source": "https://github.com/frida/frida.git",
+      "source_commit": "adf8be5f5b7f3840521783b628a191b62d7e6f66",
+      "source_ref": "17.24.3",
+      "summary": "Instrumentasi dinamis.",
+      "test": {
+        "command": [
+          "frida"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "17.24.3",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "container",
+      "distribution": "iso",
+      "install_path": "/usr/bin/fuse-overlayfs",
+      "license": "debian",
+      "name": "fuse-overlayfs",
+      "package": "fuse-overlayfs",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/fuse-overlayfs",
+      "summary": "Lapisan filesystem untuk rootless.",
+      "test": {
+        "command": [
+          "fuse-overlayfs"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/fzf",
+      "license": "debian",
+      "name": "fzf",
+      "package": "fzf",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/fzf",
+      "summary": "Pemilih interaktif fuzzy.",
+      "test": {
+        "command": [
+          "fzf"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "recon",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/gau",
+      "license": "MIT",
+      "name": "gau",
+      "role": "security",
+      "source": "https://github.com/lc/gau.git",
+      "source_commit": "5d4e1270e632732756fe98717520c43c86e8bd18",
+      "source_ref": "v2.2.4",
+      "summary": "Pengambilan URL dari arsip dan endpoint.",
+      "test": {
+        "command": [
+          "gau"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.2.4",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reverse",
+      "distribution": "iso",
+      "install_path": "/usr/bin/gdb",
+      "license": "debian",
+      "name": "gdb",
+      "package": "gdb",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/gdb",
+      "summary": "Debugger native.",
+      "test": {
+        "command": [
+          "gdb"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03",
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ddrescue",
+      "license": "debian",
+      "name": "gddrescue",
+      "package": "gddrescue",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/gddrescue",
+      "summary": "Pemulihan data dari media rusak.",
+      "test": {
+        "command": [
+          "ddrescue"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/gh",
+      "license": "debian",
+      "name": "gh",
+      "package": "gh",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/gh",
+      "summary": "Klien GitHub.",
+      "test": {
+        "command": [
+          "gh"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "reverse",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "Apache-2.0",
+      "name": "ghidra",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Decompiler, ukuran besar, opt-in.",
+      "test": {
+        "command": [
+          "ghidra"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/git",
+      "license": "debian",
+      "name": "git",
+      "package": "git",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/git",
+      "summary": "Version control.",
+      "test": {
+        "command": [
+          "git"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/gpg",
+      "license": "debian",
+      "name": "gnupg",
+      "package": "gnupg",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/gnupg",
+      "summary": "Dukungan OpenPGP.",
+      "test": {
+        "command": [
+          "gpg"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/gnutls-cli",
+      "license": "debian",
+      "name": "gnutls-bin",
+      "package": "gnutls-bin",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/gnutls-bin",
+      "summary": "Inspeksi TLS dan sertifikat.",
+      "test": {
+        "command": [
+          "gnutls-cli"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/gobuster",
+      "license": "debian",
+      "name": "gobuster",
+      "package": "gobuster",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/gobuster",
+      "summary": "Enumerasi direktori dan subdomain.",
+      "test": {
+        "command": [
+          "gobuster"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "-h"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/go",
+      "license": "debian",
+      "name": "golang",
+      "package": "golang",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/golang",
+      "summary": "Toolchain Go bawaan Debian.",
+      "test": {
+        "command": [
+          "go"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/gospider",
+      "license": "MIT",
+      "name": "gospider",
+      "role": "security",
+      "source": "https://github.com/jaeles-project/gospider.git",
+      "source_commit": "006cce2fc415e65044f9ba4a10a3e7acba04d38c",
+      "source_ref": "v1.1.6",
+      "summary": "Crawler web yang cepat.",
+      "test": {
+        "command": [
+          "gospider"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.1.6",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/guymager",
+      "license": "debian",
+      "name": "guymager",
+      "package": "guymager",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/guymager",
+      "summary": "Acquisition media dengan verifikasi.",
+      "test": {
+        "command": [
+          "guymager"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/hakrawler",
+      "license": "MIT",
+      "name": "hakrawler",
+      "role": "security",
+      "source": "https://github.com/hakluke/hakrawler.git",
+      "source_commit": "61905593d82e8bac87ff7a7cca32b2adde42bb60",
+      "source_ref": 2.1,
+      "summary": "Crawler endpoint dan subdomain.",
+      "test": {
+        "command": [
+          "hakrawler"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.1",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "password",
+      "distribution": "iso",
+      "install_path": "/usr/bin/hashcat",
+      "license": "debian",
+      "name": "hashcat",
+      "package": "hashcat",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/hashcat",
+      "summary": "Pemecahan hash dengan GPU dan CPU.",
+      "test": {
+        "command": [
+          "hashcat"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "--help"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-04",
+      "workflows": [
+        "WF-04",
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "exploitation",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "havoc",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Server command and control, opt-in.",
+      "test": {
+        "command": [
+          "havoc-server"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "wireless",
+      "distribution": "iso",
+      "install_path": "/usr/bin/hcxdumptool",
+      "license": "debian",
+      "name": "hcxdumptool",
+      "package": "hcxdumptool",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/hcxdumptool",
+      "summary": "Penangkapan PMKID tanpa klien.",
+      "test": {
+        "command": [
+          "hcxdumptool"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "wireless",
+      "distribution": "iso",
+      "install_path": "/usr/bin/hcxpcapng",
+      "license": "debian",
+      "name": "hcxtools",
+      "package": "hcxtools",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/hcxtools",
+      "summary": "Penangkapan dan konversi hash WPA.",
+      "test": {
+        "command": [
+          "hcxpcapng"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "cloud",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/helm",
+      "license": "Apache-2.0",
+      "name": "helm",
+      "role": "security",
+      "source": "https://github.com/helm/helm.git",
+      "source_commit": "b77ca75bfc1de35db606a8c06c42aedb4f751182",
+      "source_ref": "v4.3.1",
+      "summary": "Manajer paket Kubernetes.",
+      "test": {
+        "command": [
+          "helm"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "4.3.1",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/hping3",
+      "license": "debian",
+      "name": "hping3",
+      "package": "hping3",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/hping3",
+      "summary": "Craft dan uji paket kustom.",
+      "test": {
+        "command": [
+          "hping3"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/htop",
+      "license": "debian",
+      "name": "htop",
+      "package": "htop",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/htop",
+      "summary": "Pemantau proses.",
+      "test": {
+        "command": [
+          "htop"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/http",
+      "license": "debian",
+      "name": "httpie",
+      "package": "httpie",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/httpie",
+      "summary": "Klien HTTP ergonomic.",
+      "test": {
+        "command": [
+          "http"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "recon",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/httpx",
+      "license": "MIT",
+      "name": "httpx",
+      "role": "security",
+      "source": "https://github.com/projectdiscovery/httpx.git",
+      "source_commit": "4b6a9a9d476f94a4f3a630f37051f5671ecfb1f8",
+      "source_ref": "v1.12.0",
+      "summary": "Probe HTTP dan deteksi teknologi.",
+      "test": {
+        "command": [
+          "httpx"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.12.0",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "password",
+      "distribution": "iso",
+      "install_path": "/usr/bin/hydra",
+      "license": "debian",
+      "name": "hydra",
+      "package": "hydra",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/hydra",
+      "summary": "Brute force login multi protokol.",
+      "test": {
+        "command": [
+          "hydra"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "-h"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-04",
+      "workflows": [
+        "WF-04"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "reverse",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "ida-free",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Disassembler gratis, opt-in.",
+      "test": {
+        "command": [
+          "ida64"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ip",
+      "license": "debian",
+      "name": "iproute2",
+      "package": "iproute2",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/iproute2",
+      "summary": "Konfigurasi dan inspeksi jaringan.",
+      "test": {
+        "command": [
+          "ip"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ping",
+      "license": "debian",
+      "name": "iputils-ping",
+      "package": "iputils-ping",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/iputils-ping",
+      "summary": "Uji konektivitas ICMP.",
+      "test": {
+        "command": [
+          "ping"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/iw",
+      "license": "debian",
+      "name": "iw",
+      "package": "iw",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/iw",
+      "summary": "Kontrol nirkabel tingkat rendah.",
+      "test": {
+        "command": [
+          "iw"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "reverse",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/jadx",
+      "license": "Apache-2.0",
+      "name": "jadx",
+      "role": "security",
+      "source": "https://github.com/skylot/jadx.git",
+      "source_commit": "4c0ac37699aa8c9803f1c73cfaacd9205acb044b",
+      "source_ref": "v1.5.6",
+      "summary": "Decompiler Java dan Android.",
+      "test": {
+        "command": [
+          "jadx"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.5.6",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "password",
+      "distribution": "iso",
+      "install_path": "/usr/bin/john",
+      "license": "debian",
+      "name": "john",
+      "package": "john",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/john",
+      "summary": "Pemecahan hash offline.",
+      "test": {
+        "command": [
+          "john"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "--list=build-info"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-04",
+      "workflows": [
+        "WF-04",
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reporting",
+      "distribution": "iso",
+      "install_path": "/usr/bin/jq",
+      "license": "debian",
+      "name": "jq",
+      "package": "jq",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/jq",
+      "summary": "Pemroses JSON.",
+      "test": {
+        "command": [
+          "jq"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "digest-required",
+      "category": "lab",
+      "distribution": "container",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "juice-shop",
+      "role": "security",
+      "source": "docker.io/juice-shop/juice-shop",
+      "summary": "Lab e-commerce rentan untuk latihan.",
+      "test": {
+        "command": [
+          "none"
+        ],
+        "kind": "none"
+      },
+      "tier": "T3",
+      "version": "digest-pinned",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "digest-required",
+      "category": "container",
+      "distribution": "container",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "kali-rolling",
+      "role": "security",
+      "source": "docker.io/kalilinux/kali-rolling",
+      "summary": "Tool keamanan dari Kali untuk tool yang butuh glibc baru.",
+      "test": {
+        "command": [
+          "none"
+        ],
+        "kind": "none"
+      },
+      "tier": "T3",
+      "version": "digest-pinned",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/katana",
+      "license": "MIT",
+      "name": "katana",
+      "role": "security",
+      "source": "https://github.com/projectdiscovery/katana.git",
+      "source_commit": "35267ac5c8ff1db9694a319d0eb466ed97b0969f",
+      "source_ref": "v1.8.0",
+      "summary": "Crawler web dan endpoint finder.",
+      "test": {
+        "command": [
+          "katana"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.8.0",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reporting",
+      "distribution": "iso",
+      "install_path": "/usr/bin/keepassxc",
+      "license": "debian",
+      "name": "keepassxc",
+      "package": "keepassxc",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/keepassxc",
+      "summary": "Manajemen kredensial.",
+      "test": {
+        "command": [
+          "keepassxc"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "active-directory",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/kerbrute",
+      "license": "GPL-3.0-only",
+      "name": "kerbrute",
+      "role": "security",
+      "source": "https://github.com/ropnop/kerbrute.git",
+      "source_commit": "de7f8f411e537e0eb86896fa961df5b54b52e77b",
+      "source_ref": "v1.0.3",
+      "summary": "Brute force Kerberos.",
+      "test": {
+        "command": [
+          "kerbrute"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.0.3",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "wireless",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/kismet",
+      "license": "GPL-3.0-only",
+      "name": "kismet",
+      "role": "security",
+      "source": "https://github.com/kismetwireless/kismet.git",
+      "source_commit": "7a3b5d207e6b15d7dcbb8fa916e121e51d3280e0",
+      "source_ref": "kismet-2025-09-R1",
+      "summary": "Deteksi nirkabel pasif.",
+      "test": {
+        "command": [
+          "kismet"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2025.09",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "cloud",
+      "distribution": "iso",
+      "install_path": "/usr/bin/kubectl",
+      "license": "debian",
+      "name": "kubernetes-client",
+      "package": "kubernetes-client",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/kubernetes-client",
+      "summary": "Klien Kubernetes.",
+      "test": {
+        "command": [
+          "kubectl"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ldapsearch",
+      "license": "debian",
+      "name": "ldap-utils",
+      "package": "ldap-utils",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/ldap-utils",
+      "summary": "Query dan enumerasi direktori LDAP.",
+      "test": {
+        "command": [
+          "ldapsearch"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "active-directory",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/ldapdomaindump",
+      "license": "Apache-2.0",
+      "name": "ldapdomaindump",
+      "role": "security",
+      "source": "https://github.com/dirkjanm/ldapdomaindump.git",
+      "source_commit": "35b357e1286470d39ee472d3fdd10b11c0e00fdc",
+      "source_ref": "v0.10.0",
+      "summary": "Dump struktur LDAP.",
+      "test": {
+        "command": [
+          "ldapdomaindump"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "0.10.0",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pkg-config",
+      "license": "debian",
+      "name": "libffi-dev",
+      "package": "libffi-dev",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/libffi-dev",
+      "summary": "Header development libffi.",
+      "test": {
+        "command": [
+          "pkg-config"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/exiftool",
+      "license": "debian",
+      "name": "libimage-exiftool-perl",
+      "package": "libimage-exiftool-perl",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/libimage-exiftool-perl",
+      "summary": "Baca dan ubah metadata media.",
+      "test": {
+        "command": [
+          "exiftool"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pg_config",
+      "license": "debian",
+      "name": "libpq-dev",
+      "package": "libpq-dev",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/libpq-dev",
+      "summary": "Header development PostgreSQL.",
+      "test": {
+        "command": [
+          "pg_config"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/openssl",
+      "license": "debian",
+      "name": "libssl-dev",
+      "package": "libssl-dev",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/libssl-dev",
+      "summary": "Header development OpenSSL.",
+      "test": {
+        "command": [
+          "openssl"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/libtool",
+      "license": "debian",
+      "name": "libtool",
+      "package": "libtool",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/libtool",
+      "summary": "Pembungkus pustaka statis dan dinamis.",
+      "test": {
+        "command": [
+          "libtool"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "pivoting",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/ligolo",
+      "license": "MIT",
+      "name": "ligolo-ng",
+      "role": "security",
+      "source": "https://github.com/nicocha30/ligolo-ng.git",
+      "source_commit": "e543732f4be6dc899096ae322ae620bf010bfbfc",
+      "source_ref": "v0.9.2",
+      "summary": "Pivot berbasis TUN.",
+      "test": {
+        "command": [
+          "ligolo-ng"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "0.9.2",
+      "workflow": "WF-08",
+      "workflows": [
+        "WF-08"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/lsof",
+      "license": "debian",
+      "name": "lsof",
+      "package": "lsof",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/lsof",
+      "summary": "Berkas yang sedang dibuka.",
+      "test": {
+        "command": [
+          "lsof"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "unsupported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reverse",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ltrace",
+      "license": "debian",
+      "name": "ltrace",
+      "package": "ltrace",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/ltrace",
+      "summary": "Jejak panggilan pustaka.",
+      "test": {
+        "command": [
+          "ltrace"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/lua5.4",
+      "license": "debian",
+      "name": "lua5.4",
+      "package": "lua5.4",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/lua5.4",
+      "summary": "Interpreter Lua.",
+      "test": {
+        "command": [
+          "lua5.4"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/macchanger",
+      "license": "debian",
+      "name": "macchanger",
+      "package": "macchanger",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/macchanger",
+      "summary": "Uji validasi filter alamat MAC.",
+      "test": {
+        "command": [
+          "macchanger"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/man",
+      "license": "debian",
+      "name": "man-db",
+      "package": "man-db",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/man-db",
+      "summary": "Manual halaman.",
+      "test": {
+        "command": [
+          "man"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/mariadb",
+      "license": "debian",
+      "name": "mariadb-client",
+      "package": "mariadb-client",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/mariadb-client",
+      "summary": "Klien MariaDB.",
+      "test": {
+        "command": [
+          "mariadb"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/masscan",
+      "license": "debian",
+      "name": "masscan",
+      "package": "masscan",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/masscan",
+      "summary": "Pemindai port cepat pada jaringan besar.",
+      "test": {
+        "command": [
+          "masscan"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "password",
+      "distribution": "iso",
+      "install_path": "/usr/bin/medusa",
+      "license": "debian",
+      "name": "medusa",
+      "package": "medusa",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/medusa",
+      "summary": "Brute force paralel multi protokol.",
+      "test": {
+        "command": [
+          "medusa"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "-h"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-04",
+      "workflows": [
+        "WF-04"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/meson",
+      "license": "debian",
+      "name": "meson",
+      "package": "meson",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/meson",
+      "summary": "Sistem build berbasis deklarasi.",
+      "test": {
+        "command": [
+          "meson"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "exploitation",
+      "distribution": "vendor",
+      "install_path": "/opt/arashios/tools/metasploit-framework",
+      "license": "BSD-3-Clause",
+      "name": "metasploit-framework",
+      "role": "security",
+      "source": "https://github.com/rapid7/metasploit-framework.git",
+      "source_commit": "d1dde11225376661c484f394d554457c8f475974",
+      "source_ref": "v4.11.7",
+      "summary": "Kerangka kerja eksploitasi.",
+      "test": {
+        "command": [
+          "msfconsole"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "4.11.7",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/mitmproxy",
+      "license": "debian",
+      "name": "mitmproxy",
+      "package": "mitmproxy",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/mitmproxy",
+      "summary": "Interception HTTP untuk pengujian.",
+      "test": {
+        "command": [
+          "mitmproxy"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02",
+        "WF-07"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "recon",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/naabu",
+      "license": "MIT",
+      "name": "naabu",
+      "role": "security",
+      "source": "https://github.com/projectdiscovery/naabu.git",
+      "source_commit": "5a0ca8bde91b5bb16213e9e8b5c6871eac954bd8",
+      "source_ref": "v2.6.1",
+      "summary": "Pemindai port berbasis Go.",
+      "test": {
+        "command": [
+          "naabu"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.6.1",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/nbtscan",
+      "license": "debian",
+      "name": "nbtscan",
+      "package": "nbtscan",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/nbtscan",
+      "summary": "Enumerasi NetBIOS Name Service.",
+      "test": {
+        "command": [
+          "nbtscan"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/nvim",
+      "license": "debian",
+      "name": "neovim",
+      "package": "neovim",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/neovim",
+      "summary": "Editor modal.",
+      "test": {
+        "command": [
+          "nvim"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "recon",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "nessus",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Scanner kerentanan, opt-in.",
+      "test": {
+        "command": [
+          "nessus"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/nc",
+      "license": "debian",
+      "name": "netcat-openbsd",
+      "package": "netcat-openbsd",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/netcat-openbsd",
+      "summary": "Koneksi TCP dan UDP untuk uji konfigurasi.",
+      "test": {
+        "command": [
+          "nc"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-07",
+        "WF-08"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "active-directory",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/netexec",
+      "license": "BSD-2-Clause",
+      "name": "netexec",
+      "role": "security",
+      "source": "https://github.com/Pennyw0rth/NetExec.git",
+      "source_commit": "c7dc286ba65daf10402cdc470e531b84e6d3d911",
+      "source_ref": "v1.5.1",
+      "summary": "Enumerasi dan brute force Active Directory.",
+      "test": {
+        "command": [
+          "netexec"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "1.5.1",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/rpcinfo",
+      "license": "debian",
+      "name": "nfs-common",
+      "package": "nfs-common",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/nfs-common",
+      "summary": "Klien NFS dan rpcinfo untuk enumerasi ekspor.",
+      "test": {
+        "command": [
+          "rpcinfo"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/nft",
+      "license": "debian",
+      "name": "nftables",
+      "package": "nftables",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/nftables",
+      "summary": "Filter paket untuk skenario uji jaringan.",
+      "test": {
+        "command": [
+          "nft"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/nikto",
+      "license": "debian",
+      "name": "nikto",
+      "package": "nikto",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/nikto",
+      "summary": "Scanner konfigurasi server web.",
+      "test": {
+        "command": [
+          "nikto"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "-Version"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ninja",
+      "license": "debian",
+      "name": "ninja-build",
+      "package": "ninja-build",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/ninja-build",
+      "summary": "Backend build cepat.",
+      "test": {
+        "command": [
+          "ninja"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/nmap",
+      "license": "debian",
+      "name": "nmap",
+      "package": "nmap",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/nmap",
+      "summary": "Pemindai port, layanan, dan deteksi OS.",
+      "test": {
+        "command": [
+          "nmap"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "--version"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/node",
+      "license": "debian",
+      "name": "nodejs",
+      "package": "nodejs",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/nodejs",
+      "summary": "Runtime Node.js bawaan Debian.",
+      "test": {
+        "command": [
+          "node"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/npm",
+      "license": "debian",
+      "name": "npm",
+      "package": "npm",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/npm",
+      "summary": "Pengelola paket Node.js.",
+      "test": {
+        "command": [
+          "npm"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/nuclei",
+      "license": "MIT",
+      "name": "nuclei",
+      "role": "security",
+      "source": "https://github.com/projectdiscovery/nuclei.git",
+      "source_commit": "a8c88feb4a1c8e961b7902534ce3af97e9d524a4",
+      "source_ref": "v3.11.1",
+      "summary": "Scanner berbasis template.",
+      "test": {
+        "command": [
+          "nuclei"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "3.11.1",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "reporting",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "obsidian",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Editor catatan, opt-in.",
+      "test": {
+        "command": [
+          "obsidian"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/onesixtyone",
+      "license": "debian",
+      "name": "onesixtyone",
+      "package": "onesixtyone",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/onesixtyone",
+      "summary": "Brute force SNMP community string.",
+      "test": {
+        "command": [
+          "onesixtyone"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/javac",
+      "license": "debian",
+      "name": "openjdk-17-jdk",
+      "package": "openjdk-17-jdk",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/openjdk-17-jdk",
+      "summary": "JDK 17.",
+      "test": {
+        "command": [
+          "javac"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/java",
+      "license": "debian",
+      "name": "openjdk-17-jre-headless",
+      "package": "openjdk-17-jre-headless",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/openjdk-17-jre-headless",
+      "summary": "Runtime Java 17 tanpa antarmuka.",
+      "test": {
+        "command": [
+          "java"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ssh",
+      "license": "debian",
+      "name": "openssh-client",
+      "package": "openssh-client",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/openssh-client",
+      "summary": "Klien SSH untuk pivot.",
+      "test": {
+        "command": [
+          "ssh"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07",
+        "WF-08"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/openssl",
+      "license": "debian",
+      "name": "openssl",
+      "package": "openssl",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/openssl",
+      "summary": "Pemeriksaan sertifikat dan kriptografi.",
+      "test": {
+        "command": [
+          "openssl"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/outguess",
+      "license": "debian",
+      "name": "outguess",
+      "package": "outguess",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/outguess",
+      "summary": "Steganografi JPEG untuk uji forensik.",
+      "test": {
+        "command": [
+          "outguess"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/7z",
+      "license": "debian",
+      "name": "p7zip-full",
+      "package": "p7zip-full",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/p7zip-full",
+      "summary": "Arsip dan ekstraksi.",
+      "test": {
+        "command": [
+          "7z"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reporting",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pandoc",
+      "license": "debian",
+      "name": "pandoc",
+      "package": "pandoc",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/pandoc",
+      "summary": "Konversi dokumen antar format.",
+      "test": {
+        "command": [
+          "pandoc"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/patchelf",
+      "license": "debian",
+      "name": "patchelf",
+      "package": "patchelf",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/patchelf",
+      "summary": "Edit header dan dependensi ELF.",
+      "test": {
+        "command": [
+          "patchelf"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/php",
+      "license": "debian",
+      "name": "php-cli",
+      "package": "php-cli",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/php-cli",
+      "summary": "Interpreter PHP.",
+      "test": {
+        "command": [
+          "php"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pipx",
+      "license": "debian",
+      "name": "pipx",
+      "package": "pipx",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/pipx",
+      "summary": "Pemasang aplikasi Python terisolasi.",
+      "test": {
+        "command": [
+          "pipx"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pkg-config",
+      "license": "debian",
+      "name": "pkg-config",
+      "package": "pkg-config",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/pkg-config",
+      "summary": "Lokasi pustaka development.",
+      "test": {
+        "command": [
+          "pkg-config"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pngcheck",
+      "license": "debian",
+      "name": "pngcheck",
+      "package": "pngcheck",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/pngcheck",
+      "summary": "Validasi struktur file PNG.",
+      "test": {
+        "command": [
+          "pngcheck"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "container",
+      "distribution": "iso",
+      "install_path": "/usr/bin/podman",
+      "license": "debian",
+      "name": "podman",
+      "package": "podman",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/podman",
+      "summary": "Container engine rootless.",
+      "test": {
+        "command": [
+          "podman"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/psql",
+      "license": "debian",
+      "name": "postgresql-client",
+      "package": "postgresql-client",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/postgresql-client",
+      "summary": "Klien PostgreSQL.",
+      "test": {
+        "command": [
+          "psql"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/proxychains4",
+      "license": "debian",
+      "name": "proxychains4",
+      "package": "proxychains4",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/proxychains4",
+      "summary": "Rantai proxy untuk uji tunneling.",
+      "test": {
+        "command": [
+          "proxychains4"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-08"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pstree",
+      "license": "debian",
+      "name": "psmisc",
+      "package": "psmisc",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/psmisc",
+      "summary": "Utilitas proses.",
+      "test": {
+        "command": [
+          "pstree"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "reverse",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/pwndbg",
+      "license": "MIT",
+      "name": "pwndbg",
+      "role": "security",
+      "source": "https://github.com/pwndbg/pwndbg.git",
+      "source_commit": "f6fed0cb49495f58a1dd4f972f2f610cf16b1754",
+      "source_ref": "2026.10.22",
+      "summary": "Plugin GDB untuk exploit development.",
+      "test": {
+        "command": [
+          "pwndbg"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2026.10.22",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/python3",
+      "license": "debian",
+      "name": "python3",
+      "package": "python3",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/python3",
+      "summary": "Interpreter Python 3.",
+      "test": {
+        "command": [
+          "python3"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "active-directory",
+      "distribution": "iso",
+      "install_path": "/usr/bin/impacket-GetNPUsers",
+      "license": "debian",
+      "name": "python3-impacket",
+      "package": "python3-impacket",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/python3-impacket",
+      "summary": "Protokol Windows dan enumerasi Active Directory.",
+      "test": {
+        "command": [
+          "impacket-GetNPUsers"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pip3",
+      "license": "debian",
+      "name": "python3-pip",
+      "package": "python3-pip",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/python3-pip",
+      "summary": "Pengelola paket Python.",
+      "test": {
+        "command": [
+          "pip3"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reverse",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pwntools",
+      "license": "debian",
+      "name": "python3-pwntools",
+      "package": "python3-pwntools",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/python3-pwntools",
+      "summary": "Kerangka kerja exploit development.",
+      "test": {
+        "command": [
+          "pwntools"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03",
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "active-directory",
+      "distribution": "iso",
+      "install_path": "/usr/bin/scapy",
+      "license": "debian",
+      "name": "python3-scapy",
+      "package": "python3-scapy",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/python3-scapy",
+      "summary": "Craft dan analisis paket.",
+      "test": {
+        "command": [
+          "scapy"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/python3",
+      "license": "debian",
+      "name": "python3-venv",
+      "package": "python3-venv",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/python3-venv",
+      "summary": "Lingkungan virtual Python.",
+      "test": {
+        "command": [
+          "python3"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "reverse",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/r2",
+      "license": "LGPL-3.0-only",
+      "name": "radare2",
+      "role": "security",
+      "source": "https://github.com/radareorg/radare2.git",
+      "source_commit": "485e5e205b190fc297a2a95a6f982ff5d9f54039",
+      "source_ref": "6.2.4",
+      "summary": "Kerangka reverse engineering.",
+      "test": {
+        "command": [
+          "r2"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "6.2.4",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "wireless",
+      "distribution": "iso",
+      "install_path": "/usr/bin/reaver",
+      "license": "debian",
+      "name": "reaver",
+      "package": "reaver",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/reaver",
+      "summary": "Serangan WPS.",
+      "test": {
+        "command": [
+          "reaver"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/recon-ng",
+      "license": "debian",
+      "name": "recon-ng",
+      "package": "recon-ng",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/recon-ng",
+      "summary": "Kerangka kerja recon berbasis modul.",
+      "test": {
+        "command": [
+          "recon-ng"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/redis-cli",
+      "license": "debian",
+      "name": "redis-tools",
+      "package": "redis-tools",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/redis-tools",
+      "summary": "Klien Redis.",
+      "test": {
+        "command": [
+          "redis-cli"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "interception",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/responder",
+      "license": "GPL-3.0-only",
+      "name": "responder",
+      "role": "security",
+      "source": "https://github.com/lgandx/Responder.git",
+      "source_commit": "61a028e8413053a2ead258824737609811a726cb",
+      "source_ref": "v3.2.2.0",
+      "summary": "Serangan LLMNR, NBT-NS, dan mDNS.",
+      "test": {
+        "command": [
+          "responder"
+        ],
+        "kind": "version",
+        "version_args": [
+          "-h"
+        ]
+      },
+      "tier": "T1",
+      "version": "3.2.2.0",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/rfkill",
+      "license": "debian",
+      "name": "rfkill",
+      "package": "rfkill",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/rfkill",
+      "summary": "Status dan kontrol radio nirkabel.",
+      "test": {
+        "command": [
+          "rfkill"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/rg",
+      "license": "debian",
+      "name": "ripgrep",
+      "package": "ripgrep",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/ripgrep",
+      "summary": "Pencari teks cepat.",
+      "test": {
+        "command": [
+          "rg"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "reverse",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/rz-bin",
+      "license": "LGPL-3.0-only",
+      "name": "rizin",
+      "role": "security",
+      "source": "https://github.com/rizinorg/rizin.git",
+      "source_commit": "c3a90e9226d977f58f4e9c75f78fa6b07afe13c7",
+      "source_ref": "v0.9.1",
+      "summary": "Kerangka reverse engineering.",
+      "test": {
+        "command": [
+          "rz-bin"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "0.9.1",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "wordlist",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "rockyou",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Wordlist rockyou tanpa lisensi jelas, opt-in dengan peringatan.",
+      "test": {
+        "command": [
+          "none"
+        ],
+        "kind": "none"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-04",
+      "workflows": [
+        "WF-04"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/rsync",
+      "license": "debian",
+      "name": "rsync",
+      "package": "rsync",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/rsync",
+      "summary": "Sinkronisasi berkas.",
+      "test": {
+        "command": [
+          "rsync"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/ruby",
+      "license": "debian",
+      "name": "ruby-full",
+      "package": "ruby-full",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/ruby-full",
+      "summary": "Runtime Ruby.",
+      "test": {
+        "command": [
+          "ruby"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/rustc",
+      "license": "debian",
+      "name": "rustc",
+      "package": "rustc",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/rustc",
+      "summary": "Kompilator Rust bawaan Debian.",
+      "test": {
+        "command": [
+          "rustc"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/scalpel",
+      "license": "debian",
+      "name": "scalpel",
+      "package": "scalpel",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/scalpel",
+      "summary": "Carving file berbasis pola.",
+      "test": {
+        "command": [
+          "scalpel"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "wordlist",
+      "distribution": "vendor",
+      "install_path": "/usr/share/wordlists/seclists",
+      "license": "MIT",
+      "name": "seclists-core",
+      "role": "security",
+      "source": "https://github.com/danielmiessler/SecLists.git",
+      "source_commit": "190c6f7bd58c847ceadfe57d9853592737f059e8",
+      "source_ref": 2026.1,
+      "summary": "Subset wordlist SecLists.",
+      "test": {
+        "command": [
+          "none"
+        ],
+        "kind": "none"
+      },
+      "tier": "T1",
+      "version": "2026.1",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02",
+        "WF-04"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/shellcheck",
+      "license": "debian",
+      "name": "shellcheck",
+      "package": "shellcheck",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/shellcheck",
+      "summary": "Analisis statis shell.",
+      "test": {
+        "command": [
+          "shellcheck"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "container",
+      "distribution": "iso",
+      "install_path": "/usr/bin/skopeo",
+      "license": "debian",
+      "name": "skopeo",
+      "package": "skopeo",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/skopeo",
+      "summary": "Inspeksi dan salin image.",
+      "test": {
+        "command": [
+          "skopeo"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/fls",
+      "license": "debian",
+      "name": "sleuthkit",
+      "package": "sleuthkit",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/sleuthkit",
+      "summary": "Analisis filesystem forensik.",
+      "test": {
+        "command": [
+          "fls"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "container",
+      "distribution": "iso",
+      "install_path": "/usr/bin/slirp4netns",
+      "license": "debian",
+      "name": "slirp4netns",
+      "package": "slirp4netns",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/slirp4netns",
+      "summary": "Jaringan userspace untuk container rootless.",
+      "test": {
+        "command": [
+          "slirp4netns"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "user-download",
+      "category": "exploitation",
+      "distribution": "installer",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "sliver",
+      "role": "security",
+      "source": "upstream",
+      "summary": "Server command and control, opt-in.",
+      "test": {
+        "command": [
+          "sliver-server"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T2",
+      "version": "user-managed",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/smbclient",
+      "license": "debian",
+      "name": "smbclient",
+      "package": "smbclient",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/smbclient",
+      "summary": "Klien SMB untuk share dan enumerasi.",
+      "test": {
+        "command": [
+          "smbclient"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/smbmap",
+      "license": "debian",
+      "name": "smbmap",
+      "package": "smbmap",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/smbmap",
+      "summary": "Pemetaan share dan hak akses SMB.",
+      "test": {
+        "command": [
+          "smbmap"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/snmpget",
+      "license": "debian",
+      "name": "snmp",
+      "package": "snmp",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/snmp",
+      "summary": "Query SNMP v1, v2c, dan v3.",
+      "test": {
+        "command": [
+          "snmpget"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/socat",
+      "license": "debian",
+      "name": "socat",
+      "package": "socat",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/socat",
+      "summary": "Relay TCP dan UDP untuk uji pivot.",
+      "test": {
+        "command": [
+          "socat"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01",
+        "WF-07",
+        "WF-08"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/sqlite3",
+      "license": "debian",
+      "name": "sqlite3",
+      "package": "sqlite3",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/sqlite3",
+      "summary": "Mesin database SQL ringan.",
+      "test": {
+        "command": [
+          "sqlite3"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/sqlmap",
+      "license": "debian",
+      "name": "sqlmap",
+      "package": "sqlmap",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/sqlmap",
+      "summary": "Deteksi dan eksploitasi SQL injection.",
+      "test": {
+        "command": [
+          "sqlmap"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "--version"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/sshpass",
+      "license": "debian",
+      "name": "sshpass",
+      "package": "sshpass",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/sshpass",
+      "summary": "Uji password SSH noninteraktif.",
+      "test": {
+        "command": [
+          "sshpass"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/sslscan",
+      "license": "debian",
+      "name": "sslscan",
+      "package": "sslscan",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/sslscan",
+      "summary": "Audit konfigurasi TLS.",
+      "test": {
+        "command": [
+          "sslscan"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/steghide",
+      "license": "debian",
+      "name": "steghide",
+      "package": "steghide",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/steghide",
+      "summary": "Steganografi pada file gambar dan audio.",
+      "test": {
+        "command": [
+          "steghide"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reverse",
+      "distribution": "iso",
+      "install_path": "/usr/bin/strace",
+      "license": "debian",
+      "name": "strace",
+      "package": "strace",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/strace",
+      "summary": "Jejak syscall.",
+      "test": {
+        "command": [
+          "strace"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-03",
+      "workflows": [
+        "WF-03",
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "recon",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/subfinder",
+      "license": "MIT",
+      "name": "subfinder",
+      "role": "security",
+      "source": "https://github.com/projectdiscovery/subfinder.git",
+      "source_commit": "c97f25802892093060f0fc424bfc3f39e273693a",
+      "source_ref": "v2.17.0",
+      "summary": "Enumerasi subdomain pasif.",
+      "test": {
+        "command": [
+          "subfinder"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.17.0",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "interception",
+      "distribution": "iso",
+      "install_path": "/usr/bin/tcpdump",
+      "license": "debian",
+      "name": "tcpdump",
+      "package": "tcpdump",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/tcpdump",
+      "summary": "Penangkapan paket dari terminal.",
+      "test": {
+        "command": [
+          "tcpdump"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "--version"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07",
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/tcpreplay",
+      "license": "debian",
+      "name": "tcpreplay",
+      "package": "tcpreplay",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/tcpreplay",
+      "summary": "Pemutaran ulang paket untuk pengujian jaringan.",
+      "test": {
+        "command": [
+          "tcpreplay"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "toolchain",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/termshark",
+      "license": "MIT",
+      "name": "termshark",
+      "role": "platform",
+      "source": "https://github.com/gcla/termshark.git",
+      "source_commit": "e436160ef4f7bac030a9bddd5674d3159ebdd792",
+      "source_ref": "v2.4.0",
+      "summary": "Analisis pcap interaktif di terminal.",
+      "test": {
+        "command": [
+          "termshark"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.4.0",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "forensics",
+      "distribution": "iso",
+      "install_path": "/usr/bin/testdisk",
+      "license": "debian",
+      "name": "testdisk",
+      "package": "testdisk",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/testdisk",
+      "summary": "Pemulihan partisi dan analisis sistem berkas.",
+      "test": {
+        "command": [
+          "testdisk"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/testssl.sh",
+      "license": "debian",
+      "name": "testssl.sh",
+      "package": "testssl.sh",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/testssl.sh",
+      "summary": "Analisis kelemahan HTTPS.",
+      "test": {
+        "command": [
+          "testssl.sh"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/tmux",
+      "license": "debian",
+      "name": "tmux",
+      "package": "tmux",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/tmux",
+      "summary": "Terminal multiplexer.",
+      "test": {
+        "command": [
+          "tmux"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/traceroute",
+      "license": "debian",
+      "name": "traceroute",
+      "package": "traceroute",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/traceroute",
+      "summary": "Petakan jalur router menuju target.",
+      "test": {
+        "command": [
+          "traceroute"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/tree",
+      "license": "debian",
+      "name": "tree",
+      "package": "tree",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/tree",
+      "summary": "Tampilan pohon direktori.",
+      "test": {
+        "command": [
+          "tree"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "cloud",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/trivy",
+      "license": "Apache-2.0",
+      "name": "trivy",
+      "role": "security",
+      "source": "https://github.com/aquasecurity/trivy.git",
+      "source_commit": "e713f67f7d54decdcd9b3132c9751833dcced698",
+      "source_ref": "v0.76.1",
+      "summary": "Scanner kerentanan image dan filesystem.",
+      "test": {
+        "command": [
+          "trivy"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "0.76.1",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "interception",
+      "distribution": "iso",
+      "install_path": "/usr/bin/tshark",
+      "license": "debian",
+      "name": "tshark",
+      "package": "tshark",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/tshark",
+      "summary": "Analisis paket berbasis CLI.",
+      "test": {
+        "command": [
+          "tshark"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "--version"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07",
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "container",
+      "distribution": "iso",
+      "install_path": "/usr/bin/newuidmap",
+      "license": "debian",
+      "name": "uidmap",
+      "package": "uidmap",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/uidmap",
+      "summary": "Pemetaan uid untuk container rootless.",
+      "test": {
+        "command": [
+          "newuidmap"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-11",
+      "workflows": [
+        "WF-11"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/unzip",
+      "license": "debian",
+      "name": "unzip",
+      "package": "unzip",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/unzip",
+      "summary": "Ekstraksi arsip zip.",
+      "test": {
+        "command": [
+          "unzip"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "reverse",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/upx",
+      "license": "GPL-2.0-only",
+      "name": "upx",
+      "role": "security",
+      "source": "https://github.com/upx/upx.git",
+      "source_commit": "4660eead74e3241983a12dbbd5b59efea9bed0f1",
+      "source_ref": "v5.2.1",
+      "summary": "Packer dan unpacker executable.",
+      "test": {
+        "command": [
+          "upx"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "5.2.1",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "forensics",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/vol",
+      "license": "VSL",
+      "name": "volatility3",
+      "role": "security",
+      "source": "https://github.com/volatilityfoundation/volatility3.git",
+      "source_commit": "881e970121c16f0932fb9d16fbd5fb258cbcbf75",
+      "source_ref": "v2.28.2",
+      "summary": "Analisis forensik memori.",
+      "test": {
+        "command": [
+          "vol"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2.28.2",
+      "workflow": "WF-09",
+      "workflows": [
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "digest-required",
+      "category": "lab",
+      "distribution": "container",
+      "install_path": "",
+      "license": "proprietary",
+      "name": "vulnerable-ad",
+      "role": "security",
+      "source": "docker.io/madmiral/badass-metasploit",
+      "summary": "Lab Active Directory rentan untuk latihan.",
+      "test": {
+        "command": [
+          "none"
+        ],
+        "kind": "none"
+      },
+      "tier": "T3",
+      "version": "digest-pinned",
+      "workflow": "WF-05",
+      "workflows": [
+        "WF-05"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/wafw00f",
+      "license": "debian",
+      "name": "wafw00f",
+      "package": "wafw00f",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/wafw00f",
+      "summary": "Deteksi WAF pada host web.",
+      "test": {
+        "command": [
+          "wafw00f"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "recon",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/waybackurls",
+      "license": "MIT",
+      "name": "waybackurls",
+      "role": "security",
+      "source": "https://github.com/tomnomnom/waybackurls.git",
+      "source_commit": "86aeb97852707e1a6fb3bcd33e61d5433a6476c5",
+      "source_ref": "v0.1.0",
+      "summary": "Daftar URL dari arsip web.",
+      "test": {
+        "command": [
+          "waybackurls"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "0.1.0",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "web",
+      "distribution": "iso",
+      "install_path": "/usr/bin/wfuzz",
+      "license": "debian",
+      "name": "wfuzz",
+      "package": "wfuzz",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/wfuzz",
+      "summary": "Fuzzing parameter dan path.",
+      "test": {
+        "command": [
+          "wfuzz"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/wget",
+      "license": "debian",
+      "name": "wget",
+      "package": "wget",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/wget",
+      "summary": "Unduh artefak dan rekam respons.",
+      "test": {
+        "command": [
+          "wget"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/whatweb",
+      "license": "debian",
+      "name": "whatweb",
+      "package": "whatweb",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/whatweb",
+      "summary": "Fingerprint stack web dan teknologi halaman.",
+      "test": {
+        "command": [
+          "whatweb"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/whois",
+      "license": "debian",
+      "name": "whois",
+      "package": "whois",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/whois",
+      "summary": "Data registrasi domain dan alamat IP.",
+      "test": {
+        "command": [
+          "whois"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "wireless",
+      "distribution": "iso",
+      "install_path": "/usr/bin/wifite",
+      "license": "debian",
+      "name": "wifite",
+      "package": "wifite",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/wifite",
+      "summary": "Otomatisasi pengujian nirkabel.",
+      "test": {
+        "command": [
+          "wifite"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-06",
+      "workflows": [
+        "WF-06"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "interception",
+      "distribution": "iso",
+      "install_path": "/usr/bin/wireshark",
+      "license": "debian",
+      "name": "wireshark",
+      "package": "wireshark",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/wireshark",
+      "summary": "Analisis paket berbasis GUI.",
+      "test": {
+        "command": [
+          "wireshark"
+        ],
+        "kind": "presence",
+        "version_args": [
+          "-v"
+        ]
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-07",
+      "workflows": [
+        "WF-07",
+        "WF-09"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/wpscan",
+      "license": "MIT",
+      "name": "wpscan",
+      "role": "security",
+      "source": "https://github.com/wpscanteam/wpscan.git",
+      "source_commit": "f6169f00652c07feb45f57ff2a10e38949c28d56",
+      "source_ref": "v4.1.0",
+      "summary": "Audit WordPress.",
+      "test": {
+        "command": [
+          "wpscan"
+        ],
+        "kind": "version",
+        "version_args": [
+          "--version"
+        ]
+      },
+      "tier": "T1",
+      "version": "4.1.0",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/xz",
+      "license": "debian",
+      "name": "xz-utils",
+      "package": "xz-utils",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/xz-utils",
+      "summary": "Kompresi xz.",
+      "test": {
+        "command": [
+          "xz"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "recon",
+      "distribution": "iso",
+      "install_path": "/usr/bin/yersinia",
+      "license": "debian",
+      "name": "yersinia",
+      "package": "yersinia",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/yersinia",
+      "summary": "Uji protokol layer dua hingga layer tujuh.",
+      "test": {
+        "command": [
+          "yersinia"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-01",
+      "workflows": [
+        "WF-01"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "reporting",
+      "distribution": "iso",
+      "install_path": "/usr/bin/yq",
+      "license": "debian",
+      "name": "yq",
+      "package": "yq",
+      "role": "security",
+      "source": "https://packages.debian.org/bookworm/yq",
+      "summary": "Pemroses YAML.",
+      "test": {
+        "command": [
+          "yq"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "source-locked",
+      "category": "web",
+      "distribution": "vendor",
+      "install_path": "/usr/local/bin/zap.sh",
+      "license": "Apache-2.0",
+      "name": "zaproxy",
+      "role": "security",
+      "source": "https://github.com/zaproxy/zaproxy.git",
+      "source_commit": "1af83afeaa52e5b8389af494fcb9b7a540b82bf5",
+      "source_ref": "w2026-10-15",
+      "summary": "Proxy pengujian OWASP.",
+      "test": {
+        "command": [
+          "zap.sh"
+        ],
+        "kind": "version"
+      },
+      "tier": "T1",
+      "version": "2026.10.15",
+      "workflow": "WF-02",
+      "workflows": [
+        "WF-02"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/zip",
+      "license": "debian",
+      "name": "zip",
+      "package": "zip",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/zip",
+      "summary": "Arsip zip.",
+      "test": {
+        "command": [
+          "zip"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/pkg-config",
+      "license": "debian",
+      "name": "zlib1g-dev",
+      "package": "zlib1g-dev",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/zlib1g-dev",
+      "summary": "Header development zlib.",
+      "test": {
+        "command": [
+          "pkg-config"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/zoxide",
+      "license": "debian",
+      "name": "zoxide",
+      "package": "zoxide",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/zoxide",
+      "summary": "Navigasi direktori pintar.",
+      "test": {
+        "command": [
+          "zoxide"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/zsh",
+      "license": "debian",
+      "name": "zsh",
+      "package": "zsh",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/zsh",
+      "summary": "Shell interaktif.",
+      "test": {
+        "command": [
+          "zsh"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-10",
+      "workflows": [
+        "WF-10"
+      ]
+    },
+    {
+      "arch": {
+        "amd64": "supported",
+        "arm64": "supported",
+        "i386": "supported"
+      },
+      "artifact_sha256": "",
+      "artifact_status": "debian-archive",
+      "category": "toolchain",
+      "distribution": "iso",
+      "install_path": "/usr/bin/zstd",
+      "license": "debian",
+      "name": "zstd",
+      "package": "zstd",
+      "role": "platform",
+      "source": "https://packages.debian.org/bookworm/zstd",
+      "summary": "Kompresi zstd.",
+      "test": {
+        "command": [
+          "zstd"
+        ],
+        "kind": "presence"
+      },
+      "tier": "T0",
+      "version": "debian-bookworm",
+      "workflow": "WF-12",
+      "workflows": [
+        "WF-12"
+      ]
+    }
+  ],
+  "updated": "2026-10-22",
+  "workflows": {
+    "WF-01": "Reconnaissance",
+    "WF-02": "Web testing",
+    "WF-03": "Exploitation",
+    "WF-04": "Password attack",
+    "WF-05": "Active Directory",
+    "WF-06": "Wireless",
+    "WF-07": "Network interception",
+    "WF-08": "Pivoting",
+    "WF-09": "Forensics",
+    "WF-10": "Reverse engineering",
+    "WF-11": "Cloud dan container",
+    "WF-12": "Reporting"
+  }
+}

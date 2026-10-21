@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""ArashiOS lab runner for tier 3 container images.
+
+Every image is pinned by digest. Images without a digest are refused, and the
+command never requests privileged mode or the host network.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+LABS_CANDIDATES = [
+    Path(os.environ.get("ARASHIOS_LABS", "/usr/share/arashios/labs.json")),
+    Path(__file__).resolve().parents[2] / "share" / "arashios" / "labs.json",
+]
+
+
+def load_labs() -> dict:
+    for candidate in LABS_CANDIDATES:
+        if candidate.is_file():
+            with candidate.open(encoding="utf-8") as handle:
+                return json.load(handle)
+    raise SystemExit("ERROR: katalog lab tidak ditemukan.")
+
+
+def find_lab(data: dict, name: str) -> dict | None:
+    for lab in data.get("labs", []):
+        if lab["name"] == name:
+            return lab
+    return None
+
+
+def image_reference(lab: dict) -> str:
+    if lab.get("digest"):
+        return f"{lab['image']}@{lab['digest']}"
+    return f"{lab['image']}:{lab.get('tag', 'latest')}"
+
+
+def require_digest(lab: dict) -> str:
+    if not lab.get("digest"):
+        print(
+            f"ERROR: image {lab['name']} belum punya digest yang terkunci.\n"
+            "ArashiOS menolak menjalankan image tanpa digest.",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+    return lab["digest"]
+
+
+def podman() -> str:
+    """Return the podman binary name for command planning."""
+    return shutil.which("podman") or "podman"
+
+
+def require_podman() -> str:
+    binary = shutil.which("podman")
+    if binary is None:
+        print("ERROR: podman tidak tersedia. Pasang paket podman.", file=sys.stderr)
+        raise SystemExit(2)
+    return binary
+
+
+def command_list(args: argparse.Namespace) -> int:
+    data = load_labs()
+    if args.json:
+        print(json.dumps(data, indent=2, sort_keys=True))
+        return 0
+    for lab in data.get("labs", []):
+        state = lab.get("status", "unknown")
+        print(
+            f"{lab['name']:<14} {state:<16} {image_reference(lab):<70} "
+            f"risiko {lab.get('risk', 'medium')}"
+        )
+    print(f"\n{len(data.get('labs', []))} lab terdaftar.")
+    return 0
+
+
+def command_info(args: argparse.Namespace) -> int:
+    data = load_labs()
+    lab = find_lab(data, args.name)
+    if lab is None:
+        print(f"ERROR: lab tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(json.dumps(lab, indent=2, sort_keys=True))
+        return 0
+    for key in sorted(lab):
+        print(f"{key:<12}: {lab[key]}")
+    return 0
+
+
+def command_plan(args: argparse.Namespace) -> int:
+    data = load_labs()
+    lab = find_lab(data, args.name)
+    if lab is None:
+        print(f"ERROR: lab tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    require_digest(lab)
+    command = build_run_command(lab, args)
+    print(" ".join(command))
+    return 0
+
+
+def build_run_command(lab: dict, args: argparse.Namespace) -> list[str]:
+    command = [podman(), "run", "--rm"]
+    if getattr(args, "interactive", False):
+        command.append("-it")
+    command += ["--network", "bridge"]
+    command += ["--security-opt", "no-new-privileges"]
+    for port in lab.get("ports", []):
+        command += ["-p", port]
+    if args.name != lab["name"]:
+        command += ["--name", f"arashios-{lab['name']}"]
+    command.append(image_reference(lab))
+    command.extend(args.command)
+    return command
+
+
+def command_run(args: argparse.Namespace) -> int:
+    data = load_labs()
+    lab = find_lab(data, args.name)
+    if lab is None:
+        print(f"ERROR: lab tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    require_digest(lab)
+    command = build_run_command(lab, args)
+    if args.dry_run:
+        print(" ".join(command))
+        return 0
+    return subprocess.run(command, check=False).returncode
+
+
+def command_pull(args: argparse.Namespace) -> int:
+    data = load_labs()
+    lab = find_lab(data, args.name)
+    if lab is None:
+        print(f"ERROR: lab tidak dikenal: {args.name}", file=sys.stderr)
+        return 2
+    require_digest(lab)
+    require_podman()
+    command = [podman(), "pull", image_reference(lab)]
+    if args.dry_run:
+        print(" ".join(command))
+        return 0
+    return subprocess.run(command, check=False).returncode
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Runner lab container ArashiOS")
+    parser.add_argument("--json", action="store_true")
+    shared = argparse.ArgumentParser(add_help=False)
+    shared.add_argument("--json", action="store_true", default=argparse.SUPPRESS, help="keluaran JSON")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    listing = sub.add_parser("list", parents=[shared], help="daftar lab")
+    listing.set_defaults(func=command_list)
+
+    info = sub.add_parser("info", parents=[shared], help="detail lab")
+    info.add_argument("name")
+    info.set_defaults(func=command_info)
+
+    plan = sub.add_parser("plan", parents=[shared], help="tampilkan perintah podman tanpa menjalankan")
+    plan.add_argument("name")
+    plan.add_argument("command", nargs="*")
+    plan.add_argument("--interactive", action="store_true", default=True)
+    plan.set_defaults(func=command_plan)
+
+    run = sub.add_parser("run", parents=[shared], help="jalankan lab")
+    run.add_argument("name")
+    run.add_argument("command", nargs="*")
+    run.add_argument("--dry-run", action="store_true")
+    run.add_argument("--interactive", action="store_true", default=True)
+    run.set_defaults(func=command_run)
+
+    pull = sub.add_parser("pull", parents=[shared], help="tarik image lab")
+    pull.add_argument("name")
+    pull.add_argument("--dry-run", action="store_true")
+    pull.set_defaults(func=command_pull)
+
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

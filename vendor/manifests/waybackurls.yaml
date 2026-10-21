@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/waybackurls
+  go_version: '1.23'
+  kind: go
+  source_commit: 86aeb97852707e1a6fb3bcd33e61d5433a6476c5
+  source_ref: v0.1.0
+category: recon
+distribution: vendor
+install:
+  path: /usr/local/bin/waybackurls
+license: MIT
+license_file: LICENSE
+name: waybackurls
+role: security
+source: https://github.com/tomnomnom/waybackurls.git
+source_commit: 86aeb97852707e1a6fb3bcd33e61d5433a6476c5
+source_ref: v0.1.0
+summary: Daftar URL dari arsip web.
+test:
+  command:
+  - waybackurls
+  kind: version
+tier: T1
+version: 0.1.0
+workflow: WF-01
+workflows:
+- WF-01

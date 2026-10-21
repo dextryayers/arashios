@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: gnutls-bin
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/gnutls-cli
+license: debian
+name: gnutls-bin
+package: gnutls-bin
+role: security
+source: https://packages.debian.org/bookworm/gnutls-bin
+summary: Inspeksi TLS dan sertifikat.
+test:
+  command:
+  - gnutls-cli
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01

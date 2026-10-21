@@ -1,0 +1,33 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: tcpdump
+category: interception
+distribution: iso
+install:
+  path: /usr/bin/tcpdump
+license: debian
+name: tcpdump
+package: tcpdump
+role: security
+source: https://packages.debian.org/bookworm/tcpdump
+summary: Penangkapan paket dari terminal.
+test:
+  command:
+  - tcpdump
+  kind: presence
+  version_args:
+  - --version
+tier: T0
+version: debian-bookworm
+workflow: WF-07
+workflows:
+- WF-07
+- WF-09

@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/trivy
+  go_version: '1.23'
+  kind: go
+  source_commit: e713f67f7d54decdcd9b3132c9751833dcced698
+  source_ref: v0.76.1
+category: cloud
+distribution: vendor
+install:
+  path: /usr/local/bin/trivy
+license: Apache-2.0
+license_file: LICENSE
+name: trivy
+role: security
+source: https://github.com/aquasecurity/trivy.git
+source_commit: e713f67f7d54decdcd9b3132c9751833dcced698
+source_ref: v0.76.1
+summary: Scanner kerentanan image dan filesystem.
+test:
+  command:
+  - trivy
+  kind: version
+tier: T1
+version: 0.76.1
+workflow: WF-11
+workflows:
+- WF-11

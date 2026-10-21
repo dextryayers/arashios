@@ -1,0 +1,21 @@
+@page {
+  size: A4;
+  margin: 20mm;
+}
+
+body {
+  font-family: "Inter", "Noto Sans", sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #1b1b1f;
+}
+
+h1, h2, h3 {
+  color: #a32c1c;
+  font-weight: 600;
+}
+
+code, pre {
+  font-family: "JetBrains Mono", monospace;
+  background: #f2f2f4;
+}

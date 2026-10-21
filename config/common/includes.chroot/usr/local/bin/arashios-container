@@ -1,0 +1,204 @@
+#!/usr/bin/env python3
+"""ArashiOS container helper for development environments and rootless checks.
+
+The command builds the shipped Containerfile templates, runs them without host
+network and without privileged mode, and reports the readiness of the rootless
+container stack.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+TEMPLATE_DIRS = [
+    Path(os.environ.get("ARASHIOS_CONTAINER_TEMPLATES", "/usr/share/arashios/containers")),
+    Path(__file__).resolve().parents[2] / "share" / "arashios" / "containers",
+]
+DEFAULT_TAG_PREFIX = "arashios/dev"
+
+
+def template_dir() -> Path:
+    for candidate in TEMPLATE_DIRS:
+        if candidate.is_dir():
+            return candidate
+    raise SystemExit("ERROR: template container tidak ditemukan.")
+
+
+def templates() -> list[str]:
+    return sorted(path.stem for path in template_dir().glob("*.container"))
+
+
+def podman() -> str:
+    """Return the podman binary name for command planning."""
+    return shutil.which("podman") or "podman"
+
+
+def require_podman() -> str:
+    binary = shutil.which("podman")
+    if binary is None:
+        print("ERROR: podman tidak tersedia.", file=sys.stderr)
+        raise SystemExit(2)
+    return binary
+
+
+def command_list(args: argparse.Namespace) -> int:
+    names = templates()
+    if args.json:
+        print(json.dumps({"templates": names}, indent=2))
+        return 0
+    for name in names:
+        print(name)
+    print(f"\n{len(names)} template container.")
+    return 0
+
+
+def command_build(args: argparse.Namespace) -> int:
+    binary = podman()
+    name = args.name
+    source = template_dir() / f"{name}.container"
+    if not source.is_file():
+        print(f"ERROR: template tidak dikenal: {name}", file=sys.stderr)
+        return 2
+    tag = args.tag or f"{DEFAULT_TAG_PREFIX}-{name}:local"
+    command = [binary, "build", "-t", tag, "-f", str(source), str(template_dir())]
+    if args.dry_run:
+        print(" ".join(command))
+        return 0
+    require_podman()
+    return subprocess.run(command, check=False).returncode
+
+
+def command_run(args: argparse.Namespace) -> int:
+    binary = podman()
+    name = args.name
+    if name not in templates():
+        print(f"ERROR: template tidak dikenal: {name}", file=sys.stderr)
+        return 2
+    tag = args.tag or f"{DEFAULT_TAG_PREFIX}-{name}:local"
+    project = Path(args.project or os.getcwd()).resolve()
+    command = [
+        binary,
+        "run",
+        "--rm",
+        "-it",
+        "--userns",
+        "keep-id",
+        "--network",
+        "bridge",
+        "--security-opt",
+        "no-new-privileges",
+        "-v",
+        f"{project}:/workspace:Z",
+        "-w",
+        "/workspace",
+        tag,
+    ]
+    command.extend(args.command)
+    if args.dry_run:
+        print(" ".join(command))
+        return 0
+    require_podman()
+    return subprocess.run(command, check=False).returncode
+
+
+def command_doctor(args: argparse.Namespace) -> int:
+    problems: list[str] = []
+    notes: list[str] = []
+    binary = shutil.which("podman")
+    if binary is None:
+        message = "podman tidak tersedia"
+        if Path("/etc/arashios").is_dir():
+            problems.append(message)
+        else:
+            notes.append(message)
+    else:
+        notes.append(f"podman: {binary}")
+        result = subprocess.run(
+            [binary, "info", "--format", "{{.Host.Security.Rootless}} {{.Store.GraphDriverName}} {{.Version.Version}}"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            problems.append("podman info gagal, periksa izin dan penyimpanan")
+        else:
+            notes.append(f"podman info: {result.stdout.strip()}")
+            if not result.stdout.strip().startswith("true"):
+                problems.append("podman berjalan sebagai root, mode rootless tidak aktif")
+    for tool in ("newuidmap", "newgidmap"):
+        if shutil.which(tool) is None:
+            problems.append(f"{tool} tidak tersedia, petakan user tidak aktif")
+        else:
+            notes.append(f"{tool} tersedia")
+    for name in ("subuid", "subgid"):
+        path = Path("/etc") / name
+        entries = [
+            line
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ] if path.is_file() else []
+        if not entries:
+            problems.append(f"/etc/{name} kosong, container rootless tidak bisa dipetakan")
+        else:
+            notes.append(f"/etc/{name} memiliki {len(entries)} entri")
+    if Path("/sys/fs/cgroup/cgroup.controllers").is_file():
+        notes.append("cgroup v2 terdeteksi")
+    else:
+        notes.append("cgroup v1 terdeteksi, cgroup manager systemd disarankan")
+    if shutil.which("fuse-overlayfs") is None:
+        notes.append("fuse-overlayfs tidak ada, storage memakai driver lain")
+    payload = {"problems": problems, "notes": notes}
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        for note in notes:
+            print(f"INFO  {note}")
+        for problem in problems:
+            print(f"PROBLEM {problem}")
+    return 1 if problems else 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Helper container ArashiOS")
+    parser.add_argument("--json", action="store_true")
+    shared = argparse.ArgumentParser(add_help=False)
+    shared.add_argument("--json", action="store_true", default=argparse.SUPPRESS, help="keluaran JSON")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    listing = sub.add_parser("list", parents=[shared], help="daftar template container")
+    listing.set_defaults(func=command_list)
+
+    build = sub.add_parser("build", parents=[shared], help="build image dari template")
+    build.add_argument("name")
+    build.add_argument("--tag")
+    build.add_argument("--dry-run", action="store_true")
+    build.set_defaults(func=command_build)
+
+    run = sub.add_parser("run", parents=[shared], help="jalankan container pengembangan")
+    run.add_argument("name")
+    run.add_argument("--tag")
+    run.add_argument("--project")
+    run.add_argument("--dry-run", action="store_true")
+    run.add_argument("command", nargs="*")
+    run.set_defaults(func=command_run)
+
+    doctor = sub.add_parser("doctor", parents=[shared], help="periksa kesiapan container rootless")
+    doctor.set_defaults(func=command_doctor)
+
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

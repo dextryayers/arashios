@@ -1,0 +1,18 @@
+# Build
+build/
+dist/
+target/
+bin/
+*.o
+*.so
+
+# Environment
+.env
+.venv/
+venv/
+
+# Tool
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/

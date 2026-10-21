@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: clang-format
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/clang-format
+license: debian
+name: clang-format
+package: clang-format
+role: platform
+source: https://packages.debian.org/bookworm/clang-format
+summary: Pemformat kode.
+test:
+  command:
+  - clang-format
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

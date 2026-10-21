@@ -1,0 +1,32 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: aircrack-ng
+category: wireless
+distribution: iso
+install:
+  path: /usr/bin/aircrack-ng
+license: debian
+name: aircrack-ng
+package: aircrack-ng
+role: security
+source: https://packages.debian.org/bookworm/aircrack-ng
+summary: Suite pengujian nirkabel.
+test:
+  command:
+  - aircrack-ng
+  kind: presence
+  version_args:
+  - --help
+tier: T0
+version: debian-bookworm
+workflow: WF-06
+workflows:
+- WF-06

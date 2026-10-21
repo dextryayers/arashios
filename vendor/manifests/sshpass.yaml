@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: sshpass
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/sshpass
+license: debian
+name: sshpass
+package: sshpass
+role: security
+source: https://packages.debian.org/bookworm/sshpass
+summary: Uji password SSH noninteraktif.
+test:
+  command:
+  - sshpass
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01

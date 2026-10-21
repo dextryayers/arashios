@@ -1,0 +1,36 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: gem install --install-dir=$PREFIX wpscan
+  kind: ruby
+  source_commit: f6169f00652c07feb45f57ff2a10e38949c28d56
+  source_ref: v4.1.0
+category: web
+distribution: vendor
+install:
+  path: /usr/local/bin/wpscan
+license: MIT
+license_file: LICENSE
+name: wpscan
+role: security
+source: https://github.com/wpscanteam/wpscan.git
+source_commit: f6169f00652c07feb45f57ff2a10e38949c28d56
+source_ref: v4.1.0
+summary: Audit WordPress.
+test:
+  command:
+  - wpscan
+  kind: version
+  version_args:
+  - --version
+tier: T1
+version: 4.1.0
+workflow: WF-02
+workflows:
+- WF-02

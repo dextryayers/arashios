@@ -1,0 +1,206 @@
+#!/usr/bin/env python3
+"""ArashiOS coding smoke test.
+
+Compiles and runs a hello world program for every language toolchain that is
+available on the machine. Missing toolchains are reported as skipped, failing
+toolchains are reported as failed.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+LANGUAGES = {
+    "python": {
+        "compiler": "python3",
+        "kind": "interpreted",
+        "source": "main.py",
+        "code": 'print("hello arashios")\n',
+        "run": ["python3", "main.py"],
+    },
+    "go": {
+        "compiler": "go",
+        "kind": "compiled",
+        "source": "main.go",
+        "code": 'package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("hello arashios")\n}\n',
+        "run": ["./main"],
+        "env": {"GOCACHE": "./.gocache", "GOPATH": "./.gopath", "CGO_ENABLED": "0"},
+    },
+    "rust": {
+        "compiler": "rustc",
+        "kind": "compiled",
+        "source": "main.rs",
+        "code": 'fn main() {\n    println!("hello arashios");\n}\n',
+        "run": ["./main"],
+    },
+    "c": {
+        "compiler": "cc",
+        "kind": "compiled",
+        "source": "main.c",
+        "code": '#include <stdio.h>\n\nint main(void) {\n    printf("hello arashios\\n");\n    return 0;\n}\n',
+        "run": ["./main"],
+    },
+    "c++": {
+        "compiler": "c++",
+        "kind": "compiled",
+        "source": "main.cpp",
+        "code": '#include <iostream>\n\nint main() {\n    std::cout << "hello arashios" << std::endl;\n    return 0;\n}\n',
+        "run": ["./main"],
+    },
+    "node": {
+        "compiler": "node",
+        "kind": "interpreted",
+        "source": "main.js",
+        "code": 'console.log("hello arashios");\n',
+        "run": ["node", "main.js"],
+    },
+    "java": {
+        "compiler": "javac",
+        "kind": "compiled",
+        "source": "App.java",
+        "code": 'public class App {\n    public static void main(String[] args) {\n        System.out.println("hello arashios");\n    }\n}\n',
+        "run": ["java", "-cp", ".", "App"],
+    },
+    "php": {
+        "compiler": "php",
+        "kind": "interpreted",
+        "source": "main.php",
+        "code": '<?php\necho "hello arashios\\n";\n',
+        "run": ["php", "main.php"],
+    },
+    "ruby": {
+        "compiler": "ruby",
+        "kind": "interpreted",
+        "source": "main.rb",
+        "code": 'puts "hello arashios"\n',
+        "run": ["ruby", "main.rb"],
+    },
+    "lua": {
+        "compiler": "lua5.4",
+        "kind": "interpreted",
+        "source": "main.lua",
+        "code": 'print("hello arashios")\n',
+        "run": ["lua5.4", "main.lua"],
+    },
+}
+
+COMPILE_COMMANDS = {
+    "go": ["go", "build", "-o", "main", "main.go"],
+    "rust": ["rustc", "-O", "-o", "main", "main.rs"],
+    "c": ["cc", "-O2", "-o", "main", "main.c"],
+    "c++": ["c++", "-O2", "-o", "main", "main.cpp"],
+    "java": ["javac", "App.java"],
+}
+
+EXPECTED = "hello arashios"
+
+
+def run_language(name: str, spec: dict, workdir: Path) -> dict:
+    compiler = spec["compiler"]
+    record = {
+        "language": name,
+        "compiler": compiler,
+        "status": "skipped",
+        "detail": "",
+        "output": "",
+    }
+    if shutil.which(compiler) is None:
+        record["detail"] = f"{compiler} tidak tersedia"
+        return record
+    source = workdir / spec["source"]
+    source.write_text(spec["code"], encoding="utf-8")
+    env = dict(os.environ)
+    for key, value in spec.get("env", {}).items():
+        if value.startswith("./"):
+            env[key] = str((workdir / value[2:]).resolve())
+        else:
+            env[key] = value
+    if name in COMPILE_COMMANDS:
+        compile_result = subprocess.run(
+            COMPILE_COMMANDS[name],
+            cwd=workdir,
+            capture_output=True,
+            text=True,
+            env=env,
+            check=False,
+        )
+        if compile_result.returncode != 0:
+            record["status"] = "failed"
+            record["detail"] = (compile_result.stderr or compile_result.stdout).strip()[:200]
+            return record
+    try:
+        result = subprocess.run(
+            spec["run"],
+            cwd=workdir,
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=120,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        record["status"] = "timeout"
+        record["detail"] = "program melewati batas waktu"
+        return record
+    output = (result.stdout + result.stderr).strip()
+    record["output"] = output[:200]
+    if result.returncode != 0:
+        record["status"] = "failed"
+        record["detail"] = f"keluar dengan status {result.returncode}"
+        return record
+    if EXPECTED not in output:
+        record["status"] = "failed"
+        record["detail"] = f"output tidak memuat {EXPECTED!r}"
+        return record
+    record["status"] = "ok"
+    record["detail"] = "hello world berhasil"
+    return record
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Smoke test toolchain coding ArashiOS")
+    parser.add_argument("--json", action="store_true")
+    parser.add_argument("--language", help="uji satu bahasa")
+    parser.add_argument("--output", help="tulis laporan JSON")
+    args = parser.parse_args()
+
+    selected = {args.language: LANGUAGES[args.language]} if args.language else LANGUAGES
+    results = []
+    with tempfile.TemporaryDirectory(prefix="arashios-coding-") as tmp:
+        for name, spec in selected.items():
+            workdir = Path(tmp) / name
+            workdir.mkdir(parents=True, exist_ok=True)
+            results.append(run_language(name, spec, workdir))
+
+    failures = [item for item in results if item["status"] == "failed"]
+    report = {
+        "checked": len(results),
+        "passed": sum(1 for item in results if item["status"] == "ok"),
+        "skipped": sum(1 for item in results if item["status"] == "skipped"),
+        "failures": len(failures),
+        "results": results,
+    }
+    if args.output:
+        path = Path(args.output)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.json:
+        print(json.dumps(report, indent=2, sort_keys=True))
+    else:
+        for item in results:
+            print(f"{item['status']:<8} {item['language']:<8} {item['detail'][:70]}")
+        print(
+            f"\n{report['passed']} lulus, {report['skipped']} dilewati, {report['failures']} gagal."
+        )
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

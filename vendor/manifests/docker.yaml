@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Tool T2 tidak didistribusikan. Pengguna unduh sendiri dari upstream.
+  sha256: ''
+  status: user-download
+build:
+  kind: installer
+category: container
+distribution: installer
+install:
+  path: ''
+license: Apache-2.0
+name: docker
+role: security
+source: upstream
+summary: Docker engine, opt-in.
+test:
+  command:
+  - docker
+  kind: presence
+tier: T2
+version: user-managed
+workflow: WF-11
+workflows:
+- WF-11

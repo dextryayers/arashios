@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: make -C v2.4.0 install PREFIX=$PREFIX
+  kind: source
+  source_commit: e436160ef4f7bac030a9bddd5674d3159ebdd792
+  source_ref: v2.4.0
+category: toolchain
+distribution: vendor
+install:
+  path: /usr/local/bin/termshark
+license: MIT
+license_file: LICENSE
+name: termshark
+role: platform
+source: https://github.com/gcla/termshark.git
+source_commit: e436160ef4f7bac030a9bddd5674d3159ebdd792
+source_ref: v2.4.0
+summary: Analisis pcap interaktif di terminal.
+test:
+  command:
+  - termshark
+  kind: version
+tier: T1
+version: 2.4.0
+workflow: WF-07
+workflows:
+- WF-07

@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: libtool
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/libtool
+license: debian
+name: libtool
+package: libtool
+role: platform
+source: https://packages.debian.org/bookworm/libtool
+summary: Pembungkus pustaka statis dan dinamis.
+test:
+  command:
+  - libtool
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

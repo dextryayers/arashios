@@ -1,0 +1,32 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: socat
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/socat
+license: debian
+name: socat
+package: socat
+role: security
+source: https://packages.debian.org/bookworm/socat
+summary: Relay TCP dan UDP untuk uji pivot.
+test:
+  command:
+  - socat
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01
+- WF-07
+- WF-08

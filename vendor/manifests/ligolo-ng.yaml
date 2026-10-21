@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/ligolo-ng
+  go_version: '1.23'
+  kind: go
+  source_commit: e543732f4be6dc899096ae322ae620bf010bfbfc
+  source_ref: v0.9.2
+category: pivoting
+distribution: vendor
+install:
+  path: /usr/local/bin/ligolo
+license: MIT
+license_file: LICENSE
+name: ligolo-ng
+role: security
+source: https://github.com/nicocha30/ligolo-ng.git
+source_commit: e543732f4be6dc899096ae322ae620bf010bfbfc
+source_ref: v0.9.2
+summary: Pivot berbasis TUN.
+test:
+  command:
+  - ligolo-ng
+  kind: version
+tier: T1
+version: 0.9.2
+workflow: WF-08
+workflows:
+- WF-08

@@ -1,9 +1,14 @@
-# Security tooling available in Debian bookworm main, contrib, or non-free.
-# Tools marked T1 in the plan are vendored in Phase 4 and are not listed here.
+# ArashiOS security toolstack, tier T0.
+# Semua paket berasal dari Debian bookworm (main, contrib, non-free, non-free-firmware).
+# Tool tier T1 sampai T3 tidak boleh masuk daftar ini. Tool yang tidak tersedia
+# di Debian dicatat di tools/catalog.yaml dan dibangun lewat vendor.
+# ltrace hanya ada di amd64 dan i386, dipakai overlay arsitektur.
 
-# Reconnaissance and network mapping
+# Reconnaissance dan pemetaan jaringan
 nmap
 masscan
+arp-scan
+arping
 dnsutils
 dnsrecon
 dnsenum
@@ -14,43 +19,41 @@ smbmap
 snmp
 onesixtyone
 nfs-common
+whatweb
+wafw00f
+recon-ng
+tcpreplay
+hping3
+yersinia
+nbtscan
+sshpass
+netcat-openbsd
+traceroute
+iputils-ping
+iproute2
+openssl
+gnutls-bin
+nftables
+macchanger
+proxychains4
+socat
+iw
+rfkill
 
-# Web assessment
+# Penilaian aplikasi web
 nikto
 gobuster
 ffuf
+dirb
 dirsearch
 wfuzz
 sqlmap
 sslscan
 testssl.sh
-
-# Credentials and password auditing
-hydra
-john
-hashcat
-crunch
-
-# Wireless assessment
-aircrack-ng
-wifite
-reaver
-hcxtools
-hcxdumptool
-
-# Network exploitation and traffic
-ettercap-text-only
-bettercap
-python3-impacket
-python3-scapy
-python3-pwntools
-wireshark
-tshark
-tcpdump
 mitmproxy
 
-# Forensics and file analysis
-binwalk
+# Forensik dan analisis media
+testdisk
 foremost
 sleuthkit
 autopsy
@@ -63,13 +66,48 @@ gddrescue
 dcfldd
 guymager
 
-# Containers and orchestration
+# Reverse engineering
+binwalk
+python3-pwntools
+apktool
+
+# Audit kredensial dan password
+hydra
+medusa
+john
+hashcat
+crunch
+cewl
+
+# Enumerasi Active Directory
+python3-impacket
+python3-scapy
+
+# Penilaian nirkabel
+aircrack-ng
+wifite
+reaver
+hcxtools
+hcxdumptool
+
+# Interception jaringan
+wireshark
+tshark
+tcpdump
+bettercap
+ettercap-text-only
+
+# Cloud dan orkestrasi
+awscli
+azure-cli
+kubernetes-client
+ansible
+
+# Container rootless
 podman
 buildah
 skopeo
+crun
 uidmap
 fuse-overlayfs
 slirp4netns
-kubernetes-client
-ansible
-openjdk-17-jre-headless

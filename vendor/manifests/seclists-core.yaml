@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: install -d $PREFIX && cp -a 2026.1/. $PREFIX/
+  kind: data
+  source_commit: 190c6f7bd58c847ceadfe57d9853592737f059e8
+  source_ref: 2026.1
+category: wordlist
+distribution: vendor
+install:
+  path: /usr/share/wordlists/seclists
+license: MIT
+license_file: LICENSE
+name: seclists-core
+role: security
+source: https://github.com/danielmiessler/SecLists.git
+source_commit: 190c6f7bd58c847ceadfe57d9853592737f059e8
+source_ref: 2026.1
+summary: Subset wordlist SecLists.
+test:
+  command:
+  - none
+  kind: none
+tier: T1
+version: '2026.1'
+workflow: WF-02
+workflows:
+- WF-02
+- WF-04

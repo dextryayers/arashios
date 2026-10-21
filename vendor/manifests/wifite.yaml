@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: wifite
+category: wireless
+distribution: iso
+install:
+  path: /usr/bin/wifite
+license: debian
+name: wifite
+package: wifite
+role: security
+source: https://packages.debian.org/bookworm/wifite
+summary: Otomatisasi pengujian nirkabel.
+test:
+  command:
+  - wifite
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-06
+workflows:
+- WF-06

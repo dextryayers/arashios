@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: golang
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/go
+license: debian
+name: golang
+package: golang
+role: platform
+source: https://packages.debian.org/bookworm/golang
+summary: Toolchain Go bawaan Debian.
+test:
+  command:
+  - go
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

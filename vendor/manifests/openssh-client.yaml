@@ -1,0 +1,31 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: openssh-client
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/ssh
+license: debian
+name: openssh-client
+package: openssh-client
+role: platform
+source: https://packages.debian.org/bookworm/openssh-client
+summary: Klien SSH untuk pivot.
+test:
+  command:
+  - ssh
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-07
+workflows:
+- WF-07
+- WF-08

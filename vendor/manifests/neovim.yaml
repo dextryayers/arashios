@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: neovim
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/nvim
+license: debian
+name: neovim
+package: neovim
+role: platform
+source: https://packages.debian.org/bookworm/neovim
+summary: Editor modal.
+test:
+  command:
+  - nvim
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

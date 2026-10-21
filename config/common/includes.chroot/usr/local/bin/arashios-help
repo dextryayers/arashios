@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+"""ArashiOS offline help.
+
+The command prints the bundled documentation without network access so the
+manual is always available on a live session or an installed system.
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+DOC_DIRS = [
+    Path(os.environ.get("ARASHIOS_DOC_DIR", "/usr/share/doc/arashios")),
+    Path(__file__).resolve().parents[2] / "share" / "doc" / "arashios",
+]
+
+TOPICS = {
+    "toolstack": ("TOOLSTACK.md", "Arsenal keamanan dan alur kerja"),
+    "coding": ("CODING.md", "Toolchain coding dan template proyek"),
+    "arsenal": ("ARSENAL.md", "Perintah arashios-arsenal"),
+    "containers": ("CONTAINERS.md", "Container rootless dan lab"),
+    "vendor": ("VENDORING.md", "Kebijakan vendoring tool tier 1"),
+    "licenses": ("LICENSES.md", "Matriks lisensi tool"),
+    "security": ("SECURITY.md", "Kebijakan keamanan dan pelaporan kerentanan"),
+    "install": ("INSTALL.md", "Panduan instalasi dan pemeliharaan"),
+    "desktop": ("DESKTOP.md", "Integrasi desktop dan tema"),
+    "privacy": ("PRIVACY.md", "Kebijakan privasi"),
+}
+
+QUICK = """ArashiOS memakai lima perintah utama:
+
+  arashios-doctor          periksa kesehatan sistem
+  arashios-arsenal         daftar, pasang, dan verifikasi tool keamanan
+  arashios-toolchain       pasang toolchain bahasa modern tanpa sudo
+  arashios-new-project     buat proyek dari template siap pakai
+  arashios-container       bangun dan jalankan container pengembangan
+  arashios-lab             jalankan lab container dengan digest terkunci
+  arashios-accessibility   atur kontras tinggi dan reduced motion
+  arashios-help            tampilkan dokumentasi offline ini
+
+Gunakan arashios-help <topik> untuk dokumentasi lengkap.
+"""
+
+
+def doc_dir() -> Path | None:
+    for candidate in DOC_DIRS:
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Bantuan offline ArashiOS")
+    parser.add_argument("topic", nargs="?", help="topik dokumentasi")
+    parser.add_argument("--list", action="store_true", help="daftar topik")
+    args = parser.parse_args()
+
+    if args.list:
+        for topic, (filename, description) in sorted(TOPICS.items()):
+            print(f"{topic:<12} {description}")
+        return 0
+
+    if not args.topic:
+        print(QUICK)
+        return 0
+
+    topic = args.topic.lower()
+    if topic not in TOPICS:
+        print(f"ERROR: topik tidak dikenal: {args.topic}", file=sys.stderr)
+        print("Jalankan arashios-help --list untuk daftar topik.", file=sys.stderr)
+        return 2
+
+    filename, description = TOPICS[topic]
+    directory = doc_dir()
+    if directory is not None:
+        path = directory / filename
+        if path.is_file():
+            text = path.read_text(encoding="utf-8")
+            if shutil.which("less") and sys.stdout.isatty():
+                subprocess.run([shutil.which("less"), "-R", str(path)], check=False)
+                return 0
+            print(text)
+            return 0
+    print(f"Dokumen {filename} tidak ditemukan pada sistem ini.")
+    print(f"Topik: {description}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

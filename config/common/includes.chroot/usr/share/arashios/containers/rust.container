@@ -1,0 +1,9 @@
+# ArashiOS container untuk pengembangan Rust.
+FROM docker.io/library/rust@sha256:a45bf1f5d9af0a23b26703b3500d70af1abff7f984a7abef5a104b42c02a292b
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN useradd --create-home --uid 1000 --shell /bin/bash arashi
+USER arashi
+WORKDIR /workspace
+
+CMD ["/bin/bash"]

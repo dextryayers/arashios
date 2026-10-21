@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: fzf
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/fzf
+license: debian
+name: fzf
+package: fzf
+role: platform
+source: https://packages.debian.org/bookworm/fzf
+summary: Pemilih interaktif fuzzy.
+test:
+  command:
+  - fzf
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-12
+workflows:
+- WF-12

@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: libpq-dev
+category: toolchain
+distribution: iso
+install:
+  path: /usr/bin/pg_config
+license: debian
+name: libpq-dev
+package: libpq-dev
+role: platform
+source: https://packages.debian.org/bookworm/libpq-dev
+summary: Header development PostgreSQL.
+test:
+  command:
+  - pg_config
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-10
+workflows:
+- WF-10

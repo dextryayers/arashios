@@ -1,0 +1,31 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: ldap-utils
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/ldapsearch
+license: debian
+name: ldap-utils
+package: ldap-utils
+role: security
+source: https://packages.debian.org/bookworm/ldap-utils
+summary: Query dan enumerasi direktori LDAP.
+test:
+  command:
+  - ldapsearch
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01
+- WF-05

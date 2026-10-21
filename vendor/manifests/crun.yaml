@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: crun
+category: container
+distribution: iso
+install:
+  path: /usr/bin/crun
+license: debian
+name: crun
+package: crun
+role: security
+source: https://packages.debian.org/bookworm/crun
+summary: Runtime OCI ringan.
+test:
+  command:
+  - crun
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-11
+workflows:
+- WF-11

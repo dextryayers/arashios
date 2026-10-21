@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Container memakai digest. Arsenal menolak tag yang belum dikunci.
+  sha256: ''
+  status: digest-required
+build:
+  kind: container
+category: container
+distribution: container
+install:
+  image: docker.io/kalilinux/kali-rolling
+license: proprietary
+name: kali-rolling
+role: security
+source: docker.io/kalilinux/kali-rolling
+summary: Tool keamanan dari Kali untuk tool yang butuh glibc baru.
+test:
+  command:
+  - none
+  kind: none
+tier: T3
+version: digest-pinned
+workflow: WF-03
+workflows:
+- WF-03

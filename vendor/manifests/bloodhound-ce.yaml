@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Tool T2 tidak didistribusikan. Pengguna unduh sendiri dari upstream.
+  sha256: ''
+  status: user-download
+build:
+  kind: installer
+category: active-directory
+distribution: installer
+install:
+  path: ''
+license: MIT
+name: bloodhound-ce
+role: security
+source: upstream
+summary: Visualisasi Active Directory, opt-in.
+test:
+  command:
+  - BloodHound
+  kind: presence
+tier: T2
+version: user-managed
+workflow: WF-05
+workflows:
+- WF-05

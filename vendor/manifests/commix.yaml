@@ -1,0 +1,34 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: python3 -m pip install --no-deps --prefix=$PREFIX commix
+  kind: python
+  source_commit: 06beb622db6f9b8ffe4e51f7dea4414303c750ce
+  source_ref: v4.1
+category: web
+distribution: vendor
+install:
+  path: /usr/local/bin/commix
+license: GPL-2.0-only
+license_file: LICENSE
+name: commix
+role: security
+source: https://github.com/commixproject/commix.git
+source_commit: 06beb622db6f9b8ffe4e51f7dea4414303c750ce
+source_ref: v4.1
+summary: Deteksi command injection.
+test:
+  command:
+  - commix
+  kind: version
+tier: T1
+version: '4.1'
+workflow: WF-02
+workflows:
+- WF-02

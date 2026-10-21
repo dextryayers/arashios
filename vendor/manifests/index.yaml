@@ -1,0 +1,496 @@
+catalog_version: 1.10.21
+counts:
+  T0: 159
+  T1: 41
+  T2: 10
+  T3: 5
+schema_version: 1
+tools:
+- aircrack-ng
+- amass
+- ansible
+- apktool
+- arp-scan
+- arping
+- autoconf
+- automake
+- autopsy
+- awscli
+- azure-cli
+- bash-completion
+- bat
+- bettercap
+- binwalk
+- blackarch
+- bloodhound-ce
+- build-essential
+- buildah
+- burpsuite
+- cargo
+- certipy
+- cewl
+- chisel
+- clang
+- clang-format
+- cmake
+- commix
+- crun
+- crunch
+- curl
+- cutter
+- dalfox
+- dcfldd
+- dirb
+- direnv
+- dirsearch
+- dnsenum
+- dnsrecon
+- dnsutils
+- dnsx
+- docker
+- dvwa
+- enum4linux-ng
+- ettercap-text-only
+- evil-winrm
+- exa
+- exploitdb
+- fastfetch
+- fd-find
+- feroxbuster
+- ffuf
+- file
+- foremost
+- frida-tools
+- fuse-overlayfs
+- fzf
+- gau
+- gdb
+- gddrescue
+- gh
+- ghidra
+- git
+- gnupg
+- gnutls-bin
+- gobuster
+- golang
+- gospider
+- guymager
+- hakrawler
+- hashcat
+- havoc
+- hcxdumptool
+- hcxtools
+- helm
+- hping3
+- htop
+- httpie
+- httpx
+- hydra
+- ida-free
+- iproute2
+- iputils-ping
+- iw
+- jadx
+- john
+- jq
+- juice-shop
+- kali-rolling
+- katana
+- keepassxc
+- kerbrute
+- kismet
+- kubernetes-client
+- ldap-utils
+- ldapdomaindump
+- libffi-dev
+- libimage-exiftool-perl
+- libpq-dev
+- libssl-dev
+- libtool
+- ligolo-ng
+- lsof
+- ltrace
+- lua5.4
+- macchanger
+- man-db
+- mariadb-client
+- masscan
+- medusa
+- meson
+- metasploit-framework
+- mitmproxy
+- naabu
+- nbtscan
+- neovim
+- nessus
+- netcat-openbsd
+- netexec
+- nfs-common
+- nftables
+- nikto
+- ninja-build
+- nmap
+- nodejs
+- npm
+- nuclei
+- obsidian
+- onesixtyone
+- openjdk-17-jdk
+- openjdk-17-jre-headless
+- openssh-client
+- openssl
+- outguess
+- p7zip-full
+- pandoc
+- patchelf
+- php-cli
+- pipx
+- pkg-config
+- pngcheck
+- podman
+- postgresql-client
+- proxychains4
+- psmisc
+- pwndbg
+- python3
+- python3-impacket
+- python3-pip
+- python3-pwntools
+- python3-scapy
+- python3-venv
+- radare2
+- reaver
+- recon-ng
+- redis-tools
+- responder
+- rfkill
+- ripgrep
+- rizin
+- rockyou
+- rsync
+- ruby-full
+- rustc
+- scalpel
+- seclists-core
+- shellcheck
+- skopeo
+- sleuthkit
+- slirp4netns
+- sliver
+- smbclient
+- smbmap
+- snmp
+- socat
+- sqlite3
+- sqlmap
+- sshpass
+- sslscan
+- steghide
+- strace
+- subfinder
+- tcpdump
+- tcpreplay
+- termshark
+- testdisk
+- testssl.sh
+- tmux
+- traceroute
+- tree
+- trivy
+- tshark
+- uidmap
+- unzip
+- upx
+- volatility3
+- vulnerable-ad
+- wafw00f
+- waybackurls
+- wfuzz
+- wget
+- whatweb
+- whois
+- wifite
+- wireshark
+- wpscan
+- xz-utils
+- yersinia
+- yq
+- zaproxy
+- zip
+- zlib1g-dev
+- zoxide
+- zsh
+- zstd
+updated: '2026-10-22'
+workflows:
+  WF-01:
+    name: Reconnaissance
+    tier0:
+    - arp-scan
+    - arping
+    - curl
+    - dnsenum
+    - dnsrecon
+    - dnsutils
+    - gnutls-bin
+    - hping3
+    - iproute2
+    - iputils-ping
+    - ldap-utils
+    - macchanger
+    - masscan
+    - nbtscan
+    - netcat-openbsd
+    - nfs-common
+    - nftables
+    - nmap
+    - onesixtyone
+    - openssl
+    - proxychains4
+    - recon-ng
+    - smbclient
+    - smbmap
+    - snmp
+    - socat
+    - sshpass
+    - tcpreplay
+    - traceroute
+    - wafw00f
+    - wget
+    - whatweb
+    - whois
+    - yersinia
+    tier1:
+    - amass
+    - dnsx
+    - gau
+    - httpx
+    - naabu
+    - subfinder
+    - waybackurls
+  WF-02:
+    name: Web testing
+    tier0:
+    - apktool
+    - dirb
+    - dirsearch
+    - ffuf
+    - gobuster
+    - mitmproxy
+    - nikto
+    - sqlmap
+    - sslscan
+    - testssl.sh
+    - wfuzz
+    tier1:
+    - commix
+    - dalfox
+    - feroxbuster
+    - gospider
+    - hakrawler
+    - katana
+    - nuclei
+    - seclists-core
+    - wpscan
+    - zaproxy
+  WF-03:
+    name: Exploitation
+    tier0:
+    - gdb
+    - python3-pwntools
+    - strace
+    tier1:
+    - exploitdb
+    - metasploit-framework
+  WF-04:
+    name: Password attack
+    tier0:
+    - cewl
+    - crunch
+    - hashcat
+    - hydra
+    - john
+    - medusa
+    tier1:
+    - seclists-core
+  WF-05:
+    name: Active Directory
+    tier0:
+    - ldap-utils
+    - python3-impacket
+    - python3-scapy
+    - smbclient
+    - smbmap
+    tier1:
+    - certipy
+    - enum4linux-ng
+    - evil-winrm
+    - kerbrute
+    - ldapdomaindump
+    - netexec
+  WF-06:
+    name: Wireless
+    tier0:
+    - aircrack-ng
+    - hcxdumptool
+    - hcxtools
+    - iw
+    - reaver
+    - rfkill
+    - wifite
+    tier1:
+    - kismet
+  WF-07:
+    name: Network interception
+    tier0:
+    - bettercap
+    - ettercap-text-only
+    - mitmproxy
+    - netcat-openbsd
+    - openssh-client
+    - socat
+    - tcpdump
+    - tshark
+    - wireshark
+    tier1:
+    - responder
+    - termshark
+  WF-08:
+    name: Pivoting
+    tier0:
+    - netcat-openbsd
+    - openssh-client
+    - proxychains4
+    - socat
+    tier1:
+    - chisel
+    - ligolo-ng
+  WF-09:
+    name: Forensics
+    tier0:
+    - autopsy
+    - binwalk
+    - dcfldd
+    - foremost
+    - gddrescue
+    - guymager
+    - libimage-exiftool-perl
+    - outguess
+    - pngcheck
+    - scalpel
+    - sleuthkit
+    - steghide
+    - tcpdump
+    - testdisk
+    - tshark
+    - wireshark
+    tier1:
+    - volatility3
+  WF-10:
+    name: Reverse engineering
+    tier0:
+    - apktool
+    - autoconf
+    - automake
+    - binwalk
+    - build-essential
+    - cargo
+    - clang
+    - clang-format
+    - cmake
+    - gdb
+    - golang
+    - hashcat
+    - john
+    - libffi-dev
+    - libpq-dev
+    - libssl-dev
+    - libtool
+    - ltrace
+    - lua5.4
+    - meson
+    - neovim
+    - ninja-build
+    - nodejs
+    - npm
+    - openjdk-17-jdk
+    - openjdk-17-jre-headless
+    - patchelf
+    - php-cli
+    - pipx
+    - pkg-config
+    - python3
+    - python3-pip
+    - python3-pwntools
+    - python3-venv
+    - ruby-full
+    - rustc
+    - shellcheck
+    - strace
+    - tmux
+    - zlib1g-dev
+    - zsh
+    tier1:
+    - cutter
+    - frida-tools
+    - jadx
+    - pwndbg
+    - radare2
+    - rizin
+    - upx
+  WF-11:
+    name: Cloud dan container
+    tier0:
+    - ansible
+    - awscli
+    - azure-cli
+    - buildah
+    - crun
+    - fuse-overlayfs
+    - kubernetes-client
+    - nmap
+    - podman
+    - skopeo
+    - slirp4netns
+    - snmp
+    - uidmap
+    tier1:
+    - helm
+    - trivy
+  WF-12:
+    name: Reporting
+    tier0:
+    - bash-completion
+    - bat
+    - direnv
+    - exa
+    - fd-find
+    - file
+    - fzf
+    - gh
+    - git
+    - gnupg
+    - htop
+    - httpie
+    - jq
+    - keepassxc
+    - lsof
+    - man-db
+    - mariadb-client
+    - p7zip-full
+    - pandoc
+    - postgresql-client
+    - psmisc
+    - redis-tools
+    - ripgrep
+    - rsync
+    - sqlite3
+    - tree
+    - unzip
+    - xz-utils
+    - yq
+    - zip
+    - zoxide
+    - zstd
+    tier1:
+    - fastfetch

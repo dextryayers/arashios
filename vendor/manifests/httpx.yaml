@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/httpx
+  go_version: '1.23'
+  kind: go
+  source_commit: 4b6a9a9d476f94a4f3a630f37051f5671ecfb1f8
+  source_ref: v1.12.0
+category: recon
+distribution: vendor
+install:
+  path: /usr/local/bin/httpx
+license: MIT
+license_file: LICENSE.md
+name: httpx
+role: security
+source: https://github.com/projectdiscovery/httpx.git
+source_commit: 4b6a9a9d476f94a4f3a630f37051f5671ecfb1f8
+source_ref: v1.12.0
+summary: Probe HTTP dan deteksi teknologi.
+test:
+  command:
+  - httpx
+  kind: version
+tier: T1
+version: 1.12.0
+workflow: WF-01
+workflows:
+- WF-01

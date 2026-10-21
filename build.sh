@@ -272,10 +272,12 @@ for file in "$INCLUDES/etc/os-release" "$INCLUDES/etc/lsb-release" "$INCLUDES/et
         "$file"
 done
 
-log "Menghasilkan token, aset brand, dan tema Kage"
+log "Menghasilkan token, aset brand, tema Kage, katalog toolstack, dan toolchain"
 "$ROOT/scripts/generate-tokens.py" >/dev/null
 "$ROOT/scripts/generate-brand-assets.py" >/dev/null
 "$ROOT/scripts/generate-theme.py" >/dev/null
+"$ROOT/scripts/generate-toolstack.py" >/dev/null
+"$ROOT/scripts/generate-toolchain.py" >/dev/null
 
 log "Membangun paket branding lokal"
 export ARASHIOS_PACKAGE_VERSION="${VERSION_NUM}-1"
@@ -308,6 +310,13 @@ install -Dm644 "$ROOT/docs/PRIVACY.md" "$INCLUDES/usr/share/doc/arashios/PRIVACY
 install -Dm644 "$ROOT/docs/TRADEMARK.md" "$INCLUDES/usr/share/doc/arashios/TRADEMARK.md"
 
 install -Dm755 "$ROOT/tests/smoke.sh" "$INCLUDES/usr/local/bin/arashios-smoke"
+
+# Dokumentasi offline toolstack, toolchain, dan container.
+for doc in TOOLSTACK CODING ARSENAL CONTAINERS VENDORING LICENSES; do
+    install -Dm644 "$ROOT/docs/$doc.md" "$INCLUDES/usr/share/doc/arashios/$doc.md"
+done
+install -Dm644 "$ROOT/SECURITY.md" "$INCLUDES/usr/share/doc/arashios/SECURITY.md"
+install -Dm644 "$ROOT/docs/TOOLSTACK.md" "$INCLUDES/usr/share/doc/arashios/copyright-TOOLSTACK.md"
 
 log "Konfigurasi siap di $WORK/config"
 

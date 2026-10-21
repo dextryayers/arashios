@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: keepassxc
+category: reporting
+distribution: iso
+install:
+  path: /usr/bin/keepassxc
+license: debian
+name: keepassxc
+package: keepassxc
+role: security
+source: https://packages.debian.org/bookworm/keepassxc
+summary: Manajemen kredensial.
+test:
+  command:
+  - keepassxc
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-12
+workflows:
+- WF-12

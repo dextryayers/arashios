@@ -1,0 +1,31 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: binwalk
+category: reverse
+distribution: iso
+install:
+  path: /usr/bin/binwalk
+license: debian
+name: binwalk
+package: binwalk
+role: security
+source: https://packages.debian.org/bookworm/binwalk
+summary: Analisis firmware dan ekstraksi berkas.
+test:
+  command:
+  - binwalk
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-09
+workflows:
+- WF-09
+- WF-10

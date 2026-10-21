@@ -1,0 +1,35 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
+  sha256: ''
+  status: source-locked
+build:
+  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/feroxbuster
+  go_version: '1.23'
+  kind: go
+  source_commit: aa8e1335801e91d98ce0d4fd148c2159a667a83b
+  source_ref: v2.13.1
+category: web
+distribution: vendor
+install:
+  path: /usr/local/bin/feroxbuster
+license: MIT
+license_file: LICENSE
+name: feroxbuster
+role: security
+source: https://github.com/epi052/feroxbuster.git
+source_commit: aa8e1335801e91d98ce0d4fd148c2159a667a83b
+source_ref: v2.13.1
+summary: Content discovery.
+test:
+  command:
+  - feroxbuster
+  kind: version
+tier: T1
+version: 2.13.1
+workflow: WF-02
+workflows:
+- WF-02

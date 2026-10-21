@@ -1,0 +1,28 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Tool T2 tidak didistribusikan. Pengguna unduh sendiri dari upstream.
+  sha256: ''
+  status: user-download
+build:
+  kind: installer
+category: exploitation
+distribution: installer
+install:
+  path: ''
+license: proprietary
+name: havoc
+role: security
+source: upstream
+summary: Server command and control, opt-in.
+test:
+  command:
+  - havoc-server
+  kind: presence
+tier: T2
+version: user-managed
+workflow: WF-03
+workflows:
+- WF-03

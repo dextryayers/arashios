@@ -1,0 +1,30 @@
+arch:
+  amd64: supported
+  arm64: supported
+  i386: supported
+artifact:
+  note: Checksum diambil dari indeks Debian saat build image.
+  sha256: ''
+  status: debian-archive
+build:
+  kind: debian
+  package: traceroute
+category: recon
+distribution: iso
+install:
+  path: /usr/bin/traceroute
+license: debian
+name: traceroute
+package: traceroute
+role: security
+source: https://packages.debian.org/bookworm/traceroute
+summary: Petakan jalur router menuju target.
+test:
+  command:
+  - traceroute
+  kind: presence
+tier: T0
+version: debian-bookworm
+workflow: WF-01
+workflows:
+- WF-01
