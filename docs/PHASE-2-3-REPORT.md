@@ -29,7 +29,7 @@ Yang belum ada:
 | Item | Hasil |
 |---|---|
 | Varian | `ArashiKage`, `ArashiKage-HC` |
-| File manifest | 164 file |
+| File manifest | 164 entri, 165 file termasuk `manifest.json` |
 | File per varian | 80 file |
 | Aset XFWM per varian | 70 PNG |
 | Toolkit | GTK2, GTK3, GTK4 dan libadwaita, Cinnamon, Muffin dan Metacity, XFCE, Openbox, Kvantum |
@@ -71,15 +71,15 @@ line yang bergerak.
 | Package | `arashios-branding` |
 | Version | `1.10.21-1` |
 | Architecture | `all` |
-| Ukuran | 722672 byte |
-| File payload | 213 file |
+| Ukuran | 723368 byte |
+| File payload | 214 file |
 | Maintainer | `maintainers@arashios.example` |
 | Reproducible | Ya, dengan `SOURCE_DATE_EPOCH` |
-| Hash contoh | `af266a94ea331161ba25f894c85d762141692a984ac84d91e72691c3d3a2bab3` |
+| Hash contoh | `40f6c22e39ea57912758ecfa6e1377400837a30515a0b390d80457d8292ccb4d` |
 
 Paket berisi tema, wallpaper, ikon, aset GRUB, aset Plymouth, token, manifest,
-dokumentasi lisensi, dan changelog. Paket tidak memasang desktop atau window
-manager.
+dokumentasi lisensi termasuk `NOTICE`, dan changelog. Paket tidak memasang
+desktop atau window manager.
 
 ## 3. Deliverable Fase 3
 
@@ -149,7 +149,7 @@ Perubahan tema tidak memulai ulang aplikasi yang sedang berjalan.
 | Parser CSS GTK4 | Lulus untuk kedua varian |
 | Integrasi desktop | 285 pemeriksaan lulus |
 | Helper aksesibilitas | Lulus dengan `HOME` sementara |
-| Paket branding | Lulus, 213 file, reproducible |
+| Paket branding | Lulus, 214 file, reproducible |
 | Validasi konfigurasi | Lulus, termasuk GRUB dan dconf |
 | XML dan SVG | Semua dapat diparse |
 | dconf Cinnamon | `dconf compile` lulus |
@@ -173,7 +173,10 @@ atau konflik versi.
 
 ### 4.3 Dry Run Live-Build
 
-Dry run dijalankan untuk tujuh kombinasi dengan `live-build` bookworm:
+Dry run dijalankan untuk tujuh kombinasi dengan `live-build` bookworm yang
+diekstrak ke direktori sementara. Host pengembangan adalah LMDE 7 dan tidak
+memiliki toolchain ISO lengkap, jadi hasil ini memvalidasi konfigurasi, bukan
+membuktikan ISO dapat dibangun.
 
 | Kombinasi | Hasil |
 |---|---|
@@ -203,8 +206,9 @@ make config-matrix
 ## 5. Penyimpangan dan Risiko
 
 1. Pekerjaan statis Fase 2 dan Fase 3 dilanjutkan sebelum exit gate runtime
-   Fase 1 lulus. Hal ini dilakukan karena toolchain ISO tidak tersedia. Exit
-   gate runtime tetap terbuka.
+   Fase 1 lulus. Hal ini dilakukan karena toolchain ISO tidak tersedia. Host
+   LMDE 7 bukan acuan rilis Debian 12, sehingga build ISO tetap harus dijalankan
+   pada host bookworm. Exit gate runtime tetap terbuka.
 2. Parser CSS GTK4 memakai GTK 4.18 pada host pengembangan. Target bookworm
    memakai GTK 4.8. CSS perlu diuji ulang pada ISO.
 3. Patch default applet Cinnamon berada di hook dan dapat tertimpa pembaruan

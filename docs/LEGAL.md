@@ -12,6 +12,10 @@ Dokumen ini merangkum lisensi, kewajiban distribusi, merek dagang, ekspor, dan p
 | Paket Debian | Lisensi masing-masing paket | Pemegang hak masing-masing |
 | Tool vendored | Lisensi upstream | Pemegang hak upstream |
 | Firmware non-free | Lisensi masing-masing | Pemegang hak masing-masing |
+| Inspirasi palet terminal | MIT | Kanagawa.nvim dan kontributor |
+
+Palet terminal ArashiOS terinspirasi Kanagawa.nvim. Notice dan teks lisensi
+MIT pihak ketiga disertakan di `NOTICE`, paket `arashios-branding`, dan image.
 
 ## Kewajiban Distribusi
 

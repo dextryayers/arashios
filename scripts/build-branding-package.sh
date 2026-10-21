@@ -102,6 +102,7 @@ install -m644 "$ROOT/branding/boot/grub-splash.png" \
 install -m644 "$ROOT/docs/LEGAL.md" "$STAGE/usr/share/doc/arashios-branding/copyright"
 install -m644 "$ROOT/docs/LEGAL.md" "$STAGE/usr/share/doc/arashios-branding/LEGAL.md"
 install -m644 "$ROOT/LICENSE" "$STAGE/usr/share/doc/arashios-branding/LICENSE"
+install -m644 "$ROOT/NOTICE" "$STAGE/usr/share/doc/arashios-branding/NOTICE"
 install -m644 "$ROOT/CHANGELOG.md" "$STAGE/usr/share/doc/arashios-branding/CHANGELOG.md"
 
 INSTALLED_SIZE="$(du -sk "$STAGE" | cut -f1)"

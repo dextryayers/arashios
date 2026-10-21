@@ -300,6 +300,7 @@ install -Dm644 "$ROOT/branding/boot/splash800x600.png" \
     "$WORK/config/bootloaders/syslinux_common/splash800x600.png"
 
 install -Dm644 "$ROOT/LICENSE" "$INCLUDES/usr/share/doc/arashios/LICENSE"
+install -Dm644 "$ROOT/NOTICE" "$INCLUDES/usr/share/doc/arashios/NOTICE"
 install -Dm644 "$ROOT/LICENSE" "$INCLUDES/usr/share/doc/arashios/copyright"
 install -Dm644 "$ROOT/CHANGELOG.md" "$INCLUDES/usr/share/doc/arashios/CHANGELOG.md"
 install -Dm644 "$ROOT/docs/LEGAL.md" "$INCLUDES/usr/share/doc/arashios/LEGAL.md"

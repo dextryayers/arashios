@@ -95,6 +95,7 @@ case "$ARCH" in
     *) fail "arch tidak valid: $ARCH" ;;
 esac
 check_file /etc/arashios/build-info
+check_file /usr/share/doc/arashios/NOTICE
 
 printf '\nBranding dan tema:\n'
 for wallpaper in kage-sumi kage-shuriken kage-bamboo kage-washi kage-storm; do

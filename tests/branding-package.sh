@@ -62,6 +62,7 @@ required=(
     "usr/share/plymouth/themes/arashios/progress_box.png"
     "usr/share/plymouth/themes/arashios/progress_bar.png"
     "usr/share/doc/arashios-branding/copyright"
+    "usr/share/doc/arashios-branding/NOTICE"
     "usr/share/doc/arashios-branding/CHANGELOG.md"
 )
 for path in "${required[@]}"; do

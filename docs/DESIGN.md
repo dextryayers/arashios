@@ -522,6 +522,7 @@ Checklist ini wajib dijalankan saat ISO dan sesi desktop tersedia.
 | Font | Lisensi masing-masing, umumnya OFL |
 | Papirus | GPL-3.0 |
 | Bibata | GPL-3.0 |
+| Inspirasi palet terminal | MIT, Kanagawa.nvim |
 
 Atribusi dan batasan merek dijelaskan di [LEGAL.md](LEGAL.md) dan
 [TRADEMARK.md](TRADEMARK.md).
