@@ -1,0 +1,26 @@
+# LXQt edition, default desktop for i386 and low RAM target.
+
+lxqt-core
+lxqt-session
+lxqt-panel
+lxqt-config
+lxqt-about
+lxqt-runner
+lxqt-sudo
+lxqt-policykit
+lxqt-powermanagement
+lxqt-qtplugin
+lxqt-globalkeys
+lxqt-notificationd
+lxqt-openssh-askpass
+lxqt-archiver
+
+pcmanfm-qt
+qterminal
+openbox
+featherpad
+lximage-qt
+
+pipewire
+pipewire-pulse
+wireplumber

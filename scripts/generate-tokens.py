@@ -1,0 +1,914 @@
+#!/usr/bin/env python3
+"""Generate Kage design token artifacts from branding/tokens.json.
+
+Outputs:
+  tokens.css            CSS custom properties
+  _tokens.scss          Sass variables
+  kage.qss              Qt stylesheet starter
+  tokens.resolved.json  Resolved semantic colors and contrast report
+  contrast.md           WCAG contrast table
+  preview.html          Static design preview
+
+The generator only uses the Python standard library. It fails when a
+contrast pair is below its declared minimum.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+from string import Template
+from typing import Any
+
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_TOKENS = ROOT / "branding" / "tokens.json"
+DEFAULT_OUT = ROOT / "build" / "tokens"
+HEX_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
+
+
+class TokenError(Exception):
+    """Raised when the token source is invalid."""
+
+
+def fail(message: str) -> None:
+    print(f"ERROR: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def kebab(name: str) -> str:
+    return re.sub(r"(?<!^)(?=[A-Z])", "-", name).lower()
+
+
+def parse_hex(value: str) -> tuple[int, int, int]:
+    if not HEX_RE.match(value):
+        raise TokenError(f"warna tidak valid: {value!r}, harus #RRGGBB")
+    return tuple(int(value[i : i + 2], 16) for i in (1, 3, 5))
+
+
+def linear_channel(channel: int) -> float:
+    value = channel / 255.0
+    if value <= 0.04045:
+        return value / 12.92
+    return ((value + 0.055) / 1.055) ** 2.4
+
+
+def luminance(value: str) -> float:
+    r, g, b = parse_hex(value)
+    return 0.2126 * linear_channel(r) + 0.7152 * linear_channel(g) + 0.0722 * linear_channel(b)
+
+
+def contrast_ratio(fg: str, bg: str) -> float:
+    high, low = sorted((luminance(fg), luminance(bg)), reverse=True)
+    return (high + 0.05) / (low + 0.05)
+
+
+def flatten_palette(color: dict[str, Any]) -> dict[str, str]:
+    flat: dict[str, str] = {}
+    for group, shades in color.items():
+        if not isinstance(shades, dict):
+            raise TokenError(f"grup warna {group!r} harus berupa objek")
+        for shade, value in shades.items():
+            if not isinstance(value, str):
+                raise TokenError(f"warna {group}.{shade} harus string")
+            parse_hex(value)
+            flat[f"{group}.{shade}"] = value.upper()
+    if not flat:
+        raise TokenError("palet warna kosong")
+    return flat
+
+
+def resolve_semantic(semantic: dict[str, Any], palette: dict[str, str]) -> dict[str, str]:
+    resolved: dict[str, str] = {}
+    for name, value in semantic.items():
+        if not isinstance(value, str):
+            raise TokenError(f"semantic.{name} harus string")
+        if value in palette:
+            resolved[name] = palette[value]
+        elif HEX_RE.match(value):
+            parse_hex(value)
+            resolved[name] = value.upper()
+        else:
+            raise TokenError(f"semantic.{name} merujuk warna tidak dikenal: {value!r}")
+    required = {
+        "bg",
+        "surface",
+        "text",
+        "textMuted",
+        "accent",
+        "accentStrong",
+        "onAccent",
+        "success",
+        "warning",
+        "danger",
+        "border",
+        "focus",
+    }
+    missing = sorted(required - set(resolved))
+    if missing:
+        raise TokenError(f"semantic wajib hilang: {', '.join(missing)}")
+    return resolved
+
+
+def validate_pairs(
+    pairs: list[dict[str, Any]], palette: dict[str, str]
+) -> list[dict[str, Any]]:
+    if not pairs:
+        raise TokenError("contrastPairs kosong")
+    report: list[dict[str, Any]] = []
+    failures: list[str] = []
+    for index, pair in enumerate(pairs):
+        try:
+            fg = pair["fg"]
+            bg = pair["bg"]
+            minimum = float(pair["min"])
+            usage = str(pair["usage"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise TokenError(f"contrastPairs[{index}] tidak lengkap: {exc}") from exc
+        if fg not in palette:
+            raise TokenError(f"contrastPairs[{index}].fg tidak dikenal: {fg}")
+        if bg not in palette:
+            raise TokenError(f"contrastPairs[{index}].bg tidak dikenal: {bg}")
+        ratio = contrast_ratio(palette[fg], palette[bg])
+        passed = ratio + 1e-9 >= minimum
+        report.append(
+            {
+                "usage": usage,
+                "fg": fg,
+                "fgHex": palette[fg],
+                "bg": bg,
+                "bgHex": palette[bg],
+                "ratio": round(ratio, 2),
+                "min": minimum,
+                "passed": passed,
+            }
+        )
+        if not passed:
+            failures.append(
+                f"{usage}: {fg} di atas {bg} = {ratio:.2f}:1, minimum {minimum:.2f}:1"
+            )
+    if failures:
+        raise TokenError("kontras gagal:\n  " + "\n  ".join(failures))
+    return report
+
+
+def build_css(tokens: dict[str, Any], palette: dict[str, str], semantic: dict[str, str]) -> str:
+    lines = [
+        "/* ArashiOS Kage tokens. Generated by scripts/generate-tokens.py. */",
+        "/* Source: branding/tokens.json. Do not edit by hand. */",
+        "",
+        ":root {",
+        "  /* Palette */",
+    ]
+    for key, value in palette.items():
+        lines.append(f"  --kage-color-{key.replace('.', '-')}: {value};")
+    lines += ["", "  /* Semantic */"]
+    for key, value in semantic.items():
+        lines.append(f"  --kage-{kebab(key)}: {value};")
+    lines += ["", "  /* Typography */"]
+    for key, value in tokens["typography"]["fontFamily"].items():
+        lines.append(f"  --kage-font-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["fontSize"].items():
+        lines.append(f"  --kage-font-size-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["lineHeight"].items():
+        lines.append(f"  --kage-line-height-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["weight"].items():
+        lines.append(f"  --kage-weight-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["letterSpacing"].items():
+        lines.append(f"  --kage-letter-spacing-{kebab(key)}: {value};")
+    lines += ["", "  /* Space */"]
+    for key, value in tokens["space"].items():
+        lines.append(f"  --kage-space-{key}: {value};")
+    lines += ["", "  /* Radius */"]
+    for key, value in tokens["radius"].items():
+        lines.append(f"  --kage-radius-{key}: {value};")
+    lines += ["", "  /* Shadow */"]
+    for key, value in tokens["shadow"].items():
+        lines.append(f"  --kage-shadow-{key}: {value};")
+    lines += ["", "  /* Motion */"]
+    for key, value in tokens["motion"].items():
+        lines.append(f"  --kage-{kebab(key)}: {value};")
+    lines += ["}", ""]
+    return "\n".join(lines)
+
+
+def build_scss(tokens: dict[str, Any], palette: dict[str, str], semantic: dict[str, str]) -> str:
+    lines = [
+        "// ArashiOS Kage tokens. Generated by scripts/generate-tokens.py.",
+        "// Source: branding/tokens.json. Do not edit by hand.",
+        "",
+    ]
+    for key, value in palette.items():
+        lines.append(f"$kage-color-{key.replace('.', '-')}: {value};")
+    lines.append("")
+    for key, value in semantic.items():
+        lines.append(f"$kage-{kebab(key)}: {value};")
+    lines += ["", "// Typography"]
+    for key, value in tokens["typography"]["fontFamily"].items():
+        lines.append(f"$kage-font-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["fontSize"].items():
+        lines.append(f"$kage-font-size-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["lineHeight"].items():
+        lines.append(f"$kage-line-height-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["weight"].items():
+        lines.append(f"$kage-weight-{kebab(key)}: {value};")
+    for key, value in tokens["typography"]["letterSpacing"].items():
+        lines.append(f"$kage-letter-spacing-{kebab(key)}: {value};")
+    lines += ["", "// Space"]
+    for key, value in tokens["space"].items():
+        lines.append(f"$kage-space-{key}: {value};")
+    lines += ["", "// Radius"]
+    for key, value in tokens["radius"].items():
+        lines.append(f"$kage-radius-{key}: {value};")
+    lines += ["", "// Shadow"]
+    for key, value in tokens["shadow"].items():
+        lines.append(f"$kage-shadow-{key}: {value};")
+    lines += ["", "// Motion"]
+    for key, value in tokens["motion"].items():
+        lines.append(f"$kage-{kebab(key)}: {value};")
+    lines.append("")
+    return "\n".join(lines)
+
+
+QSS_TEMPLATE = Template(
+    """/* ArashiOS Kage Qt stylesheet. Generated by scripts/generate-tokens.py. */
+/* Source: branding/tokens.json. Do not edit by hand. */
+
+QWidget {
+    background-color: $bg;
+    color: $text;
+    font-family: "Inter";
+    font-size: 10pt;
+}
+
+QMainWindow, QDialog {
+    background-color: $surface;
+}
+
+QLabel {
+    background: transparent;
+    color: $text;
+}
+
+QLabel[muted="true"] {
+    color: $text_muted;
+}
+
+QPushButton {
+    background-color: $surface_raised;
+    color: $text;
+    border: 1px solid $border;
+    border-radius: $radius_sm;
+    padding: 6px 14px;
+    min-height: 20px;
+}
+
+QPushButton:hover {
+    background-color: $surface;
+    border-color: $accent;
+}
+
+QPushButton:pressed {
+    background-color: $bg_alt;
+    border-color: $accent_pressed;
+}
+
+QPushButton:disabled {
+    color: $text_muted;
+    border-color: $border;
+}
+
+QPushButton:default {
+    border-color: $accent;
+}
+
+QPushButton[primary="true"] {
+    background-color: $accent;
+    color: $on_accent;
+    border-color: $accent;
+}
+
+QPushButton[primary="true"]:hover {
+    background-color: $accent_hover;
+    border-color: $accent_hover;
+}
+
+QPushButton[danger="true"] {
+    background-color: $danger_strong;
+    color: $on_accent;
+    border-color: $danger_strong;
+}
+
+QLineEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QTimeEdit, QComboBox {
+    background-color: $surface;
+    color: $text;
+    border: 1px solid $border;
+    border-radius: $radius_sm;
+    padding: 6px 8px;
+    selection-background-color: $accent_strong;
+    selection-color: $on_accent;
+}
+
+QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus,
+QDateEdit:focus, QTimeEdit:focus, QComboBox:focus {
+    border-color: $focus;
+}
+
+QLineEdit:disabled, QComboBox:disabled {
+    color: $text_muted;
+}
+
+QComboBox::drop-down {
+    border: 0;
+    width: 22px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: $surface;
+    color: $text;
+    border: 1px solid $border;
+    selection-background-color: $accent_strong;
+    selection-color: $on_accent;
+}
+
+QTextEdit, QPlainTextEdit {
+    background-color: $surface_sunken;
+    color: $text;
+    border: 1px solid $border;
+    border-radius: $radius_sm;
+    selection-background-color: $accent_strong;
+    selection-color: $on_accent;
+    font-family: "JetBrains Mono";
+}
+
+QCheckBox, QRadioButton {
+    spacing: 8px;
+    background: transparent;
+    color: $text;
+}
+
+QCheckBox::indicator, QRadioButton::indicator {
+    width: 16px;
+    height: 16px;
+    border: 1px solid $border_strong;
+    background-color: $surface;
+}
+
+QCheckBox::indicator {
+    border-radius: $radius_sm;
+}
+
+QRadioButton::indicator {
+    border-radius: 8px;
+}
+
+QCheckBox::indicator:checked, QRadioButton::indicator:checked {
+    background-color: $accent;
+    border-color: $accent;
+}
+
+QMenuBar {
+    background-color: $surface;
+    color: $text;
+    border-bottom: 1px solid $border;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 6px 10px;
+}
+
+QMenuBar::item:selected {
+    background-color: $surface_raised;
+}
+
+QMenu {
+    background-color: $surface_raised;
+    color: $text;
+    border: 1px solid $border;
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 24px;
+    border-radius: $radius_sm;
+}
+
+QMenu::item:selected {
+    background-color: $accent_strong;
+    color: $on_accent;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: $border;
+    margin: 4px 8px;
+}
+
+QToolBar {
+    background-color: $surface;
+    border: 0;
+    spacing: 4px;
+    padding: 4px;
+}
+
+QToolButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: $radius_sm;
+    padding: 4px;
+}
+
+QToolButton:hover {
+    background-color: $surface_raised;
+    border-color: $border;
+}
+
+QStatusBar {
+    background-color: $surface;
+    color: $text_muted;
+    border-top: 1px solid $border;
+}
+
+QToolTip {
+    background-color: $surface_raised;
+    color: $text;
+    border: 1px solid $accent;
+    padding: 4px 8px;
+}
+
+QScrollBar:vertical {
+    background-color: $surface;
+    width: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:vertical {
+    background-color: $border_strong;
+    border-radius: 5px;
+    min-height: 24px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: $accent;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+QScrollBar:horizontal {
+    background-color: $surface;
+    height: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: $border_strong;
+    border-radius: 5px;
+    min-width: 24px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: $accent;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: transparent;
+}
+
+QTabWidget::pane {
+    border: 1px solid $border;
+    border-radius: $radius_sm;
+    top: -1px;
+}
+
+QTabBar::tab {
+    background-color: $surface;
+    color: $text_muted;
+    padding: 7px 14px;
+    border: 1px solid $border;
+    border-bottom: 0;
+    border-top-left-radius: $radius_sm;
+    border-top-right-radius: $radius_sm;
+}
+
+QTabBar::tab:selected {
+    background-color: $surface_raised;
+    color: $text;
+    border-bottom: 2px solid $accent;
+}
+
+QProgressBar {
+    background-color: $surface;
+    color: $text;
+    border: 1px solid $border;
+    border-radius: $radius_sm;
+    text-align: center;
+    min-height: 18px;
+}
+
+QProgressBar::chunk {
+    background-color: $accent;
+    border-radius: 3px;
+}
+
+QSlider::groove:horizontal {
+    height: 4px;
+    background-color: $surface_raised;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    width: 14px;
+    margin: -5px 0;
+    background-color: $accent;
+    border: 1px solid $accent_pressed;
+    border-radius: 7px;
+}
+
+QListView, QTreeView, QTableView {
+    background-color: $surface;
+    alternate-background-color: $surface_raised;
+    color: $text;
+    border: 1px solid $border;
+    selection-background-color: $accent_strong;
+    selection-color: $on_accent;
+    gridline-color: $border;
+}
+
+QHeaderView::section {
+    background-color: $surface_raised;
+    color: $text;
+    border: 0;
+    border-bottom: 1px solid $border;
+    padding: 6px;
+    font-weight: 600;
+}
+
+QTableCornerButton::section {
+    background-color: $surface_raised;
+    border: 0;
+    border-bottom: 1px solid $border;
+}
+
+QGroupBox {
+    border: 1px solid $border;
+    border-radius: $radius_md;
+    margin-top: 12px;
+    padding-top: 10px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 12px;
+    padding: 0 4px;
+    color: $accent;
+}
+
+QToolTip, QMenu, QMenuBar, QStatusBar {
+    font-size: 9pt;
+}
+"""
+)
+
+
+def build_qss(semantic: dict[str, str], tokens: dict[str, Any]) -> str:
+    values = {kebab(key).replace("-", "_"): value for key, value in semantic.items()}
+    values.update(
+        {
+            "radius_sm": tokens["radius"]["sm"],
+            "radius_md": tokens["radius"]["md"],
+        }
+    )
+    required = [
+        "bg",
+        "bg_alt",
+        "surface",
+        "surface_raised",
+        "surface_sunken",
+        "text",
+        "text_muted",
+        "accent",
+        "accent_hover",
+        "accent_pressed",
+        "accent_strong",
+        "on_accent",
+        "danger_strong",
+        "border",
+        "border_strong",
+        "focus",
+    ]
+    missing = [name for name in required if name not in values]
+    if missing:
+        raise TokenError(f"QSS membutuhkan semantic: {', '.join(missing)}")
+    return QSS_TEMPLATE.substitute(values)
+
+
+def build_contrast_md(report: list[dict[str, Any]], tokens: dict[str, Any]) -> str:
+    lines = [
+        "# Kage Contrast Report",
+        "",
+        f"Design system: {tokens['meta']['name']} {tokens['meta']['version']}",
+        "",
+        "| Usage | Foreground | Background | Ratio | Minimum | Status |",
+        "|---|---|---|---:|---:|---|",
+    ]
+    for row in report:
+        status = "Lulus" if row["passed"] else "Gagal"
+        lines.append(
+            f"| {row['usage']} | `{row['fg']}` {row['fgHex']} | "
+            f"`{row['bg']}` {row['bgHex']} | {row['ratio']:.2f}:1 | "
+            f"{row['min']:.2f}:1 | {status} |"
+        )
+    lines += [
+        "",
+        "Ambang mengikuti WCAG 2.1: 4.5:1 untuk teks normal, 3:1 untuk teks besar dan komponen UI.",
+        "Pasangan dengan ambang 3:1 hanya boleh dipakai untuk teks besar atau elemen non-teks.",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def preview_swatches(palette: dict[str, str]) -> str:
+    groups: dict[str, list[tuple[str, str]]] = {}
+    for key, value in palette.items():
+        group, shade = key.split(".", 1)
+        groups.setdefault(group, []).append((shade, value))
+    blocks: list[str] = []
+    for group, shades in groups.items():
+        cells: list[str] = []
+        for shade, value in shades:
+            fg = "#070709" if luminance(value) > 0.5 else "#EDE8DE"
+            cells.append(
+                f'<div class="swatch" style="background:{value};color:{fg}">'
+                f'<span class="swatch-name">{group}.{shade}</span>'
+                f'<span class="swatch-hex">{value}</span></div>'
+            )
+        blocks.append(
+            f'<div class="swatch-group"><h3>{group}</h3><div class="swatch-row">{"".join(cells)}</div></div>'
+        )
+    return "\n".join(blocks)
+
+
+PREVIEW_TEMPLATE = Template(
+    """<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kage Design System $version</title>
+<style>
+$css
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--kage-bg);
+  color: var(--kage-text);
+  font-family: var(--kage-font-sans);
+  line-height: var(--kage-line-height-normal);
+}
+a { color: var(--kage-accent); }
+header {
+  padding: var(--kage-space-10) var(--kage-space-8);
+  border-bottom: 1px solid var(--kage-border);
+  background: linear-gradient(135deg, var(--kage-bg-alt), var(--kage-surface));
+}
+.brand { display: flex; align-items: center; gap: var(--kage-space-4); }
+.mark {
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 2px solid var(--kage-accent-strong);
+  display: grid; place-items: center;
+  font-size: 28px; color: var(--kage-text);
+  background: var(--kage-bg-alt);
+}
+.brand h1 { margin: 0; font-size: var(--kage-font-size-3xl); letter-spacing: var(--kage-letter-spacing-tight); }
+.brand p { margin: 4px 0 0; color: var(--kage-text-muted); }
+main { max-width: 1120px; margin: 0 auto; padding: var(--kage-space-8); }
+section { margin: 0 0 var(--kage-space-10); }
+h2 { font-size: var(--kage-font-size-2xl); margin: 0 0 var(--kage-space-2); }
+h3 { font-size: var(--kage-font-size-lg); margin: var(--kage-space-5) 0 var(--kage-space-2); color: var(--kage-text-muted); }
+.lead { color: var(--kage-text-muted); max-width: 70ch; }
+.swatch-group { margin-bottom: var(--kage-space-5); }
+.swatch-row { display: flex; flex-wrap: wrap; gap: var(--kage-space-2); }
+.swatch {
+  min-width: 150px; min-height: 86px; border-radius: var(--kage-radius-md);
+  padding: var(--kage-space-3); display: flex; flex-direction: column; justify-content: space-between;
+  border: 1px solid var(--kage-border); font-size: var(--kage-font-size-xs);
+}
+.swatch-name { font-weight: var(--kage-weight-semibold); }
+.swatch-hex { font-family: var(--kage-font-mono); opacity: 0.85; }
+.grid { display: grid; gap: var(--kage-space-4); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card {
+  background: var(--kage-surface); border: 1px solid var(--kage-border);
+  border-radius: var(--kage-radius-lg); padding: var(--kage-space-5);
+}
+.card h3 { margin-top: 0; color: var(--kage-text); }
+.btn {
+  border: 1px solid var(--kage-border); background: var(--kage-surface-raised);
+  color: var(--kage-text); padding: 7px 14px; border-radius: var(--kage-radius-sm);
+  font: inherit; cursor: pointer;
+}
+.btn.primary { background: var(--kage-accent); color: var(--kage-on-accent); border-color: var(--kage-accent); }
+.btn.danger { background: var(--kage-danger-strong); color: var(--kage-on-accent); border-color: var(--kage-danger-strong); }
+.btn:focus-visible { outline: 2px solid var(--kage-focus); outline-offset: 2px; }
+.input {
+  width: 100%; background: var(--kage-surface); color: var(--kage-text);
+  border: 1px solid var(--kage-border); border-radius: var(--kage-radius-sm);
+  padding: 8px 10px; font: inherit;
+}
+.input:focus { outline: none; border-color: var(--kage-focus); }
+.alert {
+  border-left: 3px solid var(--kage-accent); background: var(--kage-surface);
+  padding: var(--kage-space-4); border-radius: var(--kage-radius-sm);
+}
+.typo p { margin: var(--kage-space-2) 0; }
+.typo .display { font-size: var(--kage-font-size-4xl); line-height: var(--kage-line-height-tight); letter-spacing: var(--kage-letter-spacing-tight); }
+.typo .mono { font-family: var(--kage-font-mono); color: var(--kage-accent); }
+table { width: 100%; border-collapse: collapse; font-size: var(--kage-font-size-sm); }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--kage-border); }
+th { color: var(--kage-text-muted); font-weight: var(--kage-weight-semibold); }
+code { font-family: var(--kage-font-mono); color: var(--kage-accent); }
+footer { padding: var(--kage-space-6) var(--kage-space-8); border-top: 1px solid var(--kage-border); color: var(--kage-text-muted); font-size: var(--kage-font-size-sm); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="mark">嵐</div>
+    <div>
+      <h1>Kage $version</h1>
+      <p>ArashiOS design system. Japanese minimal, red team accent, measurable contrast.</p>
+    </div>
+  </div>
+</header>
+<main>
+  <section>
+    <h2>Palette</h2>
+    <p class="lead">Palet inti Kage. Setiap warna berasal dari token JSON dan dipakai lintas GTK, Qt, GRUB, Plymouth, serta dokumentasi.</p>
+    $swatches
+  </section>
+  <section>
+    <h2>Typography</h2>
+    <div class="card typo">
+      <p class="display">静けさの中に、強さ。</p>
+      <p>Inter untuk antarmuka. JetBrains Mono untuk terminal dan kode. Skala tipe mengikuti token, bukan nilai acak.</p>
+      <p class="mono">nmap -sV -T4 10.10.10.0/24</p>
+    </div>
+  </section>
+  <section>
+    <h2>Components</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Buttons</h3>
+        <p><button class="btn">Secondary</button> <button class="btn primary">Primary</button> <button class="btn danger">Danger</button></p>
+      </div>
+      <div class="card">
+        <h3>Input</h3>
+        <p><input class="input" value="arashi@arashios" aria-label="Contoh input"></p>
+      </div>
+      <div class="card">
+        <h3>Alert</h3>
+        <div class="alert">Sesi live berjalan. Perubahan tidak disimpan setelah reboot.</div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h2>Contrast</h2>
+    <p class="lead">Rasio dihitung otomatis oleh <code>scripts/generate-tokens.py</code>. Build gagal jika ambang WCAG tidak terpenuhi.</p>
+    <table>
+      <thead><tr><th>Usage</th><th>Foreground</th><th>Background</th><th>Ratio</th><th>Status</th></tr></thead>
+      <tbody>
+      $contrast_rows
+      </tbody>
+    </table>
+  </section>
+</main>
+<footer>Kage $version. Code GPL-3.0-or-later, assets CC-BY-SA-4.0.</footer>
+</body>
+</html>
+"""
+)
+
+
+def build_preview(
+    tokens: dict[str, Any],
+    palette: dict[str, str],
+    report: list[dict[str, Any]],
+    css: str,
+) -> str:
+    rows = "\n".join(
+        f"<tr><td>{row['usage']}</td><td><code>{row['fg']}</code></td>"
+        f"<td><code>{row['bg']}</code></td><td>{row['ratio']:.2f}:1</td>"
+        f"<td>{'Lulus' if row['passed'] else 'Gagal'}</td></tr>"
+        for row in report
+    )
+    return PREVIEW_TEMPLATE.substitute(
+        version=tokens["meta"]["version"],
+        css=css,
+        swatches=preview_swatches(palette),
+        contrast_rows=rows,
+    )
+
+
+def generate(tokens_path: Path) -> tuple[dict[str, str], list[dict[str, Any]]]:
+    try:
+        tokens = json.loads(tokens_path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise TokenError(f"berkas token tidak ditemukan: {tokens_path}") from exc
+    except json.JSONDecodeError as exc:
+        raise TokenError(f"JSON tidak valid di {tokens_path}: {exc}") from exc
+
+    for key in ("meta", "color", "semantic", "typography", "space", "radius", "shadow", "motion", "contrastPairs"):
+        if key not in tokens:
+            raise TokenError(f"token wajib hilang: {key}")
+    for key in ("name", "version", "license"):
+        if key not in tokens["meta"]:
+            raise TokenError(f"meta.{key} wajib ada")
+
+    palette = flatten_palette(tokens["color"])
+    semantic = resolve_semantic(tokens["semantic"], palette)
+    report = validate_pairs(tokens["contrastPairs"], palette)
+
+    css = build_css(tokens, palette, semantic)
+    scss = build_scss(tokens, palette, semantic)
+    qss = build_qss(semantic, tokens)
+    contrast_md = build_contrast_md(report, tokens)
+    preview = build_preview(tokens, palette, report, css)
+
+    resolved = {
+        "meta": tokens["meta"],
+        "color": tokens["color"],
+        "semantic": tokens["semantic"],
+        "resolvedSemantic": semantic,
+        "typography": tokens["typography"],
+        "space": tokens["space"],
+        "radius": tokens["radius"],
+        "shadow": tokens["shadow"],
+        "motion": tokens["motion"],
+        "assets": tokens.get("assets", {}),
+        "contrast": report,
+    }
+    resolved_json = json.dumps(resolved, ensure_ascii=False, indent=2) + "\n"
+
+    files = {
+        "tokens.css": css,
+        "_tokens.scss": scss,
+        "kage.qss": qss,
+        "tokens.resolved.json": resolved_json,
+        "contrast.md": contrast_md,
+        "preview.html": preview,
+    }
+    return files, report
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate Kage design token artifacts.")
+    parser.add_argument("--tokens", type=Path, default=DEFAULT_TOKENS, help="Path to tokens.json")
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="Output directory")
+    parser.add_argument("--check", action="store_true", help="Fail if generated files are stale")
+    args = parser.parse_args()
+
+    try:
+        files, report = generate(args.tokens)
+    except TokenError as exc:
+        fail(str(exc))
+
+    if args.check:
+        problems: list[str] = []
+        for name, content in files.items():
+            path = args.out / name
+            if not path.exists():
+                problems.append(f"hilang: {path}")
+            elif path.read_text(encoding="utf-8") != content:
+                problems.append(f"kedaluwarsa: {path}")
+        if problems:
+            print("ERROR: artefak token tidak sinkron:", file=sys.stderr)
+            for problem in problems:
+                print(f"  {problem}", file=sys.stderr)
+            print("Jalankan: ./scripts/generate-tokens.py", file=sys.stderr)
+            return 1
+        print(f"OK: {len(files)} artefak token sinkron di {args.out}")
+        return 0
+
+    args.out.mkdir(parents=True, exist_ok=True)
+    for name, content in files.items():
+        (args.out / name).write_text(content, encoding="utf-8", newline="\n")
+    print(f"Kage: {len(files)} artefak ditulis ke {args.out}")
+    for row in report:
+        print(f"  {row['usage']}: {row['ratio']:.2f}:1 (minimum {row['min']:.2f}:1)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

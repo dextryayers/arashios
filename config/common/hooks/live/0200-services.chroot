@@ -1,0 +1,49 @@
+#!/bin/sh
+# ArashiOS service defaults. Runs inside the build chroot.
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+
+enable_unit() {
+    systemctl enable "$1" >/dev/null 2>&1 || true
+}
+
+disable_unit() {
+    systemctl disable "$1" >/dev/null 2>&1 || true
+}
+
+mask_unit() {
+    systemctl mask "$1" >/dev/null 2>&1 || true
+}
+
+enable_unit NetworkManager.service
+enable_unit lightdm.service
+enable_unit ufw.service
+enable_unit apparmor.service
+enable_unit bluetooth.service
+enable_unit tlp.service
+enable_unit fstrim.timer
+enable_unit unattended-upgrades.service
+enable_unit apt-daily.timer
+enable_unit apt-daily-upgrade.timer
+enable_unit cups.socket
+disable_unit cups.service
+
+disable_unit ssh.service
+mask_unit ssh.service
+mask_unit ssh.socket
+mask_unit power-profiles-daemon.service
+
+systemctl set-default graphical.target >/dev/null 2>&1 || true
+
+# Firewall policy is written directly because iptables is not available in the chroot.
+if [ -f /etc/default/ufw ]; then
+    sed -i 's/^DEFAULT_INPUT_POLICY=.*/DEFAULT_INPUT_POLICY="DROP"/' /etc/default/ufw
+    sed -i 's/^DEFAULT_OUTPUT_POLICY=.*/DEFAULT_OUTPUT_POLICY="ACCEPT"/' /etc/default/ufw
+    sed -i 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="DROP"/' /etc/default/ufw
+fi
+
+if [ -f /etc/ufw/ufw.conf ]; then
+    sed -i 's/^ENABLED=.*/ENABLED=yes/' /etc/ufw/ufw.conf
+fi
+
+sync

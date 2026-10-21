@@ -1,0 +1,4 @@
+// bookworm-backports is not used for automatic upgrades.
+Package: *
+Pin: release n=bookworm-backports
+Pin-Priority: 100

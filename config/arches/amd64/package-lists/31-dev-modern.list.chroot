@@ -1,0 +1,21 @@
+# amd64 only: modern language toolchains and CLI utilities.
+
+clang
+clang-format
+shellcheck
+rustc
+cargo
+nodejs
+npm
+openjdk-17-jdk
+php-cli
+ruby-full
+lua5.4
+gh
+
+ripgrep
+fd-find
+bat
+exa
+zoxide
+direnv

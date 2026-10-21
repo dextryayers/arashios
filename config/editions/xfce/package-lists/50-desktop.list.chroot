@@ -1,0 +1,17 @@
+# XFCE edition, default desktop for arm64 and lightweight amd64 target.
+
+xfce4
+xfce4-goodies
+xfce4-terminal
+thunar
+thunar-volman
+xfce4-whiskermenu-plugin
+xfce4-power-manager
+xfce4-notifyd
+xfce4-settings
+xfce4-session
+xfce4-panel
+mousepad
+ristretto
+
+pulseaudio

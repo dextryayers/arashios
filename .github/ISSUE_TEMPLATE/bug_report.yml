@@ -1,0 +1,95 @@
+name: Bug report
+description: Laporkan bug pada ISO, installer, tema, atau tool ArashiOS.
+title: "[bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Jangan sertakan data sensitif, kredensial, atau laporan kerentanan di issue publik.
+        Untuk kerentanan, gunakan SECURITY.md.
+
+  - type: input
+    id: version
+    attributes:
+      label: Versi ArashiOS
+      description: Output dari `cat /etc/arashios/version`.
+      placeholder: V1.10.21
+    validations:
+      required: true
+
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Edisi
+      options:
+        - Cinnamon
+        - XFCE
+        - LXQt
+    validations:
+      required: true
+
+  - type: dropdown
+    id: arch
+    attributes:
+      label: Arsitektur
+      options:
+        - amd64
+        - arm64
+        - i386
+    validations:
+      required: true
+
+  - type: dropdown
+    id: firmware
+    attributes:
+      label: Firmware
+      options:
+        - UEFI
+        - BIOS
+        - Tidak yakin
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah reproduksi
+      description: Tulis langkah yang dapat diulang.
+      placeholder: |
+        1. Boot ISO pada QEMU UEFI
+        2. Buka terminal
+        3. Jalankan ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Perilaku yang diharapkan
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Perilaku aktual
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log dan screenshot
+      description: Tempel output `journalctl -b` atau screenshot. Hapus data sensitif.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Konfirmasi
+      options:
+        - label: Saya sudah mencari issue serupa.
+          required: true
+        - label: Laporan ini bukan kerentanan keamanan.
+          required: true

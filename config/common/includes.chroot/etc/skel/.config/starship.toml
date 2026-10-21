@@ -1,0 +1,52 @@
+# ArashiOS Kage prompt.
+format = """
+$username$hostname $directory$git_branch$git_status$cmd_duration
+$character"""
+
+palette = "kage"
+
+[palettes.kage]
+sumi = "#0A0A0C"
+surface = "#121216"
+text = "#EDE8DE"
+muted = "#8B867D"
+accent = "#DD785B"
+strong = "#BF4432"
+success = "#5FA88C"
+warning = "#D6B36A"
+danger = "#D05545"
+
+[username]
+style_user = "fg:text bg:surface"
+style_root = "fg:sumi bg:strong"
+format = "[ $user ]($style)"
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "[@$hostname](fg:muted)"
+trim_at = "."
+
+[directory]
+style = "fg:accent bg:surface"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+style = "fg:text bg:surface"
+format = "[ $branch ]($style)"
+symbol = ""
+
+[git_status]
+style = "fg:danger bg:surface"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+min_time = 500
+style = "fg:muted"
+format = "[$duration]($style) "
+
+[character]
+success_symbol = "[%](fg:strong)"
+error_symbol = "[%](fg:danger)"

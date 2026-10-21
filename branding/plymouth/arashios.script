@@ -1,0 +1,25 @@
+# ArashiOS Kage Plymouth theme.
+# Static composition: ensō mark, wordmark, and a vermilion subtitle.
+
+Window.SetBackgroundTopColor(0.027, 0.027, 0.031);
+Window.SetBackgroundBottomColor(0.071, 0.071, 0.086);
+
+logo = Image("logo.png");
+logo_sprite = Sprite(logo);
+logo_sprite.SetX(Window.GetWidth() / 2 - logo.GetWidth() / 2);
+logo_sprite.SetY(Window.GetHeight() / 2 - logo.GetHeight() / 2 - 48);
+logo_sprite.SetOpacity(1.0);
+
+title = Text("ARASHIOS");
+title.SetFont("Sans 26");
+title.SetColor(0.929, 0.910, 0.871, 1.0);
+title.SetX(Window.GetWidth() / 2 - title.GetWidth() / 2);
+title.SetY(Window.GetHeight() / 2 + 84);
+title.SetOpacity(1.0);
+
+subtitle = Text("KAGE");
+subtitle.SetFont("Sans 11");
+subtitle.SetColor(0.867, 0.471, 0.357, 1.0);
+subtitle.SetX(Window.GetWidth() / 2 - subtitle.GetWidth() / 2);
+subtitle.SetY(Window.GetHeight() / 2 + 124);
+subtitle.SetOpacity(1.0);

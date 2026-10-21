@@ -1,0 +1,25 @@
+[Configuration]
+FontName=JetBrains Mono 11
+FontUseSystem=FALSE
+ColorForeground=#EDE8DE
+ColorBackground=#0A0A0C
+ColorCursor=#DD785B
+ColorPalette=#070709;#D05545;#5FA88C;#D6B36A;#6FA8C9;#DD785B;#5FA88C;#D8D2C6;#6B675F;#E8917A;#7FC4A8;#E8C98A;#8FC1E3;#E8917A;#7FC4A8;#F7F4EE
+ColorBold=#F7F4EE
+ColorBoldUse16Color=FALSE
+MiscAlwaysShowTabs=FALSE
+MiscBell=FALSE
+MiscBordersDefault=TRUE
+MiscCursorBlinks=TRUE
+MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
+MiscDefaultGeometry=120x36
+MiscMenubarDefault=FALSE
+MiscMouseAutohide=FALSE
+MiscToolbarDefault=FALSE
+MiscConfirmClose=TRUE
+MiscCycleTabs=TRUE
+MiscTabCloseButtons=TRUE
+MiscTabCloseMiddleClick=TRUE
+MiscTabPosition=GTK_POS_TOP
+MiscHighlightUrls=TRUE
+MiscScrollAlternateScreen=TRUE

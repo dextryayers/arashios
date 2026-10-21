@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Apply the ArashiOS Kage wallpaper on the current desktop session.
+set -Eeuo pipefail
+
+WALLPAPER="/usr/share/backgrounds/arashios/kage-sumi.svg"
+[ -f "$WALLPAPER" ] || exit 0
+
+desktop="${XDG_CURRENT_DESKTOP:-}${DESKTOP_SESSION:-}"
+
+set_xfce() {
+    command -v xfconf-query >/dev/null 2>&1 || return 0
+    local prop
+    while IFS= read -r prop; do
+        [ -n "$prop" ] || continue
+        xfconf-query -c xfce4-desktop -p "$prop" -s "$WALLPAPER" >/dev/null 2>&1 || true
+    done < <(xfconf-query -c xfce4-desktop -l 2>/dev/null | grep -E '/last-image$' || true)
+    xfconf-query -c xfce4-desktop \
+        -p /backdrop/screen0/monitor0/workspace0/last-image \
+        -n -t string -s "$WALLPAPER" >/dev/null 2>&1 || true
+}
+
+set_cinnamon() {
+    command -v gsettings >/dev/null 2>&1 || return 0
+    gsettings set org.cinnamon.desktop.background picture-uri "file://$WALLPAPER" >/dev/null 2>&1 || true
+    gsettings set org.cinnamon.desktop.background picture-uri-dark "file://$WALLPAPER" >/dev/null 2>&1 || true
+    gsettings set org.cinnamon.desktop.background picture-options "zoom" >/dev/null 2>&1 || true
+}
+
+set_lxqt() {
+    command -v pcmanfm-qt >/dev/null 2>&1 || return 0
+    pcmanfm-qt --set-wallpaper="$WALLPAPER" >/dev/null 2>&1 || true
+}
+
+case "$desktop" in
+    *XFCE*) set_xfce ;;
+    *Cinnamon*) set_cinnamon ;;
+    *LXQt*) set_lxqt ;;
+    *) ;;
+esac

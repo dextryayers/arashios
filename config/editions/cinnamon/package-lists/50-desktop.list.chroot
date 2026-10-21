@@ -1,0 +1,17 @@
+# Cinnamon edition, default desktop for amd64.
+
+cinnamon
+cinnamon-core
+cinnamon-l10n
+nemo
+cinnamon-settings-daemon
+cinnamon-session
+cinnamon-control-center
+cinnamon-screensaver
+
+gnome-terminal
+gedit
+
+pipewire
+pipewire-pulse
+wireplumber

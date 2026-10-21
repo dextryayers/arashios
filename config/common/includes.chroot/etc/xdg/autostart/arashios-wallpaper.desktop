@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=ArashiOS Wallpaper
+Comment=Apply the Kage wallpaper
+Exec=/usr/local/bin/arashios-wallpaper
+Terminal=false
+NoDisplay=true
+OnlyShowIn=XFCE;X-Cinnamon;Cinnamon;LXQt;
+X-GNOME-Autostart-enabled=true

@@ -1,0 +1,47 @@
+#!/bin/sh
+# ArashiOS branding hook. Runs inside the build chroot.
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+
+if [ -f /etc/default/grub ]; then
+    grep -q '^GRUB_THEME=' /etc/default/grub || \
+        printf '%s\n' 'GRUB_THEME="/usr/share/grub/themes/arashios/theme.txt"' >> /etc/default/grub
+    grep -q '^GRUB_TIMEOUT_STYLE=' /etc/default/grub || \
+        printf '%s\n' 'GRUB_TIMEOUT_STYLE=menu' >> /etc/default/grub
+    grep -q '^GRUB_TIMEOUT=' /etc/default/grub || \
+        printf '%s\n' 'GRUB_TIMEOUT=5' >> /etc/default/grub
+    grep -q '^GRUB_DISABLE_OS_PROBER=' /etc/default/grub || \
+        printf '%s\n' 'GRUB_DISABLE_OS_PROBER=false' >> /etc/default/grub
+fi
+
+mkdir -p /etc/plymouth
+cat > /etc/plymouth/plymouthd.conf <<'EOF'
+[Daemon]
+Theme=arashios
+ShowDelay=0
+EOF
+
+if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+    plymouth-set-default-theme arashios >/dev/null 2>&1 || true
+fi
+
+if command -v nvim >/dev/null 2>&1; then
+    update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60 >/dev/null 2>&1 || true
+fi
+
+if command -v fc-cache >/dev/null 2>&1; then
+    fc-cache -f >/dev/null 2>&1 || true
+fi
+
+chmod 0755 /usr/local/bin/arashios-wallpaper 2>/dev/null || true
+chmod 0644 /etc/xdg/autostart/arashios-wallpaper.desktop 2>/dev/null || true
+chmod 0644 /etc/skel/.zshrc /etc/skel/.tmux.conf /etc/skel/.gitconfig /etc/skel/.ripgreprc 2>/dev/null || true
+find /etc/skel -type d -exec chmod 0755 {} + 2>/dev/null || true
+find /etc/skel -type f -exec chmod 0644 {} + 2>/dev/null || true
+
+# Keep the live user's skeleton readable by the live session.
+if [ -d /etc/skel ]; then
+    chown -R root:root /etc/skel
+fi
+
+sync

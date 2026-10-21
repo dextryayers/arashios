@@ -1,0 +1,55 @@
+name: Feature request
+description: Usulkan fitur, tool, atau perbaikan pengalaman pengguna.
+title: "[feat]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah yang ingin diselesaikan
+      description: Jelaskan kebutuhan pengguna, bukan hanya solusi.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Usulan solusi
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Build dan ISO
+        - Installer
+        - Security tools
+        - Coding tools
+        - Desktop dan tema
+        - Dokumentasi
+        - Lainnya
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif yang dipertimbangkan
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risiko dan dampak
+      description: Pertimbangkan ukuran ISO, lisensi, keamanan, dan beban QA.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Konfirmasi
+      options:
+        - label: Saya sudah mencari issue dan roadmap yang terkait.
+          required: true
+        - label: Usulan ini tidak meminta telemetry atau repository pihak ketiga permanen.
+          required: true

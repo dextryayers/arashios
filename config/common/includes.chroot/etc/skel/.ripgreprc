@@ -1,0 +1,8 @@
+--smart-case
+--hidden
+--glob=!.git/*
+--glob=!node_modules/*
+--colors=path:fg:magenta
+--colors=line:fg:yellow
+--colors=match:fg:red
+--colors=match:style:bold

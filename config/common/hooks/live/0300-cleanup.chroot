@@ -1,0 +1,23 @@
+#!/bin/sh
+# ArashiOS cleanup hook. Runs inside the build chroot before image creation.
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+rm -rf /var/cache/apt/archives/*.deb
+rm -rf /tmp/*
+rm -rf /var/tmp/*
+chmod 1777 /tmp /var/tmp
+
+rm -f /etc/ssh/ssh_host_*
+rm -rf /root/.cache
+rm -rf /root/.local/share/Trash
+rm -rf /home/*/.cache
+
+truncate -s 0 /etc/machine-id 2>/dev/null || true
+rm -f /var/lib/dbus/machine-id
+
+find /var/log -type f -name '*.log' -exec truncate -s 0 {} \; 2>/dev/null || true
+
+sync

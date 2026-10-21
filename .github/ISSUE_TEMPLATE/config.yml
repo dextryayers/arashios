@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Dokumentasi build
+    url: https://github.com/arashios/arashios/blob/main/docs/BUILD.md
+    about: Prasyarat, perintah build, dan troubleshooting.
+  - name: Kebijakan keamanan
+    url: https://github.com/arashios/arashios/blob/main/SECURITY.md
+    about: Laporkan kerentanan melalui kanal privat.
+  - name: Diskusi
+    url: https://github.com/arashios/arashios/discussions
+    about: Pertanyaan umum dan diskusi desain.

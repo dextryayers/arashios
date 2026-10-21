@@ -1,0 +1,72 @@
+# Security tooling available in Debian bookworm main, contrib, or non-free.
+# Tools marked T1 in the plan are vendored in Phase 4 and are not listed here.
+
+# Reconnaissance and network mapping
+nmap
+masscan
+dnsutils
+dnsrecon
+dnsenum
+whois
+ldap-utils
+smbclient
+smbmap
+snmp
+onesixtyone
+nfs-common
+
+# Web assessment
+nikto
+gobuster
+ffuf
+dirsearch
+wfuzz
+sqlmap
+sslscan
+testssl.sh
+
+# Credentials and password auditing
+hydra
+john
+hashcat
+crunch
+
+# Wireless assessment
+aircrack-ng
+wifite
+reaver
+hcxtools
+hcxdumptool
+
+# Network exploitation and traffic
+ettercap-text-only
+bettercap
+python3-impacket
+python3-scapy
+python3-pwntools
+wireshark
+tshark
+tcpdump
+mitmproxy
+
+# Forensics and file analysis
+binwalk
+foremost
+sleuthkit
+autopsy
+libimage-exiftool-perl
+steghide
+outguess
+pngcheck
+scalpel
+gddrescue
+dcfldd
+guymager
+
+# Containers and orchestration
+podman
+buildah
+skopeo
+kubernetes-client
+ansible
+openjdk-17-jre-headless

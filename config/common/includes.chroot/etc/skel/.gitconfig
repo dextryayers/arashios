@@ -1,0 +1,18 @@
+[user]
+    name = ArashiOS User
+    email = user@arashios.local
+[init]
+    defaultBranch = main
+[core]
+    editor = nvim
+    pager = less -FRX
+[color]
+    ui = auto
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    lg = log --oneline --graph --decorate
+    last = log -1 HEAD
+[pull]
+    rebase = false

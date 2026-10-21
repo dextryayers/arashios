@@ -1,0 +1,115 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versi rilis, contoh V1.10.21"
+        required: true
+        default: "V1.10.21"
+      publish:
+        description: "Buat GitHub Release setelah semua artefak lulus"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build ${{ matrix.arch }} ${{ matrix.edition }}
+    runs-on: [self-hosted, linux, x64, arashios-builder]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            edition: cinnamon
+            boot: uefi
+          - arch: amd64
+            edition: xfce
+            boot: uefi
+          - arch: amd64
+            edition: lxqt
+            boot: uefi
+          - arch: arm64
+            edition: xfce
+            boot: none
+          - arch: arm64
+            edition: lxqt
+            boot: none
+          - arch: i386
+            edition: lxqt
+            boot: bios
+          - arch: i386
+            edition: xfce
+            boot: bios
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check build host
+        run: ./scripts/check-env.sh --strict
+
+      - name: Build ISO
+        run: ./build.sh --edition ${{ matrix.edition }} --arch ${{ matrix.arch }} --version ${{ inputs.version }}
+
+      - name: Verify artifact
+        run: ./tests/verify-artifact.sh out/ArashiOS-${{ matrix.arch }}-${{ inputs.version }}*.iso
+
+      - name: Boot test
+        if: matrix.boot != 'none'
+        run: |
+          ISO="$(ls out/ArashiOS-${{ matrix.arch }}-${{ inputs.version }}*.iso | head -1)"
+          ./tests/qemu-boot.sh "$ISO" "${{ matrix.boot }}" 120
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iso-${{ matrix.arch }}-${{ matrix.edition }}
+          path: |
+            out/*.iso
+            out/*.sha256
+            out/*.sha512
+            out/*.sig
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish release
+    if: inputs.publish
+    runs-on: ubuntu-24.04
+    needs: build
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: iso-*
+          merge-multiple: true
+
+      - name: Generate combined checksums
+        run: |
+          cd dist
+          sha256sum *.iso > SHA256SUMS
+          sha512sum *.iso > SHA512SUMS
+          cat SHA256SUMS
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ inputs.version }}" \
+            --title "ArashiOS ${{ inputs.version }}" \
+            --notes-file CHANGELOG.md \
+            dist/*.iso dist/*.sha256 dist/*.sha512 dist/SHA256SUMS dist/SHA512SUMS

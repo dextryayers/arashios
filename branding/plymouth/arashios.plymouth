@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=ArashiOS Kage
+Description=ArashiOS boot theme with the Kage ensō mark
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/arashios
+ScriptFile=/usr/share/plymouth/themes/arashios/arashios.script

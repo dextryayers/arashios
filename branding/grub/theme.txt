@@ -1,0 +1,55 @@
+# ArashiOS Kage GRUB theme.
+# The theme uses a generated background and a nine-slice selection pixmap.
+
+desktop-color: "#0A0A0C"
+desktop-image: "background.png"
+terminal-font: "Unifont Regular 16"
+title-text: ""
+
++ label {
+    left = 58%
+    top = 12%
+    width = 34%
+    height = 8%
+    align = "left"
+    color = "#DD785B"
+    font = "Unifont Regular 16"
+    text = "ARASHIOS / KAGE"
+}
+
++ label {
+    left = 58%
+    top = 19%
+    width = 34%
+    height = 6%
+    align = "left"
+    color = "#8B867D"
+    font = "Unifont Regular 16"
+    text = "SECURITY FIRST"
+}
+
++ boot_menu {
+    left = 58%
+    top = 30%
+    width = 34%
+    height = 46%
+    item_font = "Unifont Regular 16"
+    item_color = "#B8B2A7"
+    selected_item_color = "#070709"
+    item_height = 30
+    item_padding = 8
+    item_spacing = 6
+    selected_item_pixmap_style = "select_*.png"
+    scrollbar = false
+}
+
++ label {
+    left = 58%
+    top = 86%
+    width = 34%
+    height = 6%
+    align = "left"
+    color = "#6B675F"
+    font = "Unifont Regular 16"
+    text = "Select an operating system. Press Enter to boot."
+}

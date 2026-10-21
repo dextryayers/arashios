@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">ArashiOS wordmark</title>
+  <desc id="desc">ArashiOS name with the mark, tagline, and a vermilion rule.</desc>
+  <defs>
+    <linearGradient id="enso" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F7F4EE"/>
+      <stop offset="0.55" stop-color="#B8B2A7"/>
+      <stop offset="1" stop-color="#8B867D"/>
+    </linearGradient>
+    <linearGradient id="seal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8917A"/>
+      <stop offset="1" stop-color="#BF4432"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(40 40) scale(0.47)">
+    <path d="M 256 64 C 150 64 64 150 64 256 C 64 362 150 448 256 448 C 362 448 448 362 448 256 C 448 178 403 111 338 80"
+          fill="none" stroke="url(#enso)" stroke-width="26" stroke-linecap="round"/>
+    <path d="M 338 80 C 352 88 364 100 372 114" fill="none" stroke="#8B867D" stroke-width="18" stroke-linecap="round" opacity="0.8"/>
+    <text x="256" y="322" text-anchor="middle"
+          font-family="'Noto Sans CJK JP', 'Noto Sans JP', sans-serif"
+          font-size="190" font-weight="600" fill="#EDE8DE">嵐</text>
+    <rect x="356" y="356" width="68" height="68" rx="8" fill="url(#seal)"/>
+    <path d="M 374 406 L 406 372" fill="none" stroke="#F7F4EE" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <text x="324" y="150" font-family="Inter, 'Noto Sans', sans-serif" font-size="92" font-weight="700"
+        letter-spacing="12" fill="#EDE8DE">ARASHIOS</text>
+  <text x="328" y="202" font-family="Inter, 'Noto Sans', sans-serif" font-size="22" font-weight="600"
+        letter-spacing="8" fill="#DD785B">RED TEAM READY</text>
+  <line x1="328" y1="236" x2="1120" y2="236" stroke="#25252D" stroke-width="2"/>
+  <text x="328" y="272" font-family="Inter, 'Noto Sans', sans-serif" font-size="16" font-weight="500"
+        letter-spacing="3" fill="#8B867D">SECURITY FIRST. CODE SECOND. DAILY THIRD.</text>
+</svg>

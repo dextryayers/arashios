@@ -1,0 +1,4 @@
+# bookworm-backports is available for selected packages only.
+# NotAutomatic prevents automatic upgrades from this archive.
+
+deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware

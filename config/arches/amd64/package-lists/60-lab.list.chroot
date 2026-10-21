@@ -1,0 +1,9 @@
+# amd64 only: local lab virtualization.
+# The daemon is socket activated and does not listen on the network by default.
+
+qemu-system-x86
+qemu-utils
+libvirt-daemon-system
+libvirt-clients
+virt-manager
+virtinst

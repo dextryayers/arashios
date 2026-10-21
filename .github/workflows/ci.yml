@@ -1,0 +1,80 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint and validate
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lint tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck python3
+
+      - name: Shell syntax
+        run: |
+          bash -n build.sh
+          bash -n scripts/*.sh
+          bash -n tests/*.sh
+
+      - name: ShellCheck
+        run: shellcheck -x build.sh scripts/*.sh tests/*.sh
+
+      - name: Generate design tokens
+        run: ./scripts/generate-tokens.py
+
+      - name: Verify design tokens are current
+        run: ./scripts/generate-tokens.py --check
+
+      - name: Validate build configuration
+        run: ./scripts/validate-config.sh
+
+      - name: Validate documentation
+        run: ./scripts/check-docs.sh
+
+      - name: Validate requirement traceability
+        run: ./scripts/check-traceability.py
+
+  config-dry-run:
+    name: live-build config (${{ matrix.edition }})
+    runs-on: ubuntu-24.04
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [cinnamon, xfce, lxqt]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install live-build
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            live-build debootstrap xorriso squashfs-tools \
+            isolinux syslinux-common syslinux-efi \
+            grub-pc-bin grub-efi-amd64-bin mtools dosfstools
+
+      - name: Configure ISO without building
+        run: ./build.sh --edition ${{ matrix.edition }} --arch amd64 --dry-run
+
+      - name: Show generated config
+        run: |
+          test -f build/${{ matrix.edition }}-amd64/config/package-lists/00-base.list.chroot
+          test -f build/${{ matrix.edition }}-amd64/config/includes.chroot/etc/os-release
+          grep -q "ArashiOS" build/${{ matrix.edition }}-amd64/config/includes.chroot/etc/os-release

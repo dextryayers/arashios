@@ -1,0 +1,14 @@
+PRETTY_NAME="ArashiOS @VERSION@ (@CODENAME@)"
+NAME="ArashiOS"
+VERSION_ID="@VERSION_NUM@"
+VERSION="@VERSION@ (@CODENAME@)"
+VERSION_CODENAME=shizukesa
+ID=arashios
+ID_LIKE=debian
+HOME_URL="https://arashios.org/"
+DOCUMENTATION_URL="https://arashios.org/docs/"
+SUPPORT_URL="https://arashios.org/docs/support/"
+BUG_REPORT_URL="https://github.com/arashios/arashios/issues"
+PRIVACY_POLICY_URL="https://arashios.org/privacy/"
+ANSI_COLOR="1;31"
+LOGO=arashios
