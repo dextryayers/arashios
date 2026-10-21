@@ -1,0 +1,14 @@
+build/
+out/
+*.iso
+*.sha256
+*.sha512
+*.sig
+*.torrent
+*.zsync
+*.log
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+node_modules/
