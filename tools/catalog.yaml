@@ -1,0 +1,292 @@
+schema_version: 1
+catalog_version: "1.10.21"
+updated: "2026-10-22"
+
+# Katalog tool ArashiOS. Berkas ini adalah sumber kebenaran untuk seluruh
+# tool yang boleh masuk ke image, untuk alur kerja yang dilayani, dan untuk
+# aturan lisensi. Generator scripts/generate-toolstack.py mengubah katalog
+# ini menjadi manifest per tool di vendor/manifests dan katalog runtime di
+# config/common/includes.chroot/usr/share/arashios/toolstack/catalog.json.
+
+workflows:
+  WF-01: "Reconnaissance"
+  WF-02: "Web testing"
+  WF-03: "Exploitation"
+  WF-04: "Password attack"
+  WF-05: "Active Directory"
+  WF-06: "Wireless"
+  WF-07: "Network interception"
+  WF-08: "Pivoting"
+  WF-09: "Forensics"
+  WF-10: "Reverse engineering"
+  WF-11: "Cloud dan container"
+  WF-12: "Reporting"
+
+tiers:
+  T0:
+    source: "Debian bookworm"
+    distribution: iso
+    redistribution: "Diizinkan mengikuti lisensi paket Debian"
+  T1:
+    source: "Vendor upstream"
+    distribution: vendor
+    redistribution: "Diizinkan dengan atribusi dan berkas lisensi upstream"
+  T2:
+    source: "Unduhan oleh pengguna"
+    distribution: installer
+    redistribution: "Tidak didistribusikan dalam image"
+  T3:
+    source: "Container image"
+    distribution: container
+    redistribution: "Tidak didistribusikan dalam image"
+
+licenses:
+  debian: "Licen masing-masing paket Debian. Sumber: /usr/share/doc/<paket>/copyright"
+  proprietary: "Proprietary. Tidak boleh didistribusikan ulang"
+
+defaults:
+  arch: [amd64, arm64, i386]
+  role: security
+  distribution: iso
+
+tools:
+  # WF-01 Reconnaissance
+  - {name: nmap, tier: T0, workflow: WF-01, category: recon, package: nmap, binary: nmap, license: debian, summary: "Pemindai port, layanan, dan deteksi OS."}
+  - {name: masscan, tier: T0, workflow: WF-01, category: recon, package: masscan, binary: masscan, license: debian, summary: "Pemindai port cepat pada jaringan besar."}
+  - {name: arp-scan, tier: T0, workflow: WF-01, category: recon, package: arp-scan, binary: arp-scan, license: debian, summary: "Discovery layer dua pada jaringan lokal."}
+  - {name: arping, tier: T0, workflow: WF-01, category: recon, package: arping, binary: arping, license: debian, summary: "Probe ARP untuk menemukan host aktif."}
+  - {name: dnsutils, tier: T0, workflow: WF-01, category: recon, package: dnsutils, binary: dig, license: debian, summary: "Kueri DNS, NS, MX, dan zone transfer."}
+  - {name: dnsrecon, tier: T0, workflow: WF-01, category: recon, package: dnsrecon, binary: dnsrecon, license: debian, summary: "Enumerasi DNS dan brute force subdomain."}
+  - {name: dnsenum, tier: T0, workflow: WF-01, category: recon, package: dnsenum, binary: dnsenum, license: debian, summary: "Enumerasi server nama dan brute force."}
+  - {name: whois, tier: T0, workflow: WF-01, category: recon, package: whois, binary: whois, license: debian, summary: "Data registrasi domain dan alamat IP."}
+  - {name: ldap-utils, tier: T0, workflow: WF-01, category: recon, package: ldap-utils, binary: ldapsearch, license: debian, summary: "Query dan enumerasi direktori LDAP."}
+  - {name: smbclient, tier: T0, workflow: WF-01, category: recon, package: smbclient, binary: smbclient, license: debian, summary: "Klien SMB untuk share dan enumerasi."}
+  - {name: smbmap, tier: T0, workflow: WF-01, category: recon, package: smbmap, binary: smbmap, license: debian, summary: "Pemetaan share dan hak akses SMB."}
+  - {name: snmp, tier: T0, workflow: WF-01, category: recon, package: snmp, binary: snmpget, license: debian, summary: "Query SNMP v1, v2c, dan v3."}
+  - {name: onesixtyone, tier: T0, workflow: WF-01, category: recon, package: onesixtyone, binary: onesixtyone, license: debian, summary: "Brute force SNMP community string."}
+  - {name: nfs-common, tier: T0, workflow: WF-01, category: recon, package: nfs-common, binary: rpcinfo, license: debian, summary: "Klien NFS dan rpcinfo untuk enumerasi ekspor."}
+  - {name: whatweb, tier: T0, workflow: WF-01, category: recon, package: whatweb, binary: whatweb, license: debian, summary: "Fingerprint stack web dan teknologi halaman."}
+  - {name: wafw00f, tier: T0, workflow: WF-01, category: recon, package: wafw00f, binary: wafw00f, license: debian, summary: "Deteksi WAF pada host web."}
+  - {name: recon-ng, tier: T0, workflow: WF-01, category: recon, package: recon-ng, binary: recon-ng, license: debian, summary: "Kerangka kerja recon berbasis modul."}
+  - {name: tcpreplay, tier: T0, workflow: WF-01, category: recon, package: tcpreplay, binary: tcpreplay, license: debian, summary: "Pemutaran ulang paket untuk pengujian jaringan."}
+  - {name: hping3, tier: T0, workflow: WF-01, category: recon, package: hping3, binary: hping3, license: debian, summary: "Craft dan uji paket kustom."}
+  - {name: yersinia, tier: T0, workflow: WF-01, category: recon, package: yersinia, binary: yersinia, license: debian, summary: "Uji protokol layer dua hingga layer tujuh."}
+  - {name: nbtscan, tier: T0, workflow: WF-01, category: recon, package: nbtscan, binary: nbtscan, license: debian, summary: "Enumerasi NetBIOS Name Service."}
+  - {name: sshpass, tier: T0, workflow: WF-01, category: recon, package: sshpass, binary: sshpass, license: debian, summary: "Uji password SSH noninteraktif."}
+  - {name: netcat-openbsd, tier: T0, workflow: WF-01, category: recon, package: netcat-openbsd, binary: nc, license: debian, summary: "Koneksi TCP dan UDP untuk uji konfigurasi."}
+  - {name: traceroute, tier: T0, workflow: WF-01, category: recon, package: traceroute, binary: traceroute, license: debian, summary: "Petakan jalur router menuju target."}
+  - {name: iputils-ping, tier: T0, workflow: WF-01, category: recon, package: iputils-ping, binary: ping, license: debian, summary: "Uji konektivitas ICMP."}
+  - {name: iproute2, tier: T0, workflow: WF-01, category: recon, package: iproute2, binary: ip, license: debian, summary: "Konfigurasi dan inspeksi jaringan."}
+  - {name: openssl, tier: T0, workflow: WF-01, category: recon, package: openssl, binary: openssl, license: debian, summary: "Pemeriksaan sertifikat dan kriptografi."}
+  - {name: gnutls-bin, tier: T0, workflow: WF-01, category: recon, package: gnutls-bin, binary: gnutls-cli, license: debian, summary: "Inspeksi TLS dan sertifikat."}
+  - {name: curl, tier: T0, workflow: WF-01, category: recon, package: curl, binary: curl, license: debian, summary: "Klien HTTP dengan dukungan skrip."}
+  - {name: wget, tier: T0, workflow: WF-01, category: recon, package: wget, binary: wget, license: debian, summary: "Unduh artefak dan rekam respons."}
+  - {name: nftables, tier: T0, workflow: WF-01, category: recon, package: nftables, binary: nft, license: debian, summary: "Filter paket untuk skenario uji jaringan."}
+  - {name: macchanger, tier: T0, workflow: WF-01, category: recon, package: macchanger, binary: macchanger, license: debian, summary: "Uji validasi filter alamat MAC."}
+  - {name: proxychains4, tier: T0, workflow: WF-01, category: recon, package: proxychains4, binary: proxychains4, license: debian, summary: "Rantai proxy untuk uji tunneling."}
+  - {name: socat, tier: T0, workflow: WF-01, category: recon, package: socat, binary: socat, license: debian, summary: "Relay TCP dan UDP untuk uji pivot."}
+  - {name: iw, tier: T0, workflow: WF-06, category: recon, package: iw, binary: iw, license: debian, summary: "Kontrol nirkabel tingkat rendah."}
+  - {name: rfkill, tier: T0, workflow: WF-06, category: recon, package: rfkill, binary: rfkill, license: debian, summary: "Status dan kontrol radio nirkabel."}
+
+  # WF-02 Web testing
+  - {name: nikto, tier: T0, workflow: WF-02, category: web, package: nikto, binary: nikto, license: debian, summary: "Scanner konfigurasi server web."}
+  - {name: gobuster, tier: T0, workflow: WF-02, category: web, package: gobuster, binary: gobuster, license: debian, summary: "Enumerasi direktori dan subdomain."}
+  - {name: ffuf, tier: T0, workflow: WF-02, category: web, package: ffuf, binary: ffuf, license: debian, summary: "Fuzzer berbasis dictionary web."}
+  - {name: dirb, tier: T0, workflow: WF-02, category: web, package: dirb, binary: dirb, license: debian, summary: "Brute force direktori dengan wordlist."}
+  - {name: dirsearch, tier: T0, workflow: WF-02, category: web, package: dirsearch, binary: dirsearch, license: debian, summary: "Discovery path dan file pada aplikasi web."}
+  - {name: wfuzz, tier: T0, workflow: WF-02, category: web, package: wfuzz, binary: wfuzz, license: debian, summary: "Fuzzing parameter dan path."}
+  - {name: sqlmap, tier: T0, workflow: WF-02, category: web, package: sqlmap, binary: sqlmap, license: debian, summary: "Deteksi dan eksploitasi SQL injection."}
+  - {name: sslscan, tier: T0, workflow: WF-02, category: web, package: sslscan, binary: sslscan, license: debian, summary: "Audit konfigurasi TLS."}
+  - {name: testssl.sh, tier: T0, workflow: WF-02, category: web, package: testssl.sh, binary: testssl.sh, license: debian, summary: "Analisis kelemahan HTTPS."}
+  - {name: mitmproxy, tier: T0, workflow: WF-02, category: web, package: mitmproxy, binary: mitmproxy, license: debian, summary: "Interception HTTP untuk pengujian."}
+  - {name: testdisk, tier: T0, workflow: WF-09, category: forensics, package: testdisk, binary: testdisk, license: debian, summary: "Pemulihan partisi dan analisis sistem berkas."}
+  - {name: foremost, tier: T0, workflow: WF-09, category: forensics, package: foremost, binary: foremost, license: debian, summary: "Carving file dari media."}
+  - {name: sleuthkit, tier: T0, workflow: WF-09, category: forensics, package: sleuthkit, binary: fls, license: debian, summary: "Analisis filesystem forensik."}
+  - {name: autopsy, tier: T0, workflow: WF-09, category: forensics, package: autopsy, binary: autopsy, license: debian, test_kind: presence, summary: "GUI forensik disk."}
+  - {name: libimage-exiftool-perl, tier: T0, workflow: WF-09, category: forensics, package: libimage-exiftool-perl, binary: exiftool, license: debian, summary: "Baca dan ubah metadata media."}
+  - {name: steghide, tier: T0, workflow: WF-09, category: forensics, package: steghide, binary: steghide, license: debian, summary: "Steganografi pada file gambar dan audio."}
+  - {name: outguess, tier: T0, workflow: WF-09, category: forensics, package: outguess, binary: outguess, license: debian, summary: "Steganografi JPEG untuk uji forensik."}
+  - {name: pngcheck, tier: T0, workflow: WF-09, category: forensics, package: pngcheck, binary: pngcheck, license: debian, summary: "Validasi struktur file PNG."}
+  - {name: scalpel, tier: T0, workflow: WF-09, category: forensics, package: scalpel, binary: scalpel, license: debian, summary: "Carving file berbasis pola."}
+  - {name: gddrescue, tier: T0, workflow: WF-09, category: forensics, package: gddrescue, binary: ddrescue, license: debian, summary: "Pemulihan data dari media rusak."}
+  - {name: dcfldd, tier: T0, workflow: WF-09, category: forensics, package: dcfldd, binary: dcfldd, license: debian, summary: "Duplikat forensik dengan verifikasi."}
+  - {name: guymager, tier: T0, workflow: WF-09, category: forensics, package: guymager, binary: guymager, license: debian, test_kind: presence, summary: "Acquisition media dengan verifikasi."}
+  - {name: binwalk, tier: T0, workflow: WF-10, category: reverse, package: binwalk, binary: binwalk, license: debian, summary: "Analisis firmware dan ekstraksi berkas."}
+
+  # WF-04 Password attack
+  - {name: hydra, tier: T0, workflow: WF-04, category: password, package: hydra, binary: hydra, license: debian, summary: "Brute force login multi protokol."}
+  - {name: medusa, tier: T0, workflow: WF-04, category: password, package: medusa, binary: medusa, license: debian, summary: "Brute force paralel multi protokol."}
+  - {name: john, tier: T0, workflow: WF-04, category: password, package: john, binary: john, license: debian, summary: "Pemecahan hash offline."}
+  - {name: hashcat, tier: T0, workflow: WF-04, category: password, package: hashcat, binary: hashcat, license: debian, summary: "Pemecahan hash dengan GPU dan CPU."}
+  - {name: crunch, tier: T0, workflow: WF-04, category: password, package: crunch, binary: crunch, license: debian, summary: "Pembuat kamus dari mask karakter."}
+  - {name: cewl, tier: T0, workflow: WF-04, category: password, package: cewl, binary: cewl, license: debian, summary: "Kamus kata dari halaman web."}
+
+  # WF-05 Active Directory
+  - {name: python3-impacket, tier: T0, workflow: WF-05, category: active-directory, package: python3-impacket, binary: impacket-GetNPUsers, license: debian, summary: "Protokol Windows dan enumerasi Active Directory."}
+  - {name: python3-scapy, tier: T0, workflow: WF-05, category: active-directory, package: python3-scapy, binary: scapy, license: debian, summary: "Craft dan analisis paket."}
+  - {name: python3-pwntools, tier: T0, workflow: WF-10, category: reverse, package: python3-pwntools, binary: pwntools, license: debian, summary: "Kerangka kerja exploit development."}
+
+  # WF-06 Wireless
+  - {name: aircrack-ng, tier: T0, workflow: WF-06, category: wireless, package: aircrack-ng, binary: aircrack-ng, license: debian, summary: "Suite pengujian nirkabel."}
+  - {name: wifite, tier: T0, workflow: WF-06, category: wireless, package: wifite, binary: wifite, license: debian, summary: "Otomatisasi pengujian nirkabel."}
+  - {name: reaver, tier: T0, workflow: WF-06, category: wireless, package: reaver, binary: reaver, license: debian, summary: "Serangan WPS."}
+  - {name: hcxtools, tier: T0, workflow: WF-06, category: wireless, package: hcxtools, binary: hcxpcapng, license: debian, summary: "Penangkapan dan konversi hash WPA."}
+  - {name: hcxdumptool, tier: T0, workflow: WF-06, category: wireless, package: hcxdumptool, binary: hcxdumptool, license: debian, summary: "Penangkapan PMKID tanpa klien."}
+
+  # WF-07 Network interception
+  - {name: wireshark, tier: T0, workflow: WF-07, category: interception, package: wireshark, binary: wireshark, license: debian, test_kind: presence, summary: "Analisis paket berbasis GUI."}
+  - {name: tshark, tier: T0, workflow: WF-07, category: interception, package: tshark, binary: tshark, license: debian, summary: "Analisis paket berbasis CLI."}
+  - {name: tcpdump, tier: T0, workflow: WF-07, category: interception, package: tcpdump, binary: tcpdump, license: debian, summary: "Penangkapan paket dari terminal."}
+  - {name: bettercap, tier: T0, workflow: WF-07, category: interception, package: bettercap, binary: bettercap, license: debian, summary: "Kerangka kerja MITM."}
+  - {name: ettercap-text-only, tier: T0, workflow: WF-07, category: interception, package: ettercap-text-only, binary: ettercap, license: debian, summary: "MITM klasik tanpa GUI."}
+
+  # WF-10 Reverse engineering
+  - {name: gdb, tier: T0, workflow: WF-10, category: reverse, package: gdb, binary: gdb, license: debian, summary: "Debugger native."}
+  - {name: strace, tier: T0, workflow: WF-10, category: reverse, package: strace, binary: strace, license: debian, summary: "Jejak syscall."}
+  - {name: ltrace, tier: T0, workflow: WF-10, category: reverse, package: ltrace, binary: ltrace, license: debian, arch: [amd64, i386], summary: "Jejak panggilan pustaka."}
+  - {name: apktool, tier: T0, workflow: WF-10, category: reverse, package: apktool, binary: apktool, license: debian, summary: "Decompile dan rebuild paket Android."}
+
+  # WF-11 Cloud dan container
+  - {name: awscli, tier: T0, workflow: WF-11, category: cloud, package: awscli, binary: aws, license: debian, summary: "Klien AWS."}
+  - {name: azure-cli, tier: T0, workflow: WF-11, category: cloud, package: azure-cli, binary: az, license: debian, summary: "Klien Azure."}
+  - {name: kubernetes-client, tier: T0, workflow: WF-11, category: cloud, package: kubernetes-client, binary: kubectl, license: debian, summary: "Klien Kubernetes."}
+  - {name: ansible, tier: T0, workflow: WF-11, category: cloud, package: ansible, binary: ansible-playbook, license: debian, summary: "Otomasi konfigurasi."}
+  - {name: podman, tier: T0, workflow: WF-11, category: container, package: podman, binary: podman, license: debian, summary: "Container engine rootless."}
+  - {name: buildah, tier: T0, workflow: WF-11, category: container, package: buildah, binary: buildah, license: debian, summary: "Build image OCI tanpa daemon."}
+  - {name: skopeo, tier: T0, workflow: WF-11, category: container, package: skopeo, binary: skopeo, license: debian, summary: "Inspeksi dan salin image."}
+  - {name: crun, tier: T0, workflow: WF-11, category: container, package: crun, binary: crun, license: debian, summary: "Runtime OCI ringan."}
+  - {name: uidmap, tier: T0, workflow: WF-11, category: container, package: uidmap, binary: newuidmap, license: debian, summary: "Pemetaan uid untuk container rootless."}
+  - {name: fuse-overlayfs, tier: T0, workflow: WF-11, category: container, package: fuse-overlayfs, binary: fuse-overlayfs, license: debian, summary: "Lapisan filesystem untuk rootless."}
+  - {name: slirp4netns, tier: T0, workflow: WF-11, category: container, package: slirp4netns, binary: slirp4netns, license: debian, summary: "Jaringan userspace untuk container rootless."}
+
+  # WF-12 Reporting
+  - {name: pandoc, tier: T0, workflow: WF-12, category: reporting, package: pandoc, binary: pandoc, license: debian, summary: "Konversi dokumen antar format."}
+  - {name: keepassxc, tier: T0, workflow: WF-12, category: reporting, package: keepassxc, binary: keepassxc, license: debian, test_kind: presence, summary: "Manajemen kredensial."}
+  - {name: jq, tier: T0, workflow: WF-12, category: reporting, package: jq, binary: jq, license: debian, summary: "Pemroses JSON."}
+  - {name: yq, tier: T0, workflow: WF-12, category: reporting, package: yq, binary: yq, license: debian, summary: "Pemroses YAML."}
+
+  # Platform dan toolchain T0
+  - {name: build-essential, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: build-essential, binary: gcc, license: debian, summary: "Kompilator C, C++, dan make."}
+  - {name: cmake, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: cmake, binary: cmake, license: debian, summary: "Sistem build multi bahasa."}
+  - {name: ninja-build, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: ninja-build, binary: ninja, license: debian, summary: "Backend build cepat."}
+  - {name: meson, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: meson, binary: meson, license: debian, summary: "Sistem build berbasis deklarasi."}
+  - {name: pkg-config, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: pkg-config, binary: pkg-config, license: debian, summary: "Lokasi pustaka development."}
+  - {name: autoconf, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: autoconf, binary: autoconf, license: debian, summary: "Pembuat skrip configure."}
+  - {name: automake, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: automake, binary: automake, license: debian, summary: "Pembuat Makefile."}
+  - {name: libtool, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: libtool, binary: libtool, license: debian, summary: "Pembungkus pustaka statis dan dinamis."}
+  - {name: clang, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: clang, binary: clang, license: debian, summary: "Kompilator LLVM."}
+  - {name: clang-format, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: clang-format, binary: clang-format, license: debian, summary: "Pemformat kode."}
+  - {name: shellcheck, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: shellcheck, binary: shellcheck, license: debian, summary: "Analisis statis shell."}
+  - {name: patchelf, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: patchelf, binary: patchelf, license: debian, summary: "Edit header dan dependensi ELF."}
+  - {name: python3, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: python3, binary: python3, license: debian, summary: "Interpreter Python 3."}
+  - {name: python3-pip, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: python3-pip, binary: pip3, license: debian, summary: "Pengelola paket Python."}
+  - {name: python3-venv, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: python3-venv, binary: python3, license: debian, summary: "Lingkungan virtual Python."}
+  - {name: pipx, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: pipx, binary: pipx, license: debian, summary: "Pemasang aplikasi Python terisolasi."}
+  - {name: golang, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: golang, binary: go, license: debian, summary: "Toolchain Go bawaan Debian."}
+  - {name: rustc, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: rustc, binary: rustc, license: debian, summary: "Kompilator Rust bawaan Debian."}
+  - {name: cargo, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: cargo, binary: cargo, license: debian, summary: "Pengelola paket Rust."}
+  - {name: nodejs, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: nodejs, binary: node, license: debian, summary: "Runtime Node.js bawaan Debian."}
+  - {name: npm, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: npm, binary: npm, license: debian, summary: "Pengelola paket Node.js."}
+  - {name: openjdk-17-jdk, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: openjdk-17-jdk, binary: javac, license: debian, summary: "JDK 17."}
+  - {name: php-cli, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: php-cli, binary: php, license: debian, summary: "Interpreter PHP."}
+  - {name: ruby-full, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: ruby-full, binary: ruby, license: debian, summary: "Runtime Ruby."}
+  - {name: lua5.4, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: lua5.4, binary: lua5.4, license: debian, summary: "Interpreter Lua."}
+  - {name: git, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: git, binary: git, license: debian, summary: "Version control."}
+  - {name: gh, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: gh, binary: gh, license: debian, summary: "Klien GitHub."}
+  - {name: neovim, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: neovim, binary: nvim, license: debian, summary: "Editor modal."}
+  - {name: tmux, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: tmux, binary: tmux, license: debian, summary: "Terminal multiplexer."}
+  - {name: zsh, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: zsh, binary: zsh, license: debian, summary: "Shell interaktif."}
+  - {name: ripgrep, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: ripgrep, binary: rg, license: debian, summary: "Pencari teks cepat."}
+  - {name: fd-find, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: fd-find, binary: fdfind, license: debian, summary: "Penelusuran berkas modern."}
+  - {name: fzf, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: fzf, binary: fzf, license: debian, summary: "Pemilih interaktif fuzzy."}
+  - {name: bat, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: bat, binary: batcat, license: debian, summary: "Penampil berkas dengan sintaks."}
+  - {name: exa, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: exa, binary: exa, license: debian, summary: "Alternatif ls dengan warna."}
+  - {name: zoxide, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: zoxide, binary: zoxide, license: debian, summary: "Navigasi direktori pintar."}
+  - {name: direnv, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: direnv, binary: direnv, license: debian, summary: "Lingkungan per direktori."}
+  - {name: httpie, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: httpie, binary: http, license: debian, summary: "Klien HTTP ergonomic."}
+  - {name: sqlite3, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: sqlite3, binary: sqlite3, license: debian, summary: "Mesin database SQL ringan."}
+  - {name: postgresql-client, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: postgresql-client, binary: psql, license: debian, summary: "Klien PostgreSQL."}
+  - {name: mariadb-client, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: mariadb-client, binary: mariadb, license: debian, summary: "Klien MariaDB."}
+  - {name: redis-tools, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: redis-tools, binary: redis-cli, license: debian, summary: "Klien Redis."}
+  - {name: libssl-dev, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: libssl-dev, binary: openssl, license: debian, summary: "Header development OpenSSL."}
+  - {name: libffi-dev, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: libffi-dev, binary: pkg-config, license: debian, summary: "Header development libffi."}
+  - {name: zlib1g-dev, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: zlib1g-dev, binary: pkg-config, license: debian, summary: "Header development zlib."}
+  - {name: libpq-dev, tier: T0, workflow: WF-10, role: platform, category: toolchain, package: libpq-dev, binary: pg_config, license: debian, summary: "Header development PostgreSQL."}
+  - {name: gnupg, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: gnupg, binary: gpg, license: debian, summary: "Dukungan OpenPGP."}
+  - {name: rsync, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: rsync, binary: rsync, license: debian, summary: "Sinkronisasi berkas."}
+  - {name: p7zip-full, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: p7zip-full, binary: 7z, license: debian, summary: "Arsip dan ekstraksi."}
+  - {name: xz-utils, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: xz-utils, binary: xz, license: debian, summary: "Kompresi xz."}
+  - {name: zstd, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: zstd, binary: zstd, license: debian, summary: "Kompresi zstd."}
+  - {name: file, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: file, binary: file, license: debian, summary: "Deteksi tipe berkas."}
+  - {name: tree, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: tree, binary: tree, license: debian, summary: "Tampilan pohon direktori."}
+  - {name: htop, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: htop, binary: htop, license: debian, summary: "Pemantau proses."}
+  - {name: lsof, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: lsof, binary: lsof, license: debian, summary: "Berkas yang sedang dibuka."}
+  - {name: psmisc, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: psmisc, binary: pstree, license: debian, summary: "Utilitas proses."}
+  - {name: bash-completion, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: bash-completion, binary: bash, license: debian, summary: "Pelengkapan shell Bash."}
+  - {name: man-db, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: man-db, binary: man, license: debian, summary: "Manual halaman."}
+  - {name: openssh-client, tier: T0, workflow: WF-08, role: platform, category: toolchain, package: openssh-client, binary: ssh, license: debian, summary: "Klien SSH untuk pivot."}
+  - {name: unzip, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: unzip, binary: unzip, license: debian, summary: "Ekstraksi arsip zip."}
+  - {name: zip, tier: T0, workflow: WF-12, role: platform, category: toolchain, package: zip, binary: zip, license: debian, summary: "Arsip zip."}
+
+  # WF-03 Exploitation, T1 vendor
+  - {name: metasploit-framework, tier: T1, workflow: WF-03, category: exploitation, binary: msfconsole, license: BSD-3-Clause, source: metasploit-framework, build: ruby, install_path: /opt/arashios/tools/metasploit-framework, summary: "Kerangka kerja eksploitasi."}
+  - {name: exploitdb, tier: T1, workflow: WF-03, category: exploitation, binary: searchsploit, license: GPL-2.0-only, source: exploitdb, build: data, install_path: /usr/share/exploitdb, summary: "Database exploit dan searchsploit."}
+  - {name: nuclei, tier: T1, workflow: WF-02, category: web, binary: nuclei, license: MIT, source: nuclei, build: go, install_path: /usr/local/bin/nuclei, summary: "Scanner berbasis template."}
+  - {name: subfinder, tier: T1, workflow: WF-01, category: recon, binary: subfinder, license: MIT, source: subfinder, build: go, install_path: /usr/local/bin/subfinder, summary: "Enumerasi subdomain pasif."}
+  - {name: httpx, tier: T1, workflow: WF-01, category: recon, binary: httpx, license: MIT, source: httpx, build: go, install_path: /usr/local/bin/httpx, summary: "Probe HTTP dan deteksi teknologi."}
+  - {name: naabu, tier: T1, workflow: WF-01, category: recon, binary: naabu, license: MIT, source: naabu, build: go, install_path: /usr/local/bin/naabu, summary: "Pemindai port berbasis Go."}
+  - {name: dnsx, tier: T1, workflow: WF-01, category: recon, binary: dnsx, license: MIT, source: dnsx, build: go, install_path: /usr/local/bin/dnsx, summary: "Resolver dan enumerasi DNS."}
+  - {name: katana, tier: T1, workflow: WF-02, category: web, binary: katana, license: MIT, source: katana, build: go, install_path: /usr/local/bin/katana, summary: "Crawler web dan endpoint finder."}
+  - {name: amass, tier: T1, workflow: WF-01, category: recon, binary: amass, license: Apache-2.0, source: amass, build: go, install_path: /usr/local/bin/amass, summary: "Pemetaan attack surface."}
+  - {name: feroxbuster, tier: T1, workflow: WF-02, category: web, binary: feroxbuster, license: MIT, source: feroxbuster, build: go, install_path: /usr/local/bin/feroxbuster, summary: "Content discovery."}
+  - {name: wpscan, tier: T1, workflow: WF-02, category: web, binary: wpscan, license: MIT, source: wpscan, build: ruby, install_path: /usr/local/bin/wpscan, summary: "Audit WordPress."}
+  - {name: dalfox, tier: T1, workflow: WF-02, category: web, binary: dalfox, license: MIT, source: dalfox, build: go, install_path: /usr/local/bin/dalfox, summary: "Deteksi dan eksploitasi XSS."}
+  - {name: commix, tier: T1, workflow: WF-02, category: web, binary: commix, license: GPL-2.0-only, source: commix, build: python, install_path: /usr/local/bin/commix, summary: "Deteksi command injection."}
+  - {name: gospider, tier: T1, workflow: WF-02, category: web, binary: gospider, license: MIT, source: gospider, build: go, install_path: /usr/local/bin/gospider, summary: "Crawler web yang cepat."}
+  - {name: hakrawler, tier: T1, workflow: WF-02, category: web, binary: hakrawler, license: MIT, source: hakrawler, build: go, install_path: /usr/local/bin/hakrawler, summary: "Crawler endpoint dan subdomain."}
+  - {name: gau, tier: T1, workflow: WF-01, category: recon, binary: gau, license: MIT, source: gau, build: go, install_path: /usr/local/bin/gau, summary: "Pengambilan URL dari arsip dan endpoint."}
+  - {name: waybackurls, tier: T1, workflow: WF-01, category: recon, binary: waybackurls, license: MIT, source: waybackurls, build: go, install_path: /usr/local/bin/waybackurls, summary: "Daftar URL dari arsip web."}
+  - {name: netexec, tier: T1, workflow: WF-05, category: active-directory, binary: netexec, license: BSD-2-Clause, source: netexec, build: python, install_path: /usr/local/bin/netexec, summary: "Enumerasi dan brute force Active Directory."}
+  - {name: evil-winrm, tier: T1, workflow: WF-05, category: active-directory, binary: evil-winrm, license: GPL-3.0-only, source: evil-winrm, build: ruby, install_path: /usr/local/bin/evil-winrm, summary: "Shell WinRM untuk Windows."}
+  - {name: enum4linux-ng, tier: T1, workflow: WF-05, category: active-directory, binary: enum4linux-ng, license: GPL-3.0-only, source: enum4linux-ng, build: python, install_path: /usr/local/bin/enum4linux-ng, summary: "Enumerasi SMB."}
+  - {name: kerbrute, tier: T1, workflow: WF-05, category: active-directory, binary: kerbrute, license: GPL-3.0-only, source: kerbrute, build: go, install_path: /usr/local/bin/kerbrute, summary: "Brute force Kerberos."}
+  - {name: certipy, tier: T1, workflow: WF-05, category: active-directory, binary: certipy, license: GPL-3.0-only, source: certipy, build: python, install_path: /usr/local/bin/certipy, summary: "Audit dan eksploitasi Active Directory Certificate Services."}
+  - {name: ldapdomaindump, tier: T1, workflow: WF-05, category: active-directory, binary: ldapdomaindump, license: Apache-2.0, source: ldapdomaindump, build: python, install_path: /usr/local/bin/ldapdomaindump, summary: "Dump struktur LDAP."}
+  - {name: responder, tier: T1, workflow: WF-07, category: interception, binary: responder, license: GPL-3.0-only, source: responder, build: python, install_path: /usr/local/bin/responder, summary: "Serangan LLMNR, NBT-NS, dan mDNS."}
+  - {name: chisel, tier: T1, workflow: WF-08, category: pivoting, binary: chisel, license: MIT, source: chisel, build: go, install_path: /usr/local/bin/chisel, summary: "Tunnel TCP untuk pivot."}
+  - {name: ligolo-ng, tier: T1, workflow: WF-08, category: pivoting, binary: ligolo-ng, license: MIT, source: ligolo-ng, build: go, install_path: /usr/local/bin/ligolo, summary: "Pivot berbasis TUN."}
+  - {name: volatility3, tier: T1, workflow: WF-09, category: forensics, binary: vol, license: VSL, source: volatility3, build: python, install_path: /usr/local/bin/vol, summary: "Analisis forensik memori."}
+  - {name: radare2, tier: T1, workflow: WF-10, category: reverse, binary: r2, license: LGPL-3.0-only, source: radare2, build: source, install_path: /usr/local/bin/r2, summary: "Kerangka reverse engineering."}
+  - {name: rizin, tier: T1, workflow: WF-10, category: reverse, binary: rz-bin, license: LGPL-3.0-only, source: rizin, build: source, install_path: /usr/local/bin/rz-bin, summary: "Kerangka reverse engineering."}
+  - {name: cutter, tier: T1, workflow: WF-10, category: reverse, binary: cutter, license: GPL-2.0-only, source: cutter, build: source, install_path: /usr/local/bin/cutter, summary: "GUI untuk rizin."}
+  - {name: jadx, tier: T1, workflow: WF-10, category: reverse, binary: jadx, license: Apache-2.0, source: jadx, build: java, install_path: /usr/local/bin/jadx, summary: "Decompiler Java dan Android."}
+  - {name: pwndbg, tier: T1, workflow: WF-10, category: reverse, binary: pwndbg, license: MIT, source: pwndbg, build: python, install_path: /usr/local/bin/pwndbg, summary: "Plugin GDB untuk exploit development."}
+  - {name: frida-tools, tier: T1, workflow: WF-10, category: reverse, binary: frida, license: wxWindows-Licence, source: frida-tools, build: python, install_path: /usr/local/bin/frida, summary: "Instrumentasi dinamis."}
+  - {name: upx, tier: T1, workflow: WF-10, category: reverse, binary: upx, license: GPL-2.0-only, source: upx, build: source, install_path: /usr/local/bin/upx, summary: "Packer dan unpacker executable."}
+  - {name: trivy, tier: T1, workflow: WF-11, category: cloud, binary: trivy, license: Apache-2.0, source: trivy, build: go, install_path: /usr/local/bin/trivy, summary: "Scanner kerentanan image dan filesystem."}
+  - {name: helm, tier: T1, workflow: WF-11, category: cloud, binary: helm, license: Apache-2.0, source: helm, build: go, install_path: /usr/local/bin/helm, summary: "Manajer paket Kubernetes."}
+  - {name: kismet, tier: T1, workflow: WF-06, category: wireless, binary: kismet, license: GPL-3.0-only, source: kismet, build: source, install_path: /usr/local/bin/kismet, summary: "Deteksi nirkabel pasif."}
+  - {name: zaproxy, tier: T1, workflow: WF-02, category: web, binary: zap.sh, license: Apache-2.0, source: zaproxy, build: java, install_path: /usr/local/bin/zap.sh, summary: "Proxy pengujian OWASP."}
+  - {name: seclists-core, tier: T1, workflow: WF-02, category: wordlist, binary: none, license: MIT, source: seclists-core, build: data, install_path: /usr/share/wordlists/seclists, summary: "Subset wordlist SecLists."}
+  - {name: fastfetch, tier: T1, workflow: WF-12, role: platform, category: toolchain, binary: fastfetch, license: MIT, source: fastfetch, build: source, install_path: /usr/local/bin/fastfetch, summary: "Pengambil informasi sistem."}
+  - {name: termshark, tier: T1, workflow: WF-07, role: platform, category: toolchain, binary: termshark, license: MIT, source: termshark, build: source, install_path: /usr/local/bin/termshark, summary: "Analisis pcap interaktif di terminal."}
+
+  # Tier 2, unduhan oleh pengguna
+  - {name: sliver, tier: T2, workflow: WF-03, category: exploitation, binary: sliver-server, license: proprietary, distribution: installer, summary: "Server command and control, opt-in."}
+  - {name: havoc, tier: T2, workflow: WF-03, category: exploitation, binary: havoc-server, license: proprietary, distribution: installer, summary: "Server command and control, opt-in."}
+  - {name: burpsuite, tier: T2, workflow: WF-02, category: web, binary: burpsuite, license: proprietary, distribution: installer, summary: "Proxy pengujian web, opt-in."}
+  - {name: nessus, tier: T2, workflow: WF-01, category: recon, binary: nessus, license: proprietary, distribution: installer, summary: "Scanner kerentanan, opt-in."}
+  - {name: ida-free, tier: T2, workflow: WF-10, category: reverse, binary: ida64, license: proprietary, distribution: installer, summary: "Disassembler gratis, opt-in."}
+  - {name: ghidra, tier: T2, workflow: WF-10, category: reverse, binary: ghidra, license: Apache-2.0, distribution: installer, summary: "Decompiler, ukuran besar, opt-in."}
+  - {name: bloodhound-ce, tier: T2, workflow: WF-05, category: active-directory, binary: BloodHound, license: MIT, distribution: installer, summary: "Visualisasi Active Directory, opt-in."}
+  - {name: docker, tier: T2, workflow: WF-11, category: container, binary: docker, license: Apache-2.0, distribution: installer, summary: "Docker engine, opt-in."}
+  - {name: obsidian, tier: T2, workflow: WF-12, category: reporting, binary: obsidian, license: proprietary, distribution: installer, summary: "Editor catatan, opt-in."}
+  - {name: rockyou, tier: T2, workflow: WF-04, category: wordlist, binary: none, license: proprietary, distribution: installer, summary: "Wordlist rockyou tanpa lisensi jelas, opt-in dengan peringatan."}
+  - {name: autopsy, tier: T2, workflow: WF-09, category: forensics, binary: autopsy, license: Apache-2.0, distribution: installer, summary: "GUI forensik, opt-in."}
+
+  # Tier 3, container image
+  - {name: kali-rolling, tier: T3, workflow: WF-03, category: container, binary: none, license: proprietary, distribution: container, summary: "Tool security滚动 dari Kali untuk tool yang butuh glibc baru."}
+  - {name: blackarch, tier: T3, workflow: WF-03, category: container, binary: none, license: proprietary, distribution: container, summary: "Tool Linux ArchArmor untuk tool spesifik."}
+  - {name: dvwa, tier: T3, workflow: WF-02, category: lab, binary: none, license: proprietary, distribution: container, summary: "Lab web rentan untuk latihan."}
+  - {name: juice-shop, tier: T3, workflow: WF-02, category: lab, binary: none, license: proprietary, distribution: container, summary: "Lab e-commerce rentan untuk latihan."}
+  - {name: vulnerable-ad, tier: T3, workflow: WF-05, category: lab, binary: none, license: proprietary, distribution: container, summary: "Lab Active Directory rentan untuk latihan."}

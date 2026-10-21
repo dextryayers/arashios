@@ -28,7 +28,7 @@ atau window manager.
 
 | Path | Fungsi |
 |---|---|
-| `/etc/dconf/db/local.d/00-arashios` | Default panel, tema, wallpaper, workspace, Nemo, media, dan GNOME Terminal |
+| `/etc/dconf/db/local.d/00-arashios` | Default panel, tema GTK dan Muffin, wallpaper, workspace, Nemo, media, dan GNOME Terminal |
 | `/etc/lightdm/lightdm.conf.d/50-arashios.conf` | Sesi Cinnamon dan autologin live |
 | `/etc/xdg/mimeapps.list` | Asosiasi Nemo, Gedit, Eye of GNOME, dan Firefox |
 | `/etc/dconf/profile/user` | Urutan database user dan sistem |
@@ -38,7 +38,8 @@ Default utama:
 1. Panel atas 30px dengan menu, grouped window list, kalender, workspace
    switcher, systray, notifikasi, keyboard, suara, dan power.
 2. Empat workspace.
-3. Tema `ArashiKage`, ikon `Papirus-Dark`, kursor `Bibata-Modern-Classic`.
+3. Tema `ArashiKage` untuk GTK, Cinnamon, dan Muffin, ikon `Papirus-Dark`,
+   kursor `Bibata-Modern-Classic`.
 4. Wallpaper `kage-sumi.png`.
 5. Ikon desktop Nemo nonaktif.
 6. GNOME Terminal memakai profil `Kage` dengan palet token.

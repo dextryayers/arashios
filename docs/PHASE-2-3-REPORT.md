@@ -93,6 +93,8 @@ desktop atau window manager.
 5. GNOME Terminal memakai profil `Kage` dengan palet token.
 6. Toolkit accessibility aktif.
 7. Screensaver aktif dengan lock delay 0.
+8. Muffin dan border jendela memakai tema `ArashiKage`; helper aksesibilitas
+   ikut mengganti tema Muffin saat mode kontras diubah.
 
 ### 3.2 XFCE
 
@@ -147,12 +149,19 @@ Perubahan tema tidak memulai ulang aplikasi yang sedang berjalan.
 | Tema | 2237 pemeriksaan lulus |
 | Parser CSS GTK3 | Lulus untuk kedua varian |
 | Parser CSS GTK4 | Lulus untuk kedua varian |
-| Integrasi desktop | 285 pemeriksaan lulus |
+| Integrasi desktop | 287 pemeriksaan lulus |
 | Helper aksesibilitas | Lulus dengan `HOME` sementara |
 | Paket branding | Lulus, 214 file, reproducible |
 | Validasi konfigurasi | Lulus, termasuk GRUB dan dconf |
 | XML dan SVG | Semua dapat diparse |
 | dconf Cinnamon | `dconf compile` lulus |
+
+Pemeriksaan tambahan memuat tema pada sesi Cinnamon 6.6 di host LMDE 7 dengan
+Xephyr dan HOME sementara. Panel atas 30px, GTK, Muffin, Nemo, dan terminal
+tampil dengan tema Kage. Uji ini menemukan default tema Muffin yang belum
+diatur; konfigurasi dan helper aksesibilitas sudah diperbaiki. Sesi host
+memakai Cinnamon 6.6, bukan target Debian 12, sehingga hasil ini bukan bukti
+exit gate runtime.
 
 ### 4.2 Ketersediaan Paket Bookworm
 

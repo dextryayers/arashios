@@ -389,6 +389,7 @@ sistem terpasang.
 5. Screensaver aktif dengan lock delay 0.
 6. Automount dan autorun dimatikan.
 7. GNOME Terminal memakai profil Kage.
+8. Muffin dan border jendela memakai tema ArashiKage.
 
 ### 10.2 XFCE
 

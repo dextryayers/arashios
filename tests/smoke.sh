@@ -216,7 +216,9 @@ case "$EDITION" in
         check_cmd gedit
         check_cmd eog
         check_file /usr/share/themes/ArashiKage/cinnamon/cinnamon.css
+        check_file /usr/share/themes/ArashiKage/metacity-1/metacity-theme-3.xml
         check_grep "name='ArashiKage'" /etc/dconf/db/local.d/00-arashios 'tema Cinnamon ArashiKage'
+        check_grep "theme='ArashiKage'" /etc/dconf/db/local.d/00-arashios 'tema Muffin ArashiKage'
         check_grep "visible-name='Kage'" /etc/dconf/db/local.d/00-arashios 'profil GNOME Terminal Kage'
         ;;
     xfce)

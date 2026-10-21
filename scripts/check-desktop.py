@@ -171,7 +171,14 @@ def main() -> int:
             check(value.upper() in token_colors, f"{path.relative_to(ROOT)}: terminal color {value} is not a Kage token")
 
     accessibility = read(COMMON / "usr/local/bin/arashios-accessibility")
-    for value in ("contrast", "motion", "ArashiKage-HC", "enable-animations", "Bibata-Modern-Classic"):
+    for value in (
+        "contrast",
+        "motion",
+        "ArashiKage-HC",
+        "enable-animations",
+        "Bibata-Modern-Classic",
+        "org.cinnamon.desktop.wm.preferences theme",
+    ):
         check(value in accessibility, f"accessibility helper lacks {value}")
     wallpaper = read(COMMON / "usr/local/bin/arashios-wallpaper")
     check("kage-sumi.png" in wallpaper, "wallpaper helper does not default to a PNG wallpaper")
@@ -222,6 +229,7 @@ def main() -> int:
         "panels-enabled=['1:0:top']",
         "panels-height=['1:30']",
         "name='ArashiKage'",
+        "theme='ArashiKage'",
         "gtk-theme='ArashiKage'",
         "icon-theme='Papirus-Dark'",
         "cursor-theme='Bibata-Modern-Classic'",

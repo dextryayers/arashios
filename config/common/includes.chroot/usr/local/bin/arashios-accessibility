@@ -123,6 +123,7 @@ apply_theme() {
     write_gtk_import "$theme"
     gsettings_set org.cinnamon.desktop.interface gtk-theme "$theme"
     gsettings_set org.cinnamon.theme name "$theme"
+    gsettings_set org.cinnamon.desktop.wm.preferences theme "$theme"
     gsettings_set org.gnome.desktop.interface gtk-theme "$theme"
     gsettings_set org.gnome.desktop.interface icon-theme "Papirus-Dark"
     gsettings_set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Classic"
