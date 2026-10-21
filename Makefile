@@ -6,13 +6,14 @@ JOBS ?= $(shell nproc)
 ISO ?= $(firstword $(wildcard out/*.iso))
 BOOT_MODE ?= uefi
 
-.PHONY: help tokens env env-strict config build verify test smoke lint clean distclean
+.PHONY: help tokens env env-strict config config-matrix build verify test smoke lint clean distclean
 
 help:
 	@printf '%s\n' \
 	  'make env' \
 	  'make tokens' \
 	  'make config EDITION=xfce ARCH=amd64' \
+	  'make config-matrix' \
 	  'make build EDITION=cinnamon ARCH=amd64' \
 	  'make build EDITION=lxqt ARCH=i386 JOBS=8' \
 	  'make verify ISO=out/ArashiOS-amd64-V1.10.21.iso' \
@@ -33,6 +34,9 @@ env-strict:
 
 config:
 	./build.sh --edition $(EDITION) --arch $(ARCH) --version $(VERSION) --dry-run
+
+config-matrix:
+	./tests/config-matrix.sh
 
 build:
 	./build.sh --edition $(EDITION) --arch $(ARCH) --version $(VERSION) --jobs $(JOBS)

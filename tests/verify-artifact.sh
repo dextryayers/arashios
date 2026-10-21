@@ -67,6 +67,16 @@ else
     edition="${!default_var}"
 fi
 
+case " $SUPPORTED_COMBINATIONS " in
+    *" $arch:$edition "*) ;;
+    *) fail "kombinasi $arch/$edition tidak didukung" ;;
+esac
+
+default_var="DEFAULT_EDITION_${arch^^}"
+if [ -n "$variant" ] && [ "$variant" = "${!default_var}" ]; then
+    fail "edisi default $arch tidak boleh memakai sufiks -$variant"
+fi
+
 max_var="MAX_ISO_MIB_${edition^^}"
 max_mib="${!max_var}"
 
@@ -107,15 +117,15 @@ if command -v xorriso >/dev/null 2>&1; then
 
     volume_id="$(xorriso -indev "$ISO" -pvd_info 2>/dev/null | sed -n 's/^Volume id[^:]*: *//p' | head -1 | tr -d '"' | tr -d "'")"
     if [ -n "$volume_id" ]; then
-        expected="${ISO_VOLUME_PREFIX}_$(printf '%s' "${version#V}" | tr '.' '_')"
+        expected="${ISO_VOLUME_PREFIX}_$(printf '%s' "$version" | tr '.' '_')"
         log "volume ID: $volume_id"
         if [ "$volume_id" = "$expected" ]; then
             ok "volume ID sesuai: $expected"
         else
-            warn "volume ID tidak sama dengan $expected"
+            fail "volume ID tidak sesuai: $volume_id (harus $expected)"
         fi
     else
-        warn "volume ID tidak dapat dibaca"
+        fail "volume ID tidak dapat dibaca"
     fi
 
     if xorriso -indev "$ISO" -ls / 2>/dev/null | grep -q 'live'; then
@@ -153,7 +163,7 @@ if command -v xorriso >/dev/null 2>&1; then
         log "UEFI tidak berlaku untuk $arch, boot BIOS saja"
     fi
 else
-    warn "xorriso tidak terpasang, pemeriksaan isi ISO dilewati"
+    fail "xorriso tidak terpasang, pemeriksaan isi ISO tidak dapat dilakukan"
 fi
 
 sha_file="${ISO}.sha256"
@@ -164,7 +174,7 @@ if [ -f "$sha_file" ]; then
         fail "checksum SHA-256 tidak cocok"
     fi
 else
-    warn "berkas .sha256 tidak ditemukan"
+    fail "berkas .sha256 tidak ditemukan"
 fi
 
 sha512_file="${ISO}.sha512"
@@ -175,7 +185,7 @@ if [ -f "$sha512_file" ]; then
         fail "checksum SHA-512 tidak cocok"
     fi
 else
-    warn "berkas .sha512 tidak ditemukan"
+    fail "berkas .sha512 tidak ditemukan"
 fi
 
 sig_file="${ISO}.sig"

@@ -5,6 +5,7 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STRICT=0
+RELEASE=0
 MISSING_BUILD=()
 MISSING_TEST=()
 WARNINGS=()
@@ -13,9 +14,10 @@ export PATH="$PATH:/usr/sbin:/sbin"
 
 usage() {
     cat <<EOF
-Pemakaian: $0 [--strict]
+Pemakaian: $0 [--strict] [--release]
 
   --strict   Keluar dengan status 1 jika tool build atau test wajib hilang.
+  --release  Wajibkan host Debian 12 bookworm dan aktifkan mode strict.
   -h, --help Tampilkan bantuan ini.
 EOF
 }
@@ -23,6 +25,7 @@ EOF
 for arg in "$@"; do
     case "$arg" in
         --strict) STRICT=1 ;;
+        --release) RELEASE=1; STRICT=1 ;;
         -h|--help) usage; exit 0 ;;
         *) printf 'ERROR: argumen tidak dikenal: %s\n' "$arg" >&2; exit 2 ;;
     esac
@@ -55,8 +58,18 @@ if [ -r /etc/os-release ]; then
     # shellcheck disable=SC1091
     . /etc/os-release
     printf 'Host: %s %s (%s)\n' "${NAME:-unknown}" "${VERSION_ID:-unknown}" "${ID:-unknown}"
+    if [ "${ID:-}" != "debian" ]; then
+        WARNINGS+=("Host bukan Debian. Build rilis harus Debian 12 bookworm.")
+    fi
 else
     WARNINGS+=("Tidak dapat membaca /etc/os-release")
+fi
+
+if [ "$RELEASE" -eq 1 ]; then
+    if [ "${ID:-}" != "debian" ] || [ "${VERSION_ID:-}" != "12" ]; then
+        printf 'ERROR: mode rilis membutuhkan Debian 12 bookworm.\n' >&2
+        exit 1
+    fi
 fi
 
 printf '\nTool build:\n'

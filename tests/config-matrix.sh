@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Validate live-build configuration for every supported architecture and edition.
+set -Eeuo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=../versions.env
+# shellcheck disable=SC1091
+source "$ROOT/versions.env"
+
+LOG="$(mktemp)"
+trap 'rm -f "$LOG"' EXIT
+
+die() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+if ! command -v lb >/dev/null 2>&1; then
+    die "Perintah 'lb' tidak ditemukan. Pasang live-build atau jalankan scripts/check-env.sh."
+fi
+
+count=0
+for combo in $SUPPORTED_COMBINATIONS; do
+    arch="${combo%%:*}"
+    edition="${combo#*:}"
+    config="$ROOT/build/${edition}-${arch}/config"
+
+    printf '[matrix] %s\n' "$combo"
+    if ! "$ROOT/build.sh" --edition "$edition" --arch "$arch" --dry-run >"$LOG" 2>&1; then
+        tail -40 "$LOG" >&2
+        die "dry-run gagal untuk $combo"
+    fi
+
+    [ -f "$config/package-lists/00-base.list.chroot" ] || die "package list dasar hilang untuk $combo"
+    [ -f "$config/includes.chroot/etc/os-release" ] || die "os-release hilang untuk $combo"
+    [ -f "$config/includes.chroot/etc/arashios/build-info" ] || die "build-info hilang untuk $combo"
+    [ -f "$config/includes.chroot/etc/lightdm/lightdm.conf.d/50-arashios.conf" ] || die "konfigurasi LightDM hilang untuk $combo"
+
+    grep -q '^ID=arashios$' "$config/includes.chroot/etc/os-release" || die "ID os-release salah untuk $combo"
+    grep -q "^ARASHIOS_ARCH=$arch$" "$config/includes.chroot/etc/arashios/build-info" || die "arsitektur build-info salah untuk $combo"
+    grep -q "^ARASHIOS_EDITION=$edition$" "$config/includes.chroot/etc/arashios/build-info" || die "edisi build-info salah untuk $combo"
+    grep -q "^user-session=$edition$" "$config/includes.chroot/etc/lightdm/lightdm.conf.d/50-arashios.conf" || die "sesi LightDM salah untuk $combo"
+
+    case "$arch" in
+        amd64)
+            grep -q '^LB_BOOTLOADERS="syslinux grub-efi"$' "$config/binary" || die "bootloader amd64 salah"
+            grep -q '^LB_LINUX_FLAVOURS_WITH_ARCH="amd64"$' "$config/chroot" || die "kernel amd64 salah"
+            ;;
+        arm64)
+            grep -q '^LB_BOOTLOADERS="grub-efi"$' "$config/binary" || die "bootloader arm64 salah"
+            grep -q '^LB_LINUX_FLAVOURS_WITH_ARCH="arm64"$' "$config/chroot" || die "kernel arm64 salah"
+            ;;
+        i386)
+            grep -q '^LB_BOOTLOADERS="syslinux"$' "$config/binary" || die "bootloader i386 salah"
+            grep -q '^LB_LINUX_FLAVOURS_WITH_ARCH="686-pae"$' "$config/chroot" || die "kernel i386 salah"
+            ;;
+    esac
+
+    count=$((count + 1))
+    printf 'OK:   %s\n' "$combo"
+done
+
+printf 'OK: %d kombinasi konfigurasi valid.\n' "$count"

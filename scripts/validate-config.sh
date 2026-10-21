@@ -106,7 +106,7 @@ printf '\nHak eksekusi:\n'
 require_exec build.sh
 for file in scripts/check-env.sh scripts/validate-config.sh scripts/check-docs.sh \
             scripts/generate-tokens.py scripts/generate-brand-assets.py \
-            tests/qemu-boot.sh tests/smoke.sh tests/verify-artifact.sh; do
+            tests/qemu-boot.sh tests/smoke.sh tests/verify-artifact.sh tests/config-matrix.sh; do
     require_exec "$file"
 done
 for file in "$ROOT"/config/common/hooks/live/*.chroot; do
@@ -143,40 +143,44 @@ require_file config/common/includes.chroot/etc/sysctl.d/99-arashios-hardening.co
 require_file config/common/archives/backports.list.chroot
 
 printf '\nPaket per kombinasi:\n'
-for edition in $SUPPORTED_EDITIONS; do
-    for arch in $SUPPORTED_ARCHES; do
-        list_files=(
-            "$ROOT"/config/common/package-lists/*.list.chroot
-            "$ROOT/config/editions/$edition/package-lists/"*.list.chroot
-        )
-        if [ -d "$ROOT/config/arches/$arch/package-lists" ]; then
-            list_files+=("$ROOT"/config/arches/"$arch"/package-lists/*.list.chroot)
-        fi
+for combo in $SUPPORTED_COMBINATIONS; do
+    arch="${combo%%:*}"
+    edition="${combo#*:}"
+    if [ "$arch" = "$combo" ] || [ -z "$edition" ]; then
+        fail "format kombinasi tidak valid: $combo"
+        continue
+    fi
+    list_files=(
+        "$ROOT"/config/common/package-lists/*.list.chroot
+        "$ROOT/config/editions/$edition/package-lists/"*.list.chroot
+    )
+    if [ -d "$ROOT/config/arches/$arch/package-lists" ]; then
+        list_files+=("$ROOT"/config/arches/"$arch"/package-lists/*.list.chroot)
+    fi
 
-        packages="$(mktemp)"
-        TMP_FILES+=("$packages")
-        for file in "${list_files[@]}"; do
-            [ -f "$file" ] || continue
-            while IFS= read -r package; do
-                if [[ ! "$package" =~ ^[a-z0-9][a-z0-9+.-]*$ ]]; then
-                    fail "nama paket tidak valid di ${file#"$ROOT/"}: $package"
-                    continue
-                fi
-                printf '%s\n' "$package"
-            done < <(read_list "$file") >> "$packages"
-        done
-
-        duplicates="$(sort "$packages" | uniq -d)"
-        if [ -n "$duplicates" ]; then
-            fail "paket duplikat pada $edition/$arch: $(printf '%s' "$duplicates" | tr '\n' ' ')"
-        fi
-
-        total="$(sort -u "$packages" | wc -l | tr -d ' ')"
-        if [ "$total" -lt 50 ]; then
-            fail "jumlah paket terlalu sedikit pada $edition/$arch: $total"
-        fi
-        info "$edition/$arch: $total paket unik"
+    packages="$(mktemp)"
+    TMP_FILES+=("$packages")
+    for file in "${list_files[@]}"; do
+        [ -f "$file" ] || continue
+        while IFS= read -r package; do
+            if [[ ! "$package" =~ ^[a-z0-9][a-z0-9+.-]*$ ]]; then
+                fail "nama paket tidak valid di ${file#"$ROOT/"}: $package"
+                continue
+            fi
+            printf '%s\n' "$package"
+        done < <(read_list "$file") >> "$packages"
     done
+
+    duplicates="$(sort "$packages" | uniq -d)"
+    if [ -n "$duplicates" ]; then
+        fail "paket duplikat pada $edition/$arch: $(printf '%s' "$duplicates" | tr '\n' ' ')"
+    fi
+
+    total="$(sort -u "$packages" | wc -l | tr -d ' ')"
+    if [ "$total" -lt 50 ]; then
+        fail "jumlah paket terlalu sedikit pada $edition/$arch: $total"
+    fi
+    info "$edition/$arch: $total paket unik"
 done
 
 printf '\nKebijakan repositori dan layanan:\n'

@@ -8,7 +8,7 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 
 | Fase | Isi | Status |
 |---|---|---|
-| 0 | Fondasi repository, kebijakan, ADR, design token, CI | Selesai |
+| 0 | Fondasi repository, kebijakan, ADR, design token, CI | Selesai, dua butir eksternal terbuka |
 | 1 | Baseline live ISO amd64, branding, smoke test, QEMU harness | Implementasi selesai, menunggu build host |
 | 2 | Tema desktop penuh dan integrasi Kage | Berikutnya |
 | 3 | Tiga edisi desktop dan matriks QA | Direncanakan |
@@ -22,7 +22,7 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 | 11 | Dokumentasi publik, situs, dan komunitas | Direncanakan |
 | 12 | RC, rilis, dan pemeliharaan | Direncanakan |
 
-Fase 1 menghasilkan ISO live yang dapat boot pada QEMU UEFI dan BIOS. Installer Calamares, tool vendored, dan signing produksi belum aktif. Rencana lengkap ada di [plan.md](plan.md).
+Fase 1 menargetkan ISO live yang dapat boot pada QEMU UEFI dan BIOS. Installer Calamares, tool vendored, dan signing produksi belum aktif. Rencana lengkap ada di [plan.md](plan.md) dan status terperinci ada di [laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md).
 
 ## Edisi
 
@@ -54,7 +54,7 @@ ArashiOS-i386-V1.10.21.iso
 ArashiOS-i386-V1.10.21-xfce.iso
 ```
 
-Setiap artefak memiliki checksum SHA-256 dan SHA-512. Tanda tangan minisign disiapkan pada pipeline dan diaktifkan pada Fase 9.
+Setiap artefak memiliki checksum SHA-256 dan SHA-512. Build wrapper mendukung tanda tangan minisign opsional; signing produksi diaktifkan pada Fase 9.
 
 ## Prasyarat Build
 
@@ -163,6 +163,12 @@ arashios-smoke
 ```
 
 Smoke test memeriksa identitas sistem, branding, layanan, sysctl hardening, repository, locale, tool keamanan, tool coding, aplikasi harian, desktop, dan container rootless.
+
+Validasi konfigurasi semua kombinasi:
+
+```bash
+make config-matrix
+```
 
 Lint dan validasi statis:
 

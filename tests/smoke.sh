@@ -143,11 +143,16 @@ for tool in nmap masscan nikto gobuster ffuf dirsearch wfuzz sqlmap hydra john h
 done
 
 printf '\nTool coding:\n'
-for tool in gcc g++ make cmake ninja meson pkg-config gdb strace ltrace \
+for tool in gcc g++ make cmake ninja meson pkg-config gdb strace \
             python3 pip3 pipx go git nvim tmux zsh fzf jq yq http sqlite3 \
             psql mariadb redis-cli; do
     check_cmd "$tool"
 done
+
+case "$ARCH" in
+    amd64|i386) check_cmd ltrace ;;
+    *) printf '\nTool debug ltrace dilewati untuk %s.\n' "$ARCH" ;;
+esac
 
 case "$ARCH" in
     amd64|arm64)

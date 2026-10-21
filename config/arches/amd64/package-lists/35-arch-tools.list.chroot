@@ -1,0 +1,3 @@
+# amd64 only: debug and hardware tools not built for arm64.
+ltrace
+thermald

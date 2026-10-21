@@ -59,15 +59,11 @@ jobs:
       - name: Validate requirement traceability
         run: ./scripts/check-traceability.py
 
-  config-dry-run:
-    name: live-build config (${{ matrix.edition }})
+  config-matrix:
+    name: live-build config matrix
     runs-on: ubuntu-24.04
     container: debian:12
     needs: lint
-    strategy:
-      fail-fast: false
-      matrix:
-        edition: [cinnamon, xfce, lxqt]
     steps:
       - name: Install git
         run: |
@@ -85,11 +81,5 @@ jobs:
             isolinux syslinux-common syslinux-utils syslinux-efi \
             grub-pc-bin grub-efi-amd64-bin mtools dosfstools
 
-      - name: Configure ISO without building
-        run: ./build.sh --edition ${{ matrix.edition }} --arch amd64 --dry-run
-
-      - name: Show generated config
-        run: |
-          test -f build/${{ matrix.edition }}-amd64/config/package-lists/00-base.list.chroot
-          test -f build/${{ matrix.edition }}-amd64/config/includes.chroot/etc/os-release
-          grep -q "ArashiOS" build/${{ matrix.edition }}-amd64/config/includes.chroot/etc/os-release
+      - name: Validate supported combinations
+        run: ./tests/config-matrix.sh

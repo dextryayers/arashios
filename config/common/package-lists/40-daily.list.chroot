@@ -30,7 +30,6 @@ sane-utils
 bluez
 blueman
 tlp
-thermald
 zram-tools
 earlyoom
 fwupd

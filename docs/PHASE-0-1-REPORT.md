@@ -24,10 +24,11 @@ Fase 1 belum dapat dinyatakan lulus sampai ISO amd64 dibangun, diverifikasi, dan
 | Virtualisasi | `/dev/kvm` dapat diakses |
 | Firmware host | UEFI, Secure Boot dimatikan |
 | Swap | Tidak ada |
-| Tool build hilang | `lb`, `debootstrap`, `xorriso`, `qemu-system-x86_64`, `qemu-img`, OVMF |
+| Tool build hilang | `lb`, `debootstrap`, `xorriso`, `isohybrid`, `qemu-system-x86_64`, `qemu-img`, OVMF |
 | Tool build tersedia | `grub-mkimage`, `mcopy`, `mkfs.vfat`, `mksquashfs` |
+| Tool lint | ShellCheck tidak ada di PATH; dipakai binary statis 0.10.0 |
 
-Host pengembangan bukan acuan rilis. Build rilis harus memakai Debian 12 bookworm yang bersih atau container Debian 12.
+Host pengembangan bukan acuan rilis. Build rilis harus memakai Debian 12 bookworm yang bersih atau container Debian 12. `check-env.sh --release` menolak host ini karena bukan Debian 12; workflow rilis memakai mode tersebut.
 
 ## 3. Fase 0
 
@@ -72,9 +73,9 @@ Dua butir Fase 0 masih terbuka: pemasangan toolchain build dan verifikasi nama s
 | ADR | 12 |
 | Fase | 12 |
 | Sub-fase | 94 |
-| Baris plan | 2.902 |
-| Kata plan | 17.474 |
-| Ukuran plan | 99.230 byte |
+| Baris plan | 2.903 |
+| Kata plan | 17.529 |
+| Ukuran plan | 99.599 byte |
 
 Tujuh test case yang sebelumnya belum muncul langsung di matriks sudah ditambahkan ke requirement yang sesuai:
 
@@ -98,6 +99,7 @@ Tujuh test case yang sebelumnya belum muncul langsung di matriks sudah ditambahk
 | Edisi LXQt | `config/editions/lxqt/` | Selesai |
 | Overlay amd64 | `config/arches/amd64/` | Selesai |
 | Overlay arm64 | `config/arches/arm64/` | Selesai |
+| Overlay i386 | `config/arches/i386/` | Selesai |
 | Metadata sistem | `os-release`, `lsb-release`, `issue`, `build-info` | Selesai |
 | Hardening | sysctl, UFW, AppArmor, SSH mask | Selesai |
 | Branding boot | GRUB, Plymouth, LightDM, wallpaper | Selesai |
@@ -135,11 +137,11 @@ Tujuh test case yang sebelumnya belum muncul langsung di matriks sudah ditambahk
 
 | Edisi | amd64 | arm64 | i386 |
 |---|---:|---:|---:|
-| Cinnamon | 233 | 231 | 213 |
-| XFCE | 234 | 232 | 214 |
-| LXQt | 242 | 240 | 222 |
+| Cinnamon | 233 | - | - |
+| XFCE | 234 | 230 | 214 |
+| LXQt | 242 | 238 | 222 |
 
-Angka adalah paket unik dari irisan daftar paket. Dependency resolution dapat menambah paket pada image akhir.
+Angka adalah paket unik dari irisan daftar paket. Dependency resolution dapat menambah paket pada image akhir. Kombinasi Cinnamon arm64 dan i386 tidak didukung pada v1. arm64 tidak memuat `ltrace` dan `thermald` karena kedua paket tidak dibangun untuk arm64.
 
 ### 4.4 Branding
 
@@ -193,7 +195,9 @@ Kontras utama:
 | Sintaks shell | `bash -n` pada `build.sh`, `scripts/*.sh`, `tests/*.sh`, hook | Lulus |
 | Sintaks Python | `python3 -m py_compile scripts/*.py` | Lulus |
 | Validasi konfigurasi | `./scripts/validate-config.sh` | Lulus |
-| Dokumen | `./scripts/check-docs.sh` | Lulus, 84 berkas |
+| Matriks config live-build | `make config-matrix` | Lulus, 7 kombinasi pada live-build 20230502 |
+| Ketersediaan paket | audit indeks bookworm | Lulus, 0 paket hilang pada 7 kombinasi |
+| Dokumen | `./scripts/check-docs.sh` | Lulus, 87 berkas |
 | Traceability | `./scripts/check-traceability.py` | Lulus, 58 requirement dan 52 test |
 | Token | `./scripts/generate-tokens.py --check` | Lulus |
 | Aset raster | `./scripts/generate-brand-assets.py --check` | Lulus |
@@ -251,6 +255,20 @@ Kebijakan:
 3. Setiap tool vendored harus lulus cek kompatibilitas glibc.
 4. Tool yang tidak dapat di-vendor dengan aman akan diganti atau dihapus dari scope.
 
+### 5.3 Audit Daftar Final
+
+| Arsitektur | Edisi | Paket unik | Paket hilang |
+|---|---|---:|---:|
+| amd64 | Cinnamon | 233 | 0 |
+| amd64 | XFCE | 234 | 0 |
+| amd64 | LXQt | 242 | 0 |
+| arm64 | XFCE | 230 | 0 |
+| arm64 | LXQt | 238 | 0 |
+| i386 | LXQt | 222 | 0 |
+| i386 | XFCE | 214 | 0 |
+
+Audit dilakukan terhadap indeks `Packages.xz` bookworm untuk komponen main, contrib, non-free, dan non-free-firmware pada amd64, arm64, dan i386. Tidak ada paket yang hilang. `ltrace` dan `thermald` dipindahkan ke overlay amd64 dan i386 karena tidak dibangun untuk arm64.
+
 ## 6. Perubahan Penting Selama Implementasi
 
 | Perubahan | Alasan |
@@ -261,11 +279,12 @@ Kebijakan:
 | Hook `0150-cli-aliases.chroot` ditambahkan | Debian mengganti nama `bat` menjadi `batcat` dan `fd` menjadi `fdfind` |
 | `apparmor-utils` ditambahkan | Menyediakan alat audit profil |
 | `60-lab` dibatasi ke QEMU | libvirt dan virt-manager ditunda ke Fase 4 agar image live ramping |
+| `ltrace` dan `thermald` dipisah ke overlay amd64/i386 | Kedua paket tidak tersedia untuk arm64 |
 | Volume ID dihitung dari versi | Mencegah volume ID statis yang tidak cocok dengan versi |
 | Metadata build diperluas | Mencatat host, versi live-build, dan hash konfigurasi |
 | Traceability diperbaiki | Tujuh test case belum muncul langsung di matriks |
 | Release workflow memakai path ISO eksplisit | Glob dapat mencocokkan lebih dari satu ISO untuk amd64 |
-| CI dry-run memakai container Debian 12 | Menyamakan versi live-build dengan target rilis |
+| CI config matrix memakai container Debian 12 | Menyamakan versi live-build dengan target rilis dan menguji tujuh kombinasi |
 
 ## 7. Risiko dan Batasan
 
@@ -332,7 +351,13 @@ arashios-smoke 2>&1 | tee ~/arashios-smoke.log
 
 8. Perbaiki temuan build dan boot, lalu ulangi sampai exit gate Fase 1 lulus.
 
-9. Commit seluruh pekerjaan dengan `git -c safe.directory=/home/aniipid/Project/arashios`.
+9. Perbaiki kepemilikan `.git` bila dibuat oleh root, lalu commit:
+
+```bash
+sudo chown -R "$USER:$USER" .git
+git add -A
+git commit -m "Complete Phase 0 and Phase 1"
+```
 
 ## 9. Exit Gate Fase 1
 

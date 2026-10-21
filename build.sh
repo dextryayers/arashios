@@ -75,6 +75,11 @@ case " $SUPPORTED_ARCHES " in
     *) die "Arsitektur tidak didukung: $ARCH. Pilihan: $SUPPORTED_ARCHES" ;;
 esac
 
+case " $SUPPORTED_COMBINATIONS " in
+    *" $ARCH:$EDITION "*) ;;
+    *) die "Kombinasi $ARCH/$EDITION tidak didukung. Pilihan: $SUPPORTED_COMBINATIONS" ;;
+esac
+
 case "$VERSION" in
     V[0-9]*.[0-9][0-9].[0-9][0-9]) ;;
     *) die "Format versi harus V<major>.<MM>.<DD>, contoh V1.10.21" ;;
@@ -92,7 +97,7 @@ if [ -n "${SOURCE_DATE_EPOCH:-}" ]; then
 fi
 
 VERSION_NUM="${VERSION#V}"
-ISO_VOLUME="${ISO_VOLUME_PREFIX}_$(printf '%s' "$VERSION_NUM" | tr '.' '_' | tr '[:lower:]' '[:upper:]')"
+ISO_VOLUME="${ISO_VOLUME_PREFIX}_$(printf '%s' "$VERSION" | tr '.' '_' | tr '[:lower:]' '[:upper:]')"
 [ "${#ISO_VOLUME}" -le 32 ] || die "Volume ID melebihi 32 karakter: $ISO_VOLUME"
 
 case "$ARCH:$EDITION" in
@@ -124,6 +129,10 @@ else
     case ",$BOOTLOADERS," in
         *,grub-efi,*) require_cmd grub-mkimage mcopy mkfs.vfat ;;
     esac
+fi
+
+if [ -n "${MINISIGN_KEY:-}" ]; then
+    require_cmd minisign
 fi
 
 WORK="$ROOT/build/${EDITION}-${ARCH}"
@@ -170,7 +179,6 @@ LB_ARGS=(
     --iso-application "$ISO_APPLICATION"
     --iso-publisher "$ISO_PUBLISHER"
     --iso-volume "$ISO_VOLUME"
-    --hostname arashios
     --bootappend-live "${LIVE_OPTS[*]}"
     --apt-indices false
     --memtest none
@@ -331,7 +339,7 @@ log "Menghitung checksum"
 ( cd "$OUT" && sha256sum "$(basename "$ISO_TARGET")" > "$(basename "$ISO_TARGET").sha256" )
 ( cd "$OUT" && sha512sum "$(basename "$ISO_TARGET")" > "$(basename "$ISO_TARGET").sha512" )
 
-if [ -n "${MINISIGN_KEY:-}" ] && command -v minisign >/dev/null 2>&1; then
+if [ -n "${MINISIGN_KEY:-}" ]; then
     log "Menandatangani artefak"
     minisign -S -s "$MINISIGN_KEY" -m "$ISO_TARGET" -x "$ISO_TARGET.sig"
 fi

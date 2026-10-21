@@ -862,7 +862,6 @@ lb config \
   --iso-application "ArashiOS" \
   --iso-publisher "ArashiOS Project" \
   --iso-volume "ARASHIOS_V1_10_21" \
-  --hostname arashios \
   --bootappend-live "boot=live components quiet splash username=arashi hostname=arashios" \
   --apt-indices false \
   --memtest none \

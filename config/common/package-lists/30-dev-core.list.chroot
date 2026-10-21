@@ -12,7 +12,6 @@ libtool
 
 gdb
 strace
-ltrace
 
 python3
 python3-pip

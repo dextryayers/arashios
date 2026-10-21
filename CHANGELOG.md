@@ -11,8 +11,8 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 - Design system Kage dengan token JSON, generator CSS, SCSS, QSS, laporan kontras, dan preview.
 - Aset merek: mark, wordmark, wallpaper, tema GRUB, tema Plymouth, latar raster, dan nine-slice.
 - Skrip pemeriksaan host, validasi konfigurasi, pemeriksaan dokumen, dan traceability.
-- CI lint, dry-run live-build, dan release workflow.
-- Konfigurasi common, tiga edisi desktop, dan overlay amd64 serta arm64.
+- CI lint, config matrix live-build, dan release workflow.
+- Konfigurasi common, tiga edisi desktop, dan overlay amd64, arm64, serta i386.
 - Daftar paket keamanan, coding, harian, dan desktop untuk tiga edisi.
 - Metadata sistem, APT pinning, sysctl hardening, UFW, AppArmor, dan Podman rootless.
 - Hook locale, branding, alias CLI, layanan, dan cleanup.
@@ -27,13 +27,19 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 - BIOS memakai syslinux, bukan GRUB, mengikuti default live-build.
 - Volume ID dihitung dari versi dan dibatasi 32 karakter.
 - Metadata build mencatat host, kernel, arsitektur, versi live-build, dan hash konfigurasi.
-- CI dry-run memakai container Debian 12.
+- CI config matrix memakai container Debian 12 dan menguji tujuh kombinasi.
+- `check-env.sh --release` mewajibkan host Debian 12 dan workflow rilis memakai mode tersebut.
 - Traceability matrix merujuk seluruh 52 test case.
 - Lab virtual amd64 dibatasi ke QEMU dan qemu-utils. libvirt dan virt-manager ditunda ke Fase 4.
+- Plan dinaikkan ke 2.0.1 untuk menyelaraskan BIOS live, sysctl BPF, dan lab QEMU.
+- Matriks build dibatasi ke tujuh kombinasi yang didukung melalui `SUPPORTED_COMBINATIONS`.
+- `kernel.unprivileged_bpf_disabled` disetel ke 2 mengikuti default kernel Debian 12.
 
 ### Fixed
 
 - Path hook pada `scripts/validate-config.sh` memakai akar repository.
+- `ltrace` dan `thermald` dipindahkan ke overlay amd64 dan i386 karena tidak tersedia untuk arm64.
+- Audit indeks bookworm mengonfirmasi 0 paket hilang pada tujuh kombinasi.
 - Release workflow memakai path ISO eksplisit untuk setiap kombinasi arsitektur dan edisi.
 - Alias `bat` dan `fd` ditambahkan untuk nama biner Debian `batcat` dan `fdfind`.
 - Tujuh test case yang belum muncul langsung di traceability matrix sudah dirujuk.

@@ -68,9 +68,10 @@ Verifikasi:
 ```bash
 ./scripts/check-env.sh
 ./scripts/check-env.sh --strict
+./scripts/check-env.sh --release
 ```
 
-`check-env.sh` memeriksa perintah, modul bootloader, firmware OVMF, RAM, disk, CPU, KVM, squashfs, dan loop device. Mode `--strict` keluar dengan status 1 jika tool wajib hilang.
+`check-env.sh` memeriksa perintah, modul bootloader, firmware OVMF, RAM, disk, CPU, KVM, squashfs, dan loop device. Mode `--strict` keluar dengan status 1 jika tool wajib hilang. Mode `--release` juga mewajibkan host Debian 12 bookworm dan dipakai oleh workflow rilis.
 
 ## 4. Cache Paket Opsional
 
@@ -172,6 +173,8 @@ Contoh:
 | `SOURCE_DATE_EPOCH` | Waktu build | Timestamp metadata build |
 | `MINISIGN_KEY` | Kosong | Kunci minisign untuk tanda tangan |
 | `MKSQUASHFS_OPTIONS` | Diisi `build.sh` | Opsi tambahan `mksquashfs` |
+
+Jika `MINISIGN_KEY` disetel, perintah `minisign` wajib tersedia. Build berhenti dengan pesan yang jelas bila perintah tersebut tidak ditemukan.
 
 Contoh snapshot:
 
@@ -385,6 +388,14 @@ Validasi individual:
 ./scripts/generate-brand-assets.py --check
 ```
 
+Validasi konfigurasi `live-build` untuk semua kombinasi:
+
+```bash
+make config-matrix
+```
+
+Perintah ini menjalankan `build.sh --dry-run` untuk tujuh kombinasi di `SUPPORTED_COMBINATIONS`, lalu memeriksa `os-release`, metadata build, sesi LightDM, bootloader, dan kernel flavour. Perintah ini memerlukan `live-build` dan tidak memerlukan akses root.
+
 ## 14. Reproducibility
 
 Reproducibility penuh belum aktif pada Fase 1. Yang sudah tersedia:
@@ -407,7 +418,7 @@ Jangan mengklaim reproducible build sebelum dua build pada host dan snapshot yan
 
 ## 15. CI dan Rilis
 
-CI berjalan pada push ke `main`, pull request, dan manual. Pekerjaan lint berjalan pada Ubuntu 24.04. Pekerjaan dry-run berjalan pada container Debian 12 dan menguji tiga edisi amd64.
+CI berjalan pada push ke `main`, pull request, dan manual. Pekerjaan lint berjalan pada Ubuntu 24.04. Pekerjaan config matrix berjalan pada container Debian 12 dan menguji tujuh kombinasi arsitektur dan edisi yang didukung.
 
 Release workflow berjalan manual pada self-hosted runner dengan label `arashios-builder`. Matriks rilis:
 
@@ -486,7 +497,7 @@ Edisi baru memerlukan:
 
 1. `config/editions/<nama>/package-lists/50-desktop.list.chroot`.
 2. `config/editions/<nama>/includes.chroot/etc/lightdm/lightdm.conf.d/50-arashios.conf`.
-3. Entri di `SUPPORTED_EDITIONS` dan `DEFAULT_EDITION_*` pada `versions.env`.
+3. Entri di `SUPPORTED_EDITIONS`, `DEFAULT_EDITION_*`, dan `SUPPORTED_COMBINATIONS` pada `versions.env`.
 4. Matriks CI dan rilis.
 5. Test case desktop baru.
 6. Dokumentasi dan ADR jika mengubah keputusan produk.
@@ -497,8 +508,10 @@ Arsitektur baru memerlukan:
 2. Kernel flavour dan bootloader di `build.sh`.
 3. Validasi ketersediaan paket.
 4. Harness boot QEMU atau perangkat nyata.
-5. Entri di `SUPPORTED_ARCHES`.
+5. Entri di `SUPPORTED_ARCHES` dan `SUPPORTED_COMBINATIONS`.
 6. Pembaruan traceability dan dokumentasi.
+
+`build.sh` menolak kombinasi arsitektur dan edisi yang tidak tercantum di `SUPPORTED_COMBINATIONS`. Matriks rilis berisi tujuh artefak; Fase 1 membangun dan menguji amd64, sedangkan arm64 dan i386 divalidasi konfigurasinya dan dibangun pada Fase 10.
 
 ## 19. Keamanan Build
 

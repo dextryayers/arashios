@@ -65,7 +65,8 @@ Konsekuensi:
 config/
 ├── arches/
 │   ├── amd64/package-lists/
-│   └── arm64/package-lists/
+│   ├── arm64/package-lists/
+│   └── i386/package-lists/
 ├── common/
 │   ├── archives/
 │   ├── hooks/live/
@@ -77,7 +78,7 @@ config/
     └── xfce/
 ```
 
-Setiap edisi memiliki `package-lists/50-desktop.list.chroot` dan `includes.chroot/etc/lightdm/lightdm.conf.d/50-arashios.conf`. i386 tidak memiliki overlay arsitektur pada Fase 1. Paket yang tidak tersedia untuk i386 harus dipindahkan ke daftar khusus arsitektur pada Fase 10.
+Setiap edisi memiliki `package-lists/50-desktop.list.chroot` dan `includes.chroot/etc/lightdm/lightdm.conf.d/50-arashios.conf`. Overlay arsitektur memuat paket yang tidak tersedia di semua arsitektur. `ltrace` dan `thermald` hanya tersedia untuk amd64 dan i386, sehingga keduanya berada di `35-arch-tools.list.chroot` pada kedua overlay tersebut.
 
 ### 3.2 Daftar Paket
 
@@ -92,17 +93,18 @@ Daftar paket memakai awalan numerik untuk urutan baca, bukan urutan instalasi ya
 | `40-daily.list.chroot` | Semua edisi | Firefox ESR, LibreOffice, VLC, GIMP, KeePassXC, Timeshift |
 | `50-desktop.list.chroot` | Per edisi | Cinnamon, XFCE, atau LXQt dan aplikasi khasnya |
 | `31-dev-modern.list.chroot` | amd64 dan arm64 | Clang, Rust, Node.js, Java, PHP, Ruby, Go tools |
+| `35-arch-tools.list.chroot` | amd64 dan i386 | ltrace, thermald |
 | `60-lab.list.chroot` | amd64 | QEMU dan qemu-utils |
 
 Jumlah paket unik pada validasi terakhir:
 
 | Edisi | amd64 | arm64 | i386 |
 |---|---:|---:|---:|
-| Cinnamon | 233 | 231 | 213 |
-| XFCE | 234 | 232 | 214 |
-| LXQt | 242 | 240 | 222 |
+| Cinnamon | 233 | - | - |
+| XFCE | 234 | 230 | 214 |
+| LXQt | 242 | 238 | 222 |
 
-Angka ini adalah irisan paket dari daftar, bukan ukuran image terpasang. Dependency resolution dapat menambah paket.
+Angka ini adalah irisan paket dari daftar, bukan ukuran image terpasang. Dependency resolution dapat menambah paket. Kombinasi Cinnamon arm64 dan i386 tidak didukung pada v1. arm64 tidak memuat `ltrace` dan `thermald` karena kedua paket tidak dibangun untuk arm64.
 
 Lab virtual pada amd64 memakai QEMU dan qemu-utils. libvirt dan virt-manager ditunda ke Fase 4 sebagai paket opsional pada sistem terpasang agar image live tidak menjalankan daemon tambahan.
 
@@ -363,7 +365,6 @@ Batas pengujian:
 
 | Butir | Status | Tindakan |
 |---|---|---|
-| Plan menyebut GRUB untuk BIOS | Implementasi memakai syslinux | Didokumentasikan, diuji pada QEMU BIOS |
 | i386 UEFI | Tidak didukung | Boot BIOS saja, ditegaskan pada ADR-012 |
 | Calamares | Belum ada | Fase 7 |
 | Tema Kage penuh | Belum ada | Fase 2 |
