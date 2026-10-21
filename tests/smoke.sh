@@ -2,6 +2,8 @@
 # ArashiOS smoke test. Run inside the live session or an installed system.
 set -uo pipefail
 
+export PATH="$PATH:/usr/sbin:/sbin"
+
 PASS=0
 FAIL=0
 
@@ -63,6 +65,11 @@ check_sysctl() {
 }
 
 printf 'ArashiOS smoke test\n\n'
+if [ ! -f /etc/arashios/arch ]; then
+    printf 'ERROR: jalankan smoke test di dalam sesi live atau sistem ArashiOS terpasang.\n' >&2
+    exit 2
+fi
+
 if [ "$(id -u)" -eq 0 ]; then
     printf 'WARN  jalankan sebagai user arashi agar pemeriksaan Podman rootless valid.\n\n'
 fi
@@ -129,9 +136,9 @@ if [ "$(cat /etc/timezone 2>/dev/null)" = 'Etc/UTC' ]; then pass 'timezone Etc/U
 
 printf '\nTool keamanan:\n'
 for tool in nmap masscan nikto gobuster ffuf dirsearch wfuzz sqlmap hydra john hashcat \
-            aircrack-ng wifite reaver hcxdumptool hcxtools ettercap bettercap \
+            aircrack-ng wifite reaver hcxdumptool hcxpcapngtool ettercap bettercap \
             wireshark tshark tcpdump mitmproxy binwalk foremost fls exiftool steghide \
-            gddrescue dcfldd guymager podman buildah skopeo kubectl ansible; do
+            ddrescue dcfldd guymager podman buildah skopeo kubectl ansible; do
     check_cmd "$tool"
 done
 
@@ -153,6 +160,12 @@ case "$ARCH" in
         printf '\nTool coding modern dilewati untuk %s.\n' "$ARCH"
         ;;
 esac
+
+if [ "$ARCH" = "amd64" ]; then
+    printf '\nLab virtual amd64:\n'
+    check_cmd qemu-system-x86_64
+    check_cmd qemu-img
+fi
 
 printf '\nAplikasi harian:\n'
 for tool in firefox-esr thunderbird libreoffice vlc gimp inkscape evince \
@@ -184,6 +197,11 @@ case "$EDITION" in
         ;;
 esac
 check_grep '^autologin-user=arashi$' /etc/lightdm/lightdm.conf.d/50-arashios.conf 'autologin live user'
+if [ "$(getent passwd arashi | cut -d: -f7)" = "/usr/bin/zsh" ]; then
+    pass 'shell live user zsh'
+else
+    fail 'shell live user bukan zsh'
+fi
 check_file /etc/skel/.zshrc
 check_file /etc/skel/.config/nvim/init.lua
 check_file /etc/skel/.config/starship.toml

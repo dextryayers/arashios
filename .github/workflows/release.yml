@@ -58,24 +58,37 @@ jobs:
       - name: Build ISO
         run: ./build.sh --edition ${{ matrix.edition }} --arch ${{ matrix.arch }} --version ${{ inputs.version }}
 
+      - name: Compute artifact paths
+        id: artifact
+        run: |
+          case "${{ matrix.arch }}:${{ matrix.edition }}" in
+            amd64:cinnamon|arm64:xfce|i386:lxqt) suffix="" ;;
+            *) suffix="-${{ matrix.edition }}" ;;
+          esac
+          iso="out/ArashiOS-${{ matrix.arch }}-${{ inputs.version }}${suffix}.iso"
+          printf 'iso=%s\n' "$iso" >> "$GITHUB_OUTPUT"
+          printf 'name=%s\n' "$(basename "$iso")" >> "$GITHUB_OUTPUT"
+
       - name: Verify artifact
-        run: ./tests/verify-artifact.sh out/ArashiOS-${{ matrix.arch }}-${{ inputs.version }}*.iso
+        run: ./tests/verify-artifact.sh "${{ steps.artifact.outputs.iso }}"
 
       - name: Boot test
         if: matrix.boot != 'none'
         run: |
-          ISO="$(ls out/ArashiOS-${{ matrix.arch }}-${{ inputs.version }}*.iso | head -1)"
-          ./tests/qemu-boot.sh "$ISO" "${{ matrix.boot }}" 120
+          ./tests/qemu-boot.sh "${{ steps.artifact.outputs.iso }}" "${{ matrix.boot }}" 120
+          if [ "${{ matrix.arch }}" = "amd64" ]; then
+            ./tests/qemu-boot.sh "${{ steps.artifact.outputs.iso }}" bios 120
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: iso-${{ matrix.arch }}-${{ matrix.edition }}
           path: |
-            out/*.iso
-            out/*.sha256
-            out/*.sha512
-            out/*.sig
+            ${{ steps.artifact.outputs.iso }}
+            ${{ steps.artifact.outputs.iso }}.sha256
+            ${{ steps.artifact.outputs.iso }}.sha512
+            ${{ steps.artifact.outputs.iso }}.sig
           if-no-files-found: error
           retention-days: 14
 

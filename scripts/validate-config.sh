@@ -4,6 +4,7 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=../versions.env
+# shellcheck disable=SC1091
 source "$ROOT/versions.env"
 
 ERRORS=0
@@ -108,7 +109,7 @@ for file in scripts/check-env.sh scripts/validate-config.sh scripts/check-docs.s
             tests/qemu-boot.sh tests/smoke.sh tests/verify-artifact.sh; do
     require_exec "$file"
 done
-for file in config/common/hooks/live/*.chroot; do
+for file in "$ROOT"/config/common/hooks/live/*.chroot; do
     if [ -x "$file" ]; then
         ok "hook executable: ${file#"$ROOT/"}"
     else
@@ -116,6 +117,7 @@ for file in config/common/hooks/live/*.chroot; do
     fi
 done
 require_exec config/common/includes.chroot/usr/local/bin/arashios-wallpaper
+require_exec config/common/includes.chroot/lib/live/config/9990-arashios-shell
 
 printf '\nMetadata sistem:\n'
 if grep -q '^ID=arashios$' "$ROOT/config/common/includes.chroot/etc/os-release"; then

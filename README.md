@@ -74,7 +74,7 @@ Pasang toolchain:
 sudo apt update
 sudo apt install -y \
   live-build debootstrap xorriso squashfs-tools \
-  isolinux syslinux-common syslinux-efi \
+  isolinux syslinux-common syslinux-utils syslinux-efi \
   grub-pc-bin grub-efi-amd64-bin mtools dosfstools \
   qemu-system-x86 qemu-utils ovmf apt-cacher-ng shellcheck
 ```

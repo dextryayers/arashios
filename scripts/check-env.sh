@@ -9,6 +9,8 @@ MISSING_BUILD=()
 MISSING_TEST=()
 WARNINGS=()
 
+export PATH="$PATH:/usr/sbin:/sbin"
+
 usage() {
     cat <<EOF
 Pemakaian: $0 [--strict]
@@ -63,6 +65,29 @@ check_command debootstrap debootstrap build
 check_command xorriso xorriso build
 check_command mksquashfs squashfs-tools build
 check_command grub-mkimage grub-common build
+check_command isohybrid syslinux-utils build
+check_command mcopy mtools build
+check_command mkfs.vfat dosfstools build
+
+printf '\nModul bootloader:\n'
+if [ -f /usr/lib/ISOLINUX/isolinux.bin ]; then
+    printf '  OK    %-22s %s\n' isolinux.bin /usr/lib/ISOLINUX/isolinux.bin
+else
+    printf '  MISS  %-22s paket: %s\n' isolinux.bin isolinux
+    MISSING_BUILD+=("isolinux")
+fi
+if [ -d /usr/lib/syslinux/modules/bios ]; then
+    printf '  OK    %-22s %s\n' syslinux-modules /usr/lib/syslinux/modules/bios
+else
+    printf '  MISS  %-22s paket: %s\n' syslinux-modules syslinux-common
+    MISSING_BUILD+=("syslinux-common")
+fi
+if [ -d /usr/lib/grub/x86_64-efi ]; then
+    printf '  OK    %-22s %s\n' grub-efi-modules /usr/lib/grub/x86_64-efi
+else
+    printf '  MISS  %-22s paket: %s\n' grub-efi-modules grub-efi-amd64-bin
+    MISSING_BUILD+=("grub-efi-amd64-bin")
+fi
 
 printf '\nTool test:\n'
 check_command qemu-system-x86_64 qemu-system-x86 test
@@ -154,8 +179,9 @@ if [ "${#MISSING_BUILD[@]}" -gt 0 ] || [ "${#MISSING_TEST[@]}" -gt 0 ]; then
     printf 'Paket yang perlu dipasang:\n'
     printf '  sudo apt update\n'
     printf '  sudo apt install -y live-build debootstrap xorriso squashfs-tools \\\n'
-    printf '    isolinux syslinux-common syslinux-efi grub-pc-bin grub-efi-amd64-bin \\\n'
-    printf '    mtools dosfstools qemu-system-x86 qemu-utils ovmf apt-cacher-ng shellcheck\n'
+    printf '    isolinux syslinux-common syslinux-utils syslinux-efi \\\n'
+    printf '    grub-pc-bin grub-efi-amd64-bin mtools dosfstools \\\n'
+    printf '    qemu-system-x86 qemu-utils ovmf apt-cacher-ng shellcheck\n'
     printf '\n'
 fi
 

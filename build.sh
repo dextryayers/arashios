@@ -10,6 +10,8 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=versions.env
 source "$ROOT/versions.env"
 
+export PATH="$PATH:/usr/sbin:/sbin"
+
 EDITION=""
 ARCH=""
 VERSION="$ARASHIOS_VERSION"
@@ -43,6 +45,10 @@ die() {
 log() {
     printf '[arashios] %s\n' "$*"
 }
+
+if [ "$(id -u)" -eq 0 ]; then
+    log "Peringatan: build dijalankan sebagai root. Jalankan sebagai user biasa jika memungkinkan."
+fi
 
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -79,8 +85,15 @@ case "$JOBS" in
 esac
 [ "$JOBS" -ge 1 ] || die "--jobs harus minimal 1."
 
+if [ -n "${SOURCE_DATE_EPOCH:-}" ]; then
+    case "$SOURCE_DATE_EPOCH" in
+        *[!0-9]*) die "SOURCE_DATE_EPOCH harus bilangan bulat Unix timestamp." ;;
+    esac
+fi
+
 VERSION_NUM="${VERSION#V}"
-ISO_VOLUME="ARASHIOS_$(printf '%s' "$VERSION_NUM" | tr '.' '_' | tr '[:lower:]' '[:upper:]')"
+ISO_VOLUME="${ISO_VOLUME_PREFIX}_$(printf '%s' "$VERSION_NUM" | tr '.' '_' | tr '[:lower:]' '[:upper:]')"
+[ "${#ISO_VOLUME}" -le 32 ] || die "Volume ID melebihi 32 karakter: $ISO_VOLUME"
 
 case "$ARCH:$EDITION" in
     amd64:cinnamon|arm64:xfce|i386:lxqt) SUFFIX="" ;;
@@ -90,17 +103,27 @@ esac
 case "$ARCH" in
     amd64) KERNEL_FLAVOUR="amd64"; BOOTLOADERS="syslinux,grub-efi" ;;
     arm64) KERNEL_FLAVOUR="arm64"; BOOTLOADERS="grub-efi" ;;
-    i386)  KERNEL_FLAVOUR="686-pae"; BOOTLOADERS="syslinux,grub-efi" ;;
+    i386)  KERNEL_FLAVOUR="686-pae"; BOOTLOADERS="syslinux" ;;
 esac
 
+require_cmd() {
+    local cmd
+    for cmd in "$@"; do
+        command -v "$cmd" >/dev/null 2>&1 || \
+            die "Perintah '$cmd' tidak ditemukan. Jalankan scripts/check-env.sh."
+    done
+}
+
 if [ "$DRY_RUN" -eq 1 ]; then
-    for cmd in lb; do
-        command -v "$cmd" >/dev/null 2>&1 || die "Perintah '$cmd' tidak ditemukan. Jalankan scripts/check-env.sh."
-    done
+    require_cmd lb
 else
-    for cmd in lb debootstrap xorriso mksquashfs; do
-        command -v "$cmd" >/dev/null 2>&1 || die "Perintah '$cmd' tidak ditemukan. Jalankan scripts/check-env.sh."
-    done
+    require_cmd lb debootstrap xorriso mksquashfs
+    case ",$BOOTLOADERS," in
+        *,syslinux,*) require_cmd isohybrid ;;
+    esac
+    case ",$BOOTLOADERS," in
+        *,grub-efi,*) require_cmd grub-mkimage mcopy mkfs.vfat ;;
+    esac
 fi
 
 WORK="$ROOT/build/${EDITION}-${ARCH}"
@@ -127,6 +150,8 @@ LIVE_OPTS=(
     "components"
     "quiet"
     "splash"
+    "console=tty0"
+    "console=ttyS0,115200"
     "username=arashi"
     "hostname=arashios"
     "locales=en_US.UTF-8"
@@ -199,9 +224,19 @@ if [ -n "${SOURCE_DATE_EPOCH:-}" ]; then
 else
     BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 fi
+HOST_OS="$(grep -m1 '^PRETTY_NAME=' /etc/os-release 2>/dev/null | cut -d= -f2- | tr -d '"' || true)"
+[ -n "$HOST_OS" ] || HOST_OS="unknown"
+HOST_KERNEL="$(uname -r)"
+HOST_ARCH="$(uname -m)"
+LB_VERSION="$(lb --version 2>/dev/null | head -1 || printf 'unknown')"
+CONFIG_HASH="$(
+    cd "$ROOT" && find config branding versions.env -type f -print0 |
+        sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1
+)"
 
 cat > "$INCLUDES/etc/arashios/build-info" <<EOF
 ARASHIOS_VERSION=$VERSION
+ARASHIOS_CODENAME=$ARASHIOS_CODENAME
 ARASHIOS_EDITION=$EDITION
 ARASHIOS_ARCH=$ARCH
 ARASHIOS_DESIGN=$ARASHIOS_DESIGN
@@ -209,6 +244,14 @@ DEBIAN_CODENAME=$DEBIAN_CODENAME
 DEBIAN_SNAPSHOT=${DEBIAN_SNAPSHOT:-none}
 GIT_COMMIT=$GIT_COMMIT
 BUILD_DATE=$BUILD_DATE
+BUILD_JOBS=$JOBS
+BUILD_DRY_RUN=$DRY_RUN
+ISO_VOLUME=$ISO_VOLUME
+CONFIG_HASH=$CONFIG_HASH
+HOST_OS=$HOST_OS
+HOST_KERNEL=$HOST_KERNEL
+HOST_ARCH=$HOST_ARCH
+LIVE_BUILD_VERSION=$LB_VERSION
 EOF
 
 for file in "$INCLUDES/etc/os-release" "$INCLUDES/etc/lsb-release" "$INCLUDES/etc/issue"; do

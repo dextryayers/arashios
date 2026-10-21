@@ -5,6 +5,7 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=../versions.env
+# shellcheck disable=SC1091
 source "$ROOT/versions.env"
 
 ISO=""
@@ -98,7 +99,7 @@ else
 fi
 
 if command -v xorriso >/dev/null 2>&1; then
-    volume_id="$(xorriso -indev "$ISO" -pvd_info 2>/dev/null | sed -n "s/^Volume id[^:]*: *//p" | head -1 | tr -d \"'\")"
+    volume_id="$(xorriso -indev "$ISO" -pvd_info 2>/dev/null | sed -n 's/^Volume id[^:]*: *//p' | head -1 | tr -d '"' | tr -d "'")"
     if [ -n "$volume_id" ]; then
         expected="ARASHIOS_$(printf '%s' "${version#V}" | tr '.' '_')"
         log "volume ID: $volume_id"
@@ -133,13 +134,17 @@ if command -v xorriso >/dev/null 2>&1; then
 
     case "$arch" in
         amd64) efi_name="BOOTX64.EFI" ;;
-        i386) efi_name="BOOTIA32.EFI" ;;
         arm64) efi_name="BOOTAA64.EFI" ;;
+        i386) efi_name="" ;;
     esac
-    if xorriso -indev "$ISO" -ls /EFI/BOOT 2>/dev/null | grep -qi "$efi_name"; then
-        ok "bootloader UEFI $efi_name"
+    if [ -n "$efi_name" ]; then
+        if xorriso -indev "$ISO" -ls /EFI/BOOT 2>/dev/null | grep -qi "$efi_name"; then
+            ok "bootloader UEFI $efi_name"
+        else
+            fail "bootloader UEFI $efi_name tidak ditemukan"
+        fi
     else
-        fail "bootloader UEFI $efi_name tidak ditemukan"
+        log "UEFI tidak berlaku untuk $arch, boot BIOS saja"
     fi
 else
     warn "xorriso tidak terpasang, pemeriksaan isi ISO dilewati"

@@ -2851,10 +2851,10 @@ test:
 
 | Requirement | Fase | Test |
 |---|---|---|
-| FR-001 | 1, 3 | T-BOOT-01..04 |
-| FR-002 | 3 | T-DESK-01..03 |
+| FR-001 | 1, 3 | T-BOOT-01..08 |
+| FR-002 | 3 | T-DESK-01..04 |
 | FR-003 | 1 | T-BOOT-01 |
-| FR-004 | 7 | T-INST-01..04 |
+| FR-004 | 7 | T-INST-01..04, T-INST-07..08 |
 | FR-005 | 7 | T-INST-05..06 |
 | FR-006 | 7 | T-INST-09 |
 | FR-007 | 4 | T-TOOL-01..10 |

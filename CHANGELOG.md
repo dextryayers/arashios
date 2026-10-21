@@ -2,6 +2,50 @@
 
 Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi produk memakai pola V major.MM.DD.
 
+## [V1.10.21] - 2026-10-21
+
+### Added
+
+- Fondasi repository Fase 0: README, lisensi, panduan kontribusi, kebijakan keamanan, kode etik, dan changelog.
+- Dua belas ADR untuk basis Debian, live-build, edisi desktop, vendoring, installer, desain, versi, telemetry, systemd, Podman, editor, dan i386.
+- Design system Kage dengan token JSON, generator CSS, SCSS, QSS, laporan kontras, dan preview.
+- Aset merek: mark, wordmark, wallpaper, tema GRUB, tema Plymouth, latar raster, dan nine-slice.
+- Skrip pemeriksaan host, validasi konfigurasi, pemeriksaan dokumen, dan traceability.
+- CI lint, dry-run live-build, dan release workflow.
+- Konfigurasi common, tiga edisi desktop, dan overlay amd64 serta arm64.
+- Daftar paket keamanan, coding, harian, dan desktop untuk tiga edisi.
+- Metadata sistem, APT pinning, sysctl hardening, UFW, AppArmor, dan Podman rootless.
+- Hook locale, branding, alias CLI, layanan, dan cleanup.
+- Skeletons Zsh, tmux, Neovim, Git, GTK, XFCE Terminal, QTerminal, ripgrep, dan bat, serta konfigurasi Starship.
+- Build wrapper dengan dry-run, overlay arsitektur, snapshot, metadata, checksum, dan signature opsional.
+- Verifikasi artefak ISO, harness boot QEMU UEFI dan BIOS, serta smoke test runtime.
+- Dokumentasi build, arsitektur, desain, dan laporan Fase 0 dan 1.
+
+### Changed
+
+- i386 memakai syslinux saja karena UEFI i386 tidak didukung pada v1.
+- BIOS memakai syslinux, bukan GRUB, mengikuti default live-build.
+- Volume ID dihitung dari versi dan dibatasi 32 karakter.
+- Metadata build mencatat host, kernel, arsitektur, versi live-build, dan hash konfigurasi.
+- CI dry-run memakai container Debian 12.
+- Traceability matrix merujuk seluruh 52 test case.
+- Lab virtual amd64 dibatasi ke QEMU dan qemu-utils. libvirt dan virt-manager ditunda ke Fase 4.
+
+### Fixed
+
+- Path hook pada `scripts/validate-config.sh` memakai akar repository.
+- Release workflow memakai path ISO eksplisit untuk setiap kombinasi arsitektur dan edisi.
+- Alias `bat` dan `fd` ditambahkan untuk nama biner Debian `batcat` dan `fdfind`.
+- Tujuh test case yang belum muncul langsung di traceability matrix sudah dirujuk.
+
+### Known limitations
+
+- ISO amd64 belum dibangun pada host ini karena toolchain build belum terpasang.
+- Calamares, tool vendored, repository mandiri, dan signing produksi belum aktif.
+- Tema desktop masih memakai basis Adwaita dan Papirus.
+- arm64 dan i386 belum dibangun atau diuji boot.
+- Autologin belum dihapus pada sistem terpasang.
+
 ## [2.0] - 2026-10-21
 
 ### Added
