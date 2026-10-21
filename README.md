@@ -64,7 +64,7 @@ Perangkat minimum:
 
 - 4 core CPU
 - 8 GB RAM, 16 GB lebih baik
-- 30 GB ruang disk kosong
+- 25 GB ruang disk kosong
 - Koneksi internet untuk mirror Debian
 - Akses `/dev/kvm` untuk pengujian QEMU
 

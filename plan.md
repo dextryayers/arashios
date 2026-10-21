@@ -3,7 +3,7 @@
 | Atribut | Nilai |
 |---|---|
 | Dokumen | plan.md |
-| Versi dokumen | 2.0 |
+| Versi dokumen | 2.0.1 |
 | Tanggal | 2026-10-21 |
 | Status | Baseline eksekusi |
 | Produk | ArashiOS |
@@ -24,6 +24,7 @@
 |---|---|---|
 | 1.0 | 2026-10-21 | Baseline produk, desain, arsitektur, dan roadmap |
 | 2.0 | 2026-10-21 | Deep upgrade: katalog kebutuhan, model ancaman, katalog uji, spesifikasi build, tata kelola, dan rencana rilis |
+| 2.0.1 | 2026-10-21 | Koreksi teknis: BIOS live memakai syslinux, sysctl BPF 2, lab amd64 dibatasi ke QEMU |
 
 Dokumen ini adalah sumber kebenaran untuk scope, desain, arsitektur, kualitas, dan urutan rilis ArashiOS. Perubahan scope harus melalui revisi dokumen dan persetujuan maintainer.
 
@@ -742,13 +743,12 @@ LightDM:
 ```
 Firmware
   |
-  +-- UEFI: ESP/EFI/arashios/grubx64.efi
-  |     atau EFI/BOOT/BOOTX64.EFI
+  +-- UEFI: ESP/EFI/BOOT/BOOTX64.EFI -> GRUB EFI
   |
-  +-- BIOS: MBR -> GRUB stage 1.5 -> stage 2
+  +-- BIOS: MBR -> ISOLINUX
         |
         v
-      GRUB menu
+      menu boot
         |
         v
       kernel + initramfs
@@ -872,7 +872,7 @@ lb config \
 Catatan:
 
 1. arm64 memakai `--bootloaders grub-efi`.
-2. i386 memakai `--linux-flavours 686-pae`.
+2. i386 memakai `--linux-flavours 686-pae` dan `--bootloaders syslinux`.
 3. Volume ID maksimal 32 karakter, uppercase, tanpa spasi.
 4. `--apt-indices false` menghemat ukuran ISO.
 5. `--zsync false` menghindari dependensi tambahan pada build host.
@@ -1202,11 +1202,13 @@ Aturan:
 ### 15.3 Bootloader
 
 1. UEFI memakai GRUB EFI di ESP.
-2. BIOS memakai GRUB di MBR.
-3. `os-prober` aktif untuk mendeteksi Windows dan distro lain.
-4. Entri boot lama tidak dihapus.
-5. Urutan boot dapat diubah dengan `efibootmgr`.
-6. Recovery GRUB didokumentasikan.
+2. BIOS live memakai ISOLINUX pada ISO hybrid.
+3. BIOS sistem terpasang memakai GRUB di MBR.
+4. i386 hanya mendukung boot BIOS.
+5. `os-prober` aktif untuk mendeteksi Windows dan distro lain.
+6. Entri boot lama tidak dihapus.
+7. Urutan boot dapat diubah dengan `efibootmgr`.
+8. Recovery GRUB didokumentasikan.
 
 ### 15.4 Persistence
 
@@ -2339,7 +2341,7 @@ Aturan:
 ```
 kernel.kptr_restrict = 1
 kernel.dmesg_restrict = 1
-kernel.unprivileged_bpf_disabled = 1
+kernel.unprivileged_bpf_disabled = 2
 net.ipv4.conf.all.rp_filter = 1
 net.ipv4.conf.default.rp_filter = 1
 net.ipv4.tcp_syncookies = 1
@@ -2347,7 +2349,7 @@ net.ipv6.conf.all.accept_redirects = 0
 net.ipv6.conf.all.accept_ra = 0
 ```
 
-Catatan: beberapa nilai dapat mengganggu tool tertentu. Setiap perubahan diuji terhadap smoke suite.
+Catatan: beberapa nilai dapat mengganggu tool tertentu. Setiap perubahan diuji terhadap smoke suite. Nilai `kernel.unprivileged_bpf_disabled = 2` dipakai karena kernel Debian 12 menetapkan `CONFIG_BPF_UNPRIV_DEFAULT_OFF`; knob tidak dapat diturunkan ke 1 setelah dikunci, dan nilai 2 lebih ketat.
 
 ### 34.3 Layanan
 

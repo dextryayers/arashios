@@ -99,9 +99,15 @@ else
 fi
 
 if command -v xorriso >/dev/null 2>&1; then
+    iso_ls_has() {
+        local dir="$1"
+        local pattern="$2"
+        xorriso -indev "$ISO" -ls "$dir" 2>/dev/null | grep -Eiq "$pattern"
+    }
+
     volume_id="$(xorriso -indev "$ISO" -pvd_info 2>/dev/null | sed -n 's/^Volume id[^:]*: *//p' | head -1 | tr -d '"' | tr -d "'")"
     if [ -n "$volume_id" ]; then
-        expected="ARASHIOS_$(printf '%s' "${version#V}" | tr '.' '_')"
+        expected="${ISO_VOLUME_PREFIX}_$(printf '%s' "${version#V}" | tr '.' '_')"
         log "volume ID: $volume_id"
         if [ "$volume_id" = "$expected" ]; then
             ok "volume ID sesuai: $expected"
@@ -118,14 +124,14 @@ if command -v xorriso >/dev/null 2>&1; then
         fail "direktori /live tidak ditemukan"
     fi
 
-    if xorriso -indev "$ISO" -ls /live 2>/dev/null | grep -Eq 'vmlinuz|initrd'; then
+    if iso_ls_has /live 'vmlinuz|initrd'; then
         ok "kernel dan initrd ditemukan"
     else
         fail "kernel atau initrd tidak ditemukan di /live"
     fi
 
     if [ "$arch" = "amd64" ] || [ "$arch" = "i386" ]; then
-        if xorriso -indev "$ISO" -ls /isolinux 2>/dev/null | grep -q 'isolinux.bin'; then
+        if iso_ls_has /isolinux 'isolinux.bin' || iso_ls_has /boot/isolinux 'isolinux.bin'; then
             ok "bootloader BIOS isolinux"
         else
             fail "isolinux.bin tidak ditemukan"
@@ -138,7 +144,7 @@ if command -v xorriso >/dev/null 2>&1; then
         i386) efi_name="" ;;
     esac
     if [ -n "$efi_name" ]; then
-        if xorriso -indev "$ISO" -ls /EFI/BOOT 2>/dev/null | grep -qi "$efi_name"; then
+        if iso_ls_has /EFI/BOOT "$efi_name" || iso_ls_has /EFI/boot "$efi_name"; then
             ok "bootloader UEFI $efi_name"
         else
             fail "bootloader UEFI $efi_name tidak ditemukan"

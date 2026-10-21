@@ -117,7 +117,7 @@ check_grep '^ENABLED=yes$' /etc/ufw/ufw.conf 'UFW enabled'
 if /usr/sbin/aa-status --enabled >/dev/null 2>&1; then pass 'AppArmor aktif'; else fail 'AppArmor tidak aktif'; fi
 check_sysctl kernel.kptr_restrict 1
 check_sysctl kernel.dmesg_restrict 1
-check_sysctl kernel.unprivileged_bpf_disabled 1
+check_sysctl kernel.unprivileged_bpf_disabled 2
 check_sysctl net.ipv4.conf.all.rp_filter 1
 check_sysctl net.ipv4.conf.default.rp_filter 1
 check_sysctl net.ipv4.tcp_syncookies 1

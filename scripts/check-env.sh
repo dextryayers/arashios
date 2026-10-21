@@ -129,14 +129,14 @@ fi
 printf '\nSumber daya:\n'
 memory_mib="$(awk '/MemTotal/ {printf "%d", $2 / 1024}' /proc/meminfo)"
 printf '  RAM    %s MiB\n' "$memory_mib"
-if [ "$memory_mib" -lt 4096 ]; then
-    WARNINGS+=("RAM kurang dari 4 GiB. Build dapat gagal atau sangat lambat.")
+if [ "$memory_mib" -lt 8192 ]; then
+    WARNINGS+=("RAM kurang dari 8 GiB. Build dapat gagal atau sangat lambat.")
 fi
 
 disk_mib="$(df -Pm "$ROOT" | awk 'NR==2 {print $4}')"
 printf '  Disk   %s MiB bebas di %s\n' "$disk_mib" "$ROOT"
-if [ "$disk_mib" -lt 20480 ]; then
-    WARNINGS+=("Ruang disk kurang dari 20 GiB. Build amd64 dapat membutuhkan 15 sampai 25 GiB.")
+if [ "$disk_mib" -lt 25600 ]; then
+    WARNINGS+=("Ruang disk kurang dari 25 GiB. Build amd64 dapat membutuhkan 15 sampai 25 GiB.")
 fi
 
 cpus="$(nproc)"

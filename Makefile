@@ -17,7 +17,7 @@ help:
 	  'make build EDITION=lxqt ARCH=i386 JOBS=8' \
 	  'make verify ISO=out/ArashiOS-amd64-V1.10.21.iso' \
 	  'make test ISO=out/ArashiOS-amd64-V1.10.21.iso BOOT_MODE=uefi' \
-	  'make smoke' \
+	  'make smoke            # di sesi live' \
 	  'make lint' \
 	  'make clean'
 

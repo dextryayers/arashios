@@ -101,7 +101,7 @@ Tujuh test case yang sebelumnya belum muncul langsung di matriks sudah ditambahk
 | Metadata sistem | `os-release`, `lsb-release`, `issue`, `build-info` | Selesai |
 | Hardening | sysctl, UFW, AppArmor, SSH mask | Selesai |
 | Branding boot | GRUB, Plymouth, LightDM, wallpaper | Selesai |
-| Dotfile | Zsh, Starship, tmux, Neovim, Git, GTK, terminal | Selesai |
+| Dotfile | Zsh, konfigurasi Starship, tmux, Neovim, Git, GTK, terminal | Selesai |
 | Verifikasi artefak | `tests/verify-artifact.sh` | Selesai |
 | Boot harness | `tests/qemu-boot.sh` | Selesai |
 | Smoke test | `tests/smoke.sh` | Selesai |
