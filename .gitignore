@@ -7,8 +7,11 @@ out/
 *.torrent
 *.zsync
 *.log
+*.ppm
 .DS_Store
 __pycache__/
 *.pyc
 .venv/
 node_modules/
+.toolchain/
+cache/

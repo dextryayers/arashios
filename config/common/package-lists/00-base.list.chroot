@@ -51,5 +51,6 @@ firmware-misc-nonfree
 
 ufw
 apparmor
+apparmor-utils
 apparmor-profiles
 unattended-upgrades

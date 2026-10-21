@@ -3,6 +3,7 @@
 # Pemakaian:
 #   ./build.sh --edition cinnamon --arch amd64
 #   ./build.sh --edition xfce --arch arm64 --version V1.10.21
+#   ./build.sh --edition xfce --arch amd64 --dry-run
 set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,6 +14,7 @@ EDITION=""
 ARCH=""
 VERSION="$ARASHIOS_VERSION"
 JOBS="$(nproc)"
+DRY_RUN=0
 
 usage() {
     cat <<EOF
@@ -23,11 +25,13 @@ Opsi:
   --arch NAME      Arsitektur target. Wajib.
   --version VER    Versi rilis. Default: $ARASHIOS_VERSION
   --jobs N         Paralelisme mksquashfs. Default: $JOBS
+  --dry-run        Siapkan konfigurasi live-build tanpa membangun ISO.
   -h, --help       Tampilkan bantuan ini.
 
 Contoh:
   $0 --edition cinnamon --arch amd64
   $0 --edition lxqt --arch i386 --version V1.10.21
+  $0 --edition xfce --arch amd64 --dry-run
 EOF
 }
 
@@ -46,6 +50,7 @@ while [ "$#" -gt 0 ]; do
         --arch) ARCH="${2:-}"; shift 2 ;;
         --version) VERSION="${2:-}"; shift 2 ;;
         --jobs) JOBS="${2:-}"; shift 2 ;;
+        --dry-run) DRY_RUN=1; shift ;;
         -h|--help) usage; exit 0 ;;
         *) die "Argumen tidak dikenal: $1" ;;
     esac
@@ -65,9 +70,17 @@ case " $SUPPORTED_ARCHES " in
 esac
 
 case "$VERSION" in
-    V[0-9]*.[0-9]*.[0-9]*) ;;
+    V[0-9]*.[0-9][0-9].[0-9][0-9]) ;;
     *) die "Format versi harus V<major>.<MM>.<DD>, contoh V1.10.21" ;;
 esac
+
+case "$JOBS" in
+    ''|*[!0-9]*) die "--jobs harus bilangan bulat positif." ;;
+esac
+[ "$JOBS" -ge 1 ] || die "--jobs harus minimal 1."
+
+VERSION_NUM="${VERSION#V}"
+ISO_VOLUME="ARASHIOS_$(printf '%s' "$VERSION_NUM" | tr '.' '_' | tr '[:lower:]' '[:upper:]')"
 
 case "$ARCH:$EDITION" in
     amd64:cinnamon|arm64:xfce|i386:lxqt) SUFFIX="" ;;
@@ -80,9 +93,15 @@ case "$ARCH" in
     i386)  KERNEL_FLAVOUR="686-pae"; BOOTLOADERS="syslinux,grub-efi" ;;
 esac
 
-for cmd in lb debootstrap xorriso mksquashfs; do
-    command -v "$cmd" >/dev/null 2>&1 || die "Perintah '$cmd' tidak ditemukan. Jalankan scripts/check-env.sh."
-done
+if [ "$DRY_RUN" -eq 1 ]; then
+    for cmd in lb; do
+        command -v "$cmd" >/dev/null 2>&1 || die "Perintah '$cmd' tidak ditemukan. Jalankan scripts/check-env.sh."
+    done
+else
+    for cmd in lb debootstrap xorriso mksquashfs; do
+        command -v "$cmd" >/dev/null 2>&1 || die "Perintah '$cmd' tidak ditemukan. Jalankan scripts/check-env.sh."
+    done
+fi
 
 WORK="$ROOT/build/${EDITION}-${ARCH}"
 OUT="$ROOT/out"
@@ -92,11 +111,14 @@ rm -rf "$WORK"
 mkdir -p "$WORK" "$OUT"
 
 log "Menyiapkan konfigurasi live-build"
-log "  edisi    : $EDITION"
+log "  edisi     : $EDITION"
 log "  arsitektur: $ARCH"
-log "  versi    : $VERSION"
-log "  kernel   : $KERNEL_FLAVOUR"
-log "  boot     : $BOOTLOADERS"
+log "  versi     : $VERSION"
+log "  kernel    : $KERNEL_FLAVOUR"
+log "  boot      : $BOOTLOADERS"
+log "  volume    : $ISO_VOLUME"
+log "  jobs      : $JOBS"
+log "  dry-run   : $DRY_RUN"
 
 cd "$WORK"
 
@@ -130,21 +152,123 @@ LB_ARGS=(
     --zsync false
 )
 
+if [ -n "${DEBIAN_SNAPSHOT:-}" ]; then
+    SNAPSHOT_BASE="http://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}"
+    LB_ARGS+=(
+        --mirror-bootstrap "$SNAPSHOT_BASE"
+        --mirror-chroot "$SNAPSHOT_BASE"
+        --mirror-binary "$SNAPSHOT_BASE"
+    )
+    log "Snapshot Debian: $SNAPSHOT_BASE"
+fi
+
 if [ -n "${APT_PROXY:-}" ]; then
     LB_ARGS+=(--apt-http-proxy "$APT_PROXY")
+    log "APT proxy: $APT_PROXY"
 fi
 
 lb config "${LB_ARGS[@]}"
 
-log "Menerapkan overlay common dan edisi"
+log "Menerapkan overlay common, edisi, dan arsitektur"
 cp -a "$ROOT/config/common/." "$WORK/config/"
 cp -a "$ROOT/config/editions/$EDITION/." "$WORK/config/"
 
-printf '%s\n' "$EDITION" > "$WORK/config/includes.chroot/etc/arashios/edition"
-printf '%s\n' "$VERSION" > "$WORK/config/includes.chroot/etc/arashios/version"
-printf '%s\n' "$ARCH" > "$WORK/config/includes.chroot/etc/arashios/arch"
+if [ -d "$ROOT/config/arches/$ARCH" ]; then
+    cp -a "$ROOT/config/arches/$ARCH/." "$WORK/config/"
+fi
+
+INCLUDES="$WORK/config/includes.chroot"
+mkdir -p \
+    "$INCLUDES/etc/arashios" \
+    "$INCLUDES/usr/share/arashios/theme" \
+    "$INCLUDES/usr/share/arashios/branding" \
+    "$INCLUDES/usr/share/backgrounds/arashios" \
+    "$INCLUDES/usr/share/grub/themes/arashios" \
+    "$INCLUDES/usr/share/plymouth/themes/arashios" \
+    "$INCLUDES/usr/share/icons/hicolor/scalable/apps" \
+    "$INCLUDES/usr/share/doc/arashios" \
+    "$INCLUDES/usr/local/bin"
+
+printf '%s\n' "$EDITION" > "$INCLUDES/etc/arashios/edition"
+printf '%s\n' "$VERSION" > "$INCLUDES/etc/arashios/version"
+printf '%s\n' "$ARCH" > "$INCLUDES/etc/arashios/arch"
+
+GIT_COMMIT="$(git -c safe.directory="$ROOT" -C "$ROOT" rev-parse --short HEAD 2>/dev/null || printf 'unknown')"
+if [ -n "${SOURCE_DATE_EPOCH:-}" ]; then
+    BUILD_DATE="$(date -u -d "@${SOURCE_DATE_EPOCH}" +%Y-%m-%dT%H:%M:%SZ)"
+else
+    BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+fi
+
+cat > "$INCLUDES/etc/arashios/build-info" <<EOF
+ARASHIOS_VERSION=$VERSION
+ARASHIOS_EDITION=$EDITION
+ARASHIOS_ARCH=$ARCH
+ARASHIOS_DESIGN=$ARASHIOS_DESIGN
+DEBIAN_CODENAME=$DEBIAN_CODENAME
+DEBIAN_SNAPSHOT=${DEBIAN_SNAPSHOT:-none}
+GIT_COMMIT=$GIT_COMMIT
+BUILD_DATE=$BUILD_DATE
+EOF
+
+for file in "$INCLUDES/etc/os-release" "$INCLUDES/etc/lsb-release" "$INCLUDES/etc/issue"; do
+    [ -f "$file" ] || continue
+    sed -i \
+        -e "s/@VERSION@/$VERSION/g" \
+        -e "s/@VERSION_NUM@/$VERSION_NUM/g" \
+        -e "s/@CODENAME@/$ARASHIOS_CODENAME/g" \
+        "$file"
+done
+
+log "Menghasilkan token dan aset brand"
+"$ROOT/scripts/generate-tokens.py" >/dev/null
+"$ROOT/scripts/generate-brand-assets.py" >/dev/null
+
+install -Dm644 "$ROOT/branding/logo/arashios-mark.svg" \
+    "$INCLUDES/usr/share/icons/hicolor/scalable/apps/arashios.svg"
+install -Dm644 "$ROOT/branding/logo/arashios-wordmark.svg" \
+    "$INCLUDES/usr/share/arashios/branding/arashios-wordmark.svg"
+install -Dm644 "$ROOT/branding/wallpaper/kage-sumi.svg" \
+    "$INCLUDES/usr/share/backgrounds/arashios/kage-sumi.svg"
+
+install -Dm644 "$ROOT/branding/grub/theme.txt" \
+    "$INCLUDES/usr/share/grub/themes/arashios/theme.txt"
+for png in "$ROOT"/branding/grub/*.png; do
+    install -Dm644 "$png" "$INCLUDES/usr/share/grub/themes/arashios/$(basename "$png")"
+done
+
+install -Dm644 "$ROOT/branding/plymouth/arashios.plymouth" \
+    "$INCLUDES/usr/share/plymouth/themes/arashios/arashios.plymouth"
+install -Dm644 "$ROOT/branding/plymouth/arashios.script" \
+    "$INCLUDES/usr/share/plymouth/themes/arashios/arashios.script"
+install -Dm644 "$ROOT/branding/plymouth/logo.png" \
+    "$INCLUDES/usr/share/plymouth/themes/arashios/logo.png"
+
+install -Dm644 "$ROOT/build/tokens/tokens.css" \
+    "$INCLUDES/usr/share/arashios/theme/tokens.css"
+install -Dm644 "$ROOT/build/tokens/kage.qss" \
+    "$INCLUDES/usr/share/arashios/theme/kage.qss"
+install -Dm644 "$ROOT/build/tokens/tokens.resolved.json" \
+    "$INCLUDES/usr/share/arashios/theme/tokens.resolved.json"
+
+install -Dm644 "$ROOT/LICENSE" "$INCLUDES/usr/share/doc/arashios/LICENSE"
+install -Dm644 "$ROOT/LICENSE" "$INCLUDES/usr/share/doc/arashios/copyright"
+install -Dm644 "$ROOT/CHANGELOG.md" "$INCLUDES/usr/share/doc/arashios/CHANGELOG.md"
+install -Dm644 "$ROOT/docs/LEGAL.md" "$INCLUDES/usr/share/doc/arashios/LEGAL.md"
+install -Dm644 "$ROOT/docs/PRIVACY.md" "$INCLUDES/usr/share/doc/arashios/PRIVACY.md"
+install -Dm644 "$ROOT/docs/TRADEMARK.md" "$INCLUDES/usr/share/doc/arashios/TRADEMARK.md"
+
+install -Dm755 "$ROOT/tests/smoke.sh" "$INCLUDES/usr/local/bin/arashios-smoke"
+
+log "Konfigurasi siap di $WORK/config"
+
+if [ "$DRY_RUN" -eq 1 ]; then
+    log "Dry run selesai. Tidak ada ISO yang dibangun."
+    exit 0
+fi
 
 log "Build dimulai. Log: $LOG"
+export MKSQUASHFS_OPTIONS="-processors $JOBS"
 set +e
 lb build 2>&1 | tee "$LOG"
 BUILD_STATUS=${PIPESTATUS[0]}

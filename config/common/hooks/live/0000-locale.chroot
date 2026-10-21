@@ -1,0 +1,16 @@
+#!/bin/sh
+# ArashiOS locale and timezone setup. Runs inside the build chroot.
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+
+if command -v locale-gen >/dev/null 2>&1; then
+    locale-gen
+fi
+
+ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
+
+if command -v dpkg-reconfigure >/dev/null 2>&1; then
+    dpkg-reconfigure -f noninteractive tzdata >/dev/null 2>&1 || true
+fi
+
+sync

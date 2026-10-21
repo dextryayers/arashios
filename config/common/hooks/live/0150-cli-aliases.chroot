@@ -1,0 +1,15 @@
+#!/bin/sh
+# Provide conventional command names for Debian-renamed CLI tools.
+set -eu
+
+mkdir -p /usr/local/bin
+
+if [ -x /usr/bin/batcat ]; then
+    ln -sf /usr/bin/batcat /usr/local/bin/bat
+fi
+
+if [ -x /usr/bin/fdfind ]; then
+    ln -sf /usr/bin/fdfind /usr/local/bin/fd
+fi
+
+sync

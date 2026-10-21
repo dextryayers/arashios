@@ -67,6 +67,9 @@ guymager
 podman
 buildah
 skopeo
+uidmap
+fuse-overlayfs
+slirp4netns
 kubernetes-client
 ansible
 openjdk-17-jre-headless
