@@ -39,3 +39,11 @@ fonts-noto-color-emoji
 fonts-inter
 fonts-jetbrains-mono
 papirus-icon-theme
+
+# Kage desktop integration.
+dconf-cli
+qt5-style-kvantum
+qt5ct
+gtk2-engines-murrine
+libadwaita-1-0
+bibata-cursor-theme

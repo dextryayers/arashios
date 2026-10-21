@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" role="img" aria-labelledby="title desc">
+  <title id="title">Kage Storm wallpaper</title>
+  <desc id="desc">Layered isobars and a thin lightning path over a deep sumi field with a single vermilion counterpoint.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070709"/>
+      <stop offset="0.55" stop-color="#0A0A0C"/>
+      <stop offset="1" stop-color="#121216"/>
+    </linearGradient>
+    <radialGradient id="pressure" cx="0.68" cy="0.50" r="0.62">
+      <stop offset="0" stop-color="#8B867D" stop-opacity="0.09"/>
+      <stop offset="0.55" stop-color="#8B867D" stop-opacity="0.025"/>
+      <stop offset="1" stop-color="#8B867D" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="3840" height="2160" fill="url(#bg)"/>
+  <rect width="3840" height="2160" fill="url(#pressure)"/>
+  <g fill="none" stroke="#B8B2A7" stroke-width="3" opacity="0.18" stroke-dasharray="1360 156">
+    <circle cx="2611" cy="1080" r="280"/>
+    <circle cx="2611" cy="1080" r="420"/>
+    <circle cx="2611" cy="1080" r="560"/>
+    <circle cx="2611" cy="1080" r="700"/>
+    <circle cx="2611" cy="1080" r="840"/>
+    <circle cx="2611" cy="1080" r="980"/>
+    <circle cx="2611" cy="1080" r="1120"/>
+  </g>
+  <circle cx="2611" cy="1080" r="280" fill="none" stroke="#E8917A" stroke-width="6" stroke-linecap="round" stroke-dasharray="1500 260" opacity="0.72"/>
+  <path d="M 2760 300 L 2620 760 L 2790 760 L 2570 1320 L 2730 1320 L 2520 1880"
+        fill="none" stroke="#EDE8DE" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" opacity="0.58"/>
+  <path d="M 2730 1320 L 2570 1320" stroke="#E8917A" stroke-width="7" stroke-linecap="round" opacity="0.74"/>
+  <path d="M 220 260 L 620 260" stroke="#BF4432" stroke-width="4" stroke-linecap="round" opacity="0.72"/>
+  <path d="M 220 260 L 220 920" stroke="#BF4432" stroke-width="4" stroke-linecap="round" opacity="0.38"/>
+  <rect x="3360" y="1780" width="180" height="2" fill="#25252D"/>
+  <rect x="3360" y="1780" width="48" height="2" fill="#D05545"/>
+</svg>

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Shortcut for the Kage high-contrast mode.
+set -Eeuo pipefail
+exec /usr/local/bin/arashios-accessibility contrast "$@"

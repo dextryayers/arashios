@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" role="img" aria-labelledby="title desc">
+  <title id="title">Kage Shuriken wallpaper</title>
+  <desc id="desc">A low-contrast four-fold shuriken geometry with a vermilion center and fine measured lines.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070709"/>
+      <stop offset="0.60" stop-color="#0A0A0C"/>
+      <stop offset="1" stop-color="#1B1B21"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#B8B2A7" stop-opacity="0"/>
+      <stop offset="0.30" stop-color="#B8B2A7" stop-opacity="0.30"/>
+      <stop offset="0.70" stop-color="#B8B2A7" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#B8B2A7" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="3840" height="2160" fill="url(#bg)"/>
+  <path d="M 2573 380 L 2823 1360 L 3457 1080 L 2977 1617 L 3277 2000 L 2527 1740 L 2387 2050 L 2297 1613 L 1880 1580 L 2250 1310 L 2030 950 L 2400 970 Z"
+        fill="#B8B2A7" opacity="0.045"/>
+  <path d="M 2573 380 L 2823 1360 L 3457 1080 L 2977 1617 L 3277 2000 L 2527 1740 L 2387 2050 L 2297 1613 L 1880 1580 L 2250 1310 L 2030 950 L 2400 970 Z"
+        fill="none" stroke="#B8B2A7" stroke-width="4" stroke-linejoin="round" opacity="0.22"/>
+  <g fill="none" stroke="#B8B2A7" stroke-width="3" opacity="0.14">
+    <path d="M 2573 380 L 2823 1360"/>
+    <path d="M 3457 1080 L 2527 1740"/>
+    <path d="M 2387 2050 L 2297 1613"/>
+    <path d="M 1880 1580 L 2400 970"/>
+  </g>
+  <circle cx="2640" cy="1200" r="170" fill="none" stroke="#BF4432" stroke-width="8" stroke-linecap="round" opacity="0.86" stroke-dasharray="250 64"/>
+  <circle cx="2640" cy="1200" r="34" fill="#BF4432" opacity="0.92"/>
+  <circle cx="2640" cy="1200" r="1180" fill="none" stroke="#8B867D" stroke-width="2" opacity="0.14"/>
+  <path d="M 260 330 L 900 330" stroke="#BF4432" stroke-width="4" stroke-linecap="round" opacity="0.62"/>
+  <path d="M 260 330 L 260 1560" stroke="#E8917A" stroke-width="3" stroke-linecap="round" opacity="0.28"/>
+  <rect x="3220" y="260" width="260" height="6" fill="#25252D"/>
+  <rect x="3220" y="260" width="72" height="6" fill="#D05545"/>
+</svg>

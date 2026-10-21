@@ -1,0 +1,70 @@
+# ArashiOS Kage live GRUB theme.
+# The background is a generated 1024x768 composition; the menu sits on the
+# right so the ensō mark remains unobstructed.
+
+desktop-color: "#070709"
+desktop-image: "../splash.png"
+title-text: ""
+terminal-font: "Unifont Regular 16"
+
++ label {
+    left = 56%
+    top = 10%
+    width = 38%
+    height = 8%
+    align = "left"
+    color = "#DD785B"
+    font = "Unifont Regular 16"
+    text = "ARASHIOS / KAGE"
+}
+
++ label {
+    left = 56%
+    top = 17%
+    width = 38%
+    height = 6%
+    align = "left"
+    color = "#8B867D"
+    font = "Unifont Regular 16"
+    text = "LIVE SYSTEM"
+}
+
++ boot_menu {
+    left = 56%
+    top = 28%
+    width = 38%
+    height = 48%
+    item_font = "Unifont Regular 16"
+    item_color = "#B8B2A7"
+    selected_item_color = "#070709"
+    selected_item_pixmap_style = "select_*.png"
+    item_height = 30
+    item_padding = 8
+    item_spacing = 6
+    scrollbar = false
+}
+
++ label {
+    left = 56%
+    top = 84%
+    width = 38%
+    height = 8%
+    align = "left"
+    color = "#6B675F"
+    font = "Unifont Regular 16"
+    text = "Enter boots. e edits. c opens the GRUB console."
+}
+
++ progress_bar {
+    id = "__timeout__"
+    left = 56%
+    top = 93%
+    width = 34%
+    height = 10
+    font = "Unifont Regular 16"
+    text_color = "#070709"
+    fg_color = "#BF4432"
+    bg_color = "#25252D"
+    border_color = "#34343E"
+    text = "@TIMEOUT_NOTIFICATION_LONG@"
+}

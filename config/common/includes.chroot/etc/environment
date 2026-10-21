@@ -1,0 +1,5 @@
+# ArashiOS session environment.
+# Qt applications use Kvantum for the Kage shape language and qt5ct for fonts.
+QT_QPA_PLATFORMTHEME=qt5ct
+QT_STYLE_OVERRIDE=kvantum
+QT_AUTO_SCREEN_SCALE_FACTOR=0

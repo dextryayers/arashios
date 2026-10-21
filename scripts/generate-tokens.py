@@ -190,6 +190,12 @@ def build_css(tokens: dict[str, Any], palette: dict[str, str], semantic: dict[st
     lines += ["", "  /* Motion */"]
     for key, value in tokens["motion"].items():
         lines.append(f"  --kage-{kebab(key)}: {value};")
+    lines += ["", "  /* Components */"]
+    for key, value in tokens["component"].items():
+        lines.append(f"  --kage-component-{kebab(key)}: {value};")
+    lines += ["", "  /* Terminal */"]
+    for key, value in tokens["terminal"].items():
+        lines.append(f"  --kage-terminal-{kebab(key)}: {value};")
     lines += ["}", ""]
     return "\n".join(lines)
 
@@ -228,6 +234,12 @@ def build_scss(tokens: dict[str, Any], palette: dict[str, str], semantic: dict[s
     lines += ["", "// Motion"]
     for key, value in tokens["motion"].items():
         lines.append(f"$kage-{kebab(key)}: {value};")
+    lines += ["", "// Components"]
+    for key, value in tokens["component"].items():
+        lines.append(f"$kage-component-{kebab(key)}: {value};")
+    lines += ["", "// Terminal"]
+    for key, value in tokens["terminal"].items():
+        lines.append(f"$kage-terminal-{kebab(key)}: {value};")
     lines.append("")
     return "\n".join(lines)
 
@@ -829,7 +841,19 @@ def generate(tokens_path: Path) -> tuple[dict[str, str], list[dict[str, Any]]]:
     except json.JSONDecodeError as exc:
         raise TokenError(f"JSON tidak valid di {tokens_path}: {exc}") from exc
 
-    for key in ("meta", "color", "semantic", "typography", "space", "radius", "shadow", "motion", "contrastPairs"):
+    for key in (
+        "meta",
+        "color",
+        "semantic",
+        "typography",
+        "space",
+        "radius",
+        "shadow",
+        "motion",
+        "component",
+        "terminal",
+        "contrastPairs",
+    ):
         if key not in tokens:
             raise TokenError(f"token wajib hilang: {key}")
     for key in ("name", "version", "license"):
@@ -856,6 +880,8 @@ def generate(tokens_path: Path) -> tuple[dict[str, str], list[dict[str, Any]]]:
         "radius": tokens["radius"],
         "shadow": tokens["shadow"],
         "motion": tokens["motion"],
+        "component": tokens["component"],
+        "terminal": tokens["terminal"],
         "assets": tokens.get("assets", {}),
         "contrast": report,
     }

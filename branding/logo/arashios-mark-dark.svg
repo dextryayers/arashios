@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">ArashiOS dark mark</title>
+  <desc id="desc">Mark for light surfaces where washi strokes would disappear.</desc>
+  <path d="M 256 64 C 150 64 64 150 64 256 C 64 362 150 448 256 448 C 362 448 448 362 448 256 C 448 178 403 111 338 80"
+        fill="none" stroke="#070709" stroke-width="26" stroke-linecap="round"/>
+  <path d="M 338 80 C 352 88 364 100 372 114" fill="none" stroke="#070709" stroke-width="18" stroke-linecap="round" opacity="0.55"/>
+  <text x="256" y="322" text-anchor="middle"
+        font-family="'Noto Sans CJK JP', 'Noto Sans JP', sans-serif"
+        font-size="190" font-weight="600" fill="#070709">嵐</text>
+  <rect x="356" y="356" width="68" height="68" fill="#BF4432"/>
+  <path d="M 374 406 L 406 372" fill="none" stroke="#F7F4EE" stroke-width="7" stroke-linecap="round"/>
+</svg>

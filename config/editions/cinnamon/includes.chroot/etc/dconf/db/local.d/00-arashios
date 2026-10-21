@@ -1,0 +1,90 @@
+# ArashiOS Kage system defaults for Cinnamon.
+# These are defaults only. A user can override every key through Cinnamon
+# Settings, dconf, or the accessibility helper.
+
+[org/cinnamon]
+panels-enabled=['1:0:top']
+panels-height=['1:30']
+panels-autohide=['1:false']
+startup-animation=false
+enabled-applets=['panel1:left:0:menu@cinnamon.org', 'panel1:center:0:grouped-window-list@cinnamon.org', 'panel1:center:1:calendar@cinnamon.org', 'panel1:right:0:workspace-switcher@cinnamon.org', 'panel1:right:1:systray@cinnamon.org', 'panel1:right:2:notifications@cinnamon.org', 'panel1:right:3:keyboard@cinnamon.org', 'panel1:right:4:sound@cinnamon.org', 'panel1:right:5:power@cinnamon.org']
+
+[org/cinnamon/theme]
+name='ArashiKage'
+
+[org/cinnamon/desktop/interface]
+gtk-theme='ArashiKage'
+icon-theme='Papirus-Dark'
+cursor-theme='Bibata-Modern-Classic'
+cursor-size=24
+font-name='Inter 10'
+document-font-name='Inter 10'
+monospace-font-name='JetBrains Mono 10'
+text-scaling-factor=1.0
+clock-use-24h=true
+clock-show-date=true
+clock-show-seconds=false
+enable-animations=true
+toolkit-accessibility=false
+
+[org/cinnamon/desktop/background]
+picture-uri='file:///usr/share/backgrounds/arashios/kage-sumi.png'
+picture-uri-dark='file:///usr/share/backgrounds/arashios/kage-sumi.png'
+picture-options='zoom'
+primary-color='#070709'
+secondary-color='#0A0A0C'
+
+[org/cinnamon/desktop/wm/preferences]
+num-workspaces=4
+button-layout=':minimize,maximize,close'
+action-double-click-titlebar='toggle-maximize'
+action-middle-click-titlebar='lower'
+action-right-click-titlebar='menu'
+focus-mode='click'
+auto-raise=false
+raise-on-click=true
+resize-with-right-button=false
+
+[org/cinnamon/desktop/screensaver]
+lock-enabled=true
+idle-activation-enabled=true
+lock-delay=0
+
+[org/cinnamon/desktop/media-handling]
+automount=false
+automount-open=false
+autorun-never=true
+
+[org/cinnamon/desktop/notifications]
+display-notifications=true
+
+[org/nemo/desktop]
+show-desktop-icons=false
+
+[org/nemo/preferences]
+default-folder-viewer='list-view'
+show-image-thumbnails='never'
+click-policy='double'
+show-hidden-files=false
+
+[org/gnome/desktop/interface]
+gtk-theme='ArashiKage'
+icon-theme='Papirus-Dark'
+cursor-theme='Bibata-Modern-Classic'
+cursor-size=24
+font-name='Inter 10'
+monospace-font-name='JetBrains Mono 10'
+enable-animations=true
+color-scheme='prefer-dark'
+
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/arashios/kage-sumi.png'
+picture-uri-dark='file:///usr/share/backgrounds/arashios/kage-sumi.png'
+picture-options='zoom'
+primary-color='#070709'
+secondary-color='#0A0A0C'
+
+[org/gnome/desktop/media-handling]
+automount=false
+automount-open=false
+autorun-never=true

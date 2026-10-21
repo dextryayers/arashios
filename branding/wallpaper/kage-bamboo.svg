@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" role="img" aria-labelledby="title desc">
+  <title id="title">Kage Bamboo wallpaper</title>
+  <desc id="desc">Dark sumi depth with quiet bamboo silhouettes, a pale ensō, and a small vermilion seal.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070709"/>
+      <stop offset="0.58" stop-color="#0A0A0C"/>
+      <stop offset="1" stop-color="#1B1B21"/>
+    </linearGradient>
+    <linearGradient id="stalk" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3E8A72" stop-opacity="0.05"/>
+      <stop offset="0.45" stop-color="#3E8A72" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#3E8A72" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="enso" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EDE8DE" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#8B867D" stop-opacity="0.12"/>
+    </linearGradient>
+  </defs>
+  <rect width="3840" height="2160" fill="url(#bg)"/>
+  <g>
+    <rect x="2350" y="0" width="70" height="2160" fill="url(#stalk)"/>
+    <rect x="2580" y="0" width="42" height="2160" fill="url(#stalk)"/>
+    <rect x="2760" y="0" width="96" height="2160" fill="url(#stalk)"/>
+    <rect x="3040" y="0" width="54" height="2160" fill="url(#stalk)"/>
+    <rect x="3260" y="0" width="34" height="2160" fill="url(#stalk)"/>
+    <g fill="#B8B2A7" opacity="0.18">
+      <rect x="2342" y="160" width="86" height="9"/>
+      <rect x="2342" y="480" width="86" height="9"/>
+      <rect x="2342" y="800" width="86" height="9"/>
+      <rect x="2342" y="1120" width="86" height="9"/>
+      <rect x="2342" y="1440" width="86" height="9"/>
+      <rect x="2342" y="1760" width="86" height="9"/>
+      <rect x="2572" y="40" width="58" height="8"/>
+      <rect x="2572" y="360" width="58" height="8"/>
+      <rect x="2572" y="680" width="58" height="8"/>
+      <rect x="2572" y="1000" width="58" height="8"/>
+      <rect x="2572" y="1320" width="58" height="8"/>
+      <rect x="2572" y="1640" width="58" height="8"/>
+      <rect x="2572" y="1960" width="58" height="8"/>
+      <rect x="2752" y="240" width="112" height="10"/>
+      <rect x="2752" y="620" width="112" height="10"/>
+      <rect x="2752" y="1000" width="112" height="10"/>
+      <rect x="2752" y="1380" width="112" height="10"/>
+      <rect x="2752" y="1760" width="112" height="10"/>
+    </g>
+  </g>
+  <circle cx="780" cy="907" r="330" fill="none" stroke="url(#enso)" stroke-width="12" stroke-linecap="round" stroke-dasharray="1770 304" transform="rotate(-38 780 907)"/>
+  <rect x="520" y="1520" width="120" height="120" fill="#BF4432" opacity="0.88"/>
+  <path d="M 550 1608 L 610 1548" fill="none" stroke="#F7F4EE" stroke-width="7" stroke-linecap="round" opacity="0.90"/>
+  <path d="M 170 1900 L 700 1900" stroke="#8B867D" stroke-width="3" stroke-linecap="round" opacity="0.26"/>
+</svg>

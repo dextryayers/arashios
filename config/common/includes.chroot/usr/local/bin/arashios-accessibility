@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+# ArashiOS accessibility controls for theme contrast and reduced motion.
+set -Eeuo pipefail
+
+THEME_NORMAL="ArashiKage"
+THEME_CONTRAST="ArashiKage-HC"
+QT_THEME_NORMAL="ArashiKage"
+QT_THEME_CONTRAST="ArashiKage-HC"
+
+usage() {
+    cat <<'EOF'
+Pemakaian: arashios-accessibility <perintah> [nilai]
+
+Perintah:
+  contrast on|off|toggle   Aktifkan tema kontras tinggi Kage.
+  motion on|off            Aktifkan atau kurangi animasi antarmuka.
+  status                   Tampilkan pilihan sesi saat ini.
+
+Perubahan berlaku pada aplikasi baru. Beberapa desktop perlu logout dan
+login ulang sebelum seluruh window manager memakai tema baru.
+EOF
+}
+
+die() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+desktop_name() {
+    local value="${XDG_CURRENT_DESKTOP:-}${DESKTOP_SESSION:-}"
+    case "$value" in
+        *Cinnamon*) printf 'cinnamon' ;;
+        *XFCE*) printf 'xfce' ;;
+        *LXQt*|*lxqt*) printf 'lxqt' ;;
+        *) printf 'unknown' ;;
+    esac
+}
+
+gsettings_set() {
+    local schema="$1" key="$2" value="$3"
+    command -v gsettings >/dev/null 2>&1 || return 0
+    gsettings list-schemas 2>/dev/null | grep -qx "$schema" || return 0
+    gsettings set "$schema" "$key" "$value" >/dev/null 2>&1 || true
+}
+
+xfconf_set() {
+    local channel="$1" key="$2" type="$3" value="$4"
+    command -v xfconf-query >/dev/null 2>&1 || return 0
+    xfconf-query -c "$channel" -p "$key" -n -t "$type" -s "$value" >/dev/null 2>&1 || \
+        xfconf-query -c "$channel" -p "$key" -t "$type" -s "$value" >/dev/null 2>&1 || true
+}
+
+write_gtk_import() {
+    local theme="$1"
+    local target="$HOME/.config/gtk-4.0/gtk.css"
+    mkdir -p "$(dirname "$target")"
+    printf '/* Managed by arashios-accessibility. */\n@import url("/usr/share/themes/%s/gtk-4.0/gtk.css");\n' \
+        "$theme" > "$target"
+}
+
+set_gtk_ini() {
+    local theme="$1" animations="$2"
+    local target="$HOME/.config/gtk-3.0/settings.ini"
+    mkdir -p "$(dirname "$target")"
+    if [ -f "$target" ]; then
+        sed -i \
+            -e "s/^gtk-theme-name=.*/gtk-theme-name=$theme/" \
+            -e "s/^gtk-enable-animations=.*/gtk-enable-animations=$animations/" \
+            "$target"
+    else
+        cat > "$target" <<EOF
+[Settings]
+gtk-theme-name=$theme
+gtk-icon-theme-name=Papirus-Dark
+gtk-font-name=Inter 10
+gtk-cursor-theme-name=Bibata-Modern-Classic
+gtk-cursor-theme-size=24
+gtk-application-prefer-dark-theme=1
+gtk-enable-animations=$animations
+EOF
+    fi
+    target="$HOME/.config/gtk-4.0/settings.ini"
+    mkdir -p "$(dirname "$target")"
+    if [ -f "$target" ]; then
+        sed -i \
+            -e "s/^gtk-theme-name=.*/gtk-theme-name=$theme/" \
+            -e "s/^gtk-enable-animations=.*/gtk-enable-animations=$animations/" \
+            "$target" 2>/dev/null || true
+    else
+        printf '[Settings]\ngtk-theme-name=%s\ngtk-enable-animations=%s\n' \
+            "$theme" "$animations" > "$target"
+    fi
+}
+
+set_kvantum() {
+    local theme="$1"
+    local target="$HOME/.config/Kvantum/kvantum.kvconfig"
+    mkdir -p "$(dirname "$target")"
+    if command -v kvantummanager >/dev/null 2>&1; then
+        kvantummanager --set "$theme" >/dev/null 2>&1 || true
+    fi
+    if [ -f "$target" ]; then
+        sed -i "s/^theme=.*/theme=$theme/" "$target"
+    else
+        printf '[General]\ntheme=%s\n' "$theme" > "$target"
+    fi
+}
+
+set_openbox() {
+    local theme="$1"
+    local target="$HOME/.config/openbox/rc.xml"
+    [ -f /etc/xdg/openbox/rc.xml ] || return 0
+    mkdir -p "$(dirname "$target")"
+    [ -f "$target" ] || cp /etc/xdg/openbox/rc.xml "$target"
+    sed -i -E "s#<name>ArashiKage(-HC)?</name>#<name>${theme}</name>#" "$target"
+    command -v openbox >/dev/null 2>&1 && openbox --reconfigure >/dev/null 2>&1 || true
+}
+
+apply_theme() {
+    local theme="$1"
+
+    set_gtk_ini "$theme" "1"
+    write_gtk_import "$theme"
+    gsettings_set org.cinnamon.desktop.interface gtk-theme "$theme"
+    gsettings_set org.cinnamon.theme name "$theme"
+    gsettings_set org.gnome.desktop.interface gtk-theme "$theme"
+    gsettings_set org.gnome.desktop.interface icon-theme "Papirus-Dark"
+    gsettings_set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Classic"
+    xfconf_set xsettings /Net/ThemeName string "$theme"
+    xfconf_set xsettings /Net/IconThemeName string "Papirus-Dark"
+    xfconf_set xsettings /Gtk/CursorThemeName string "Bibata-Modern-Classic"
+    xfconf_set xfwm4 /general/theme string "$theme"
+    set_kvantum "$( [ "$theme" = "$THEME_CONTRAST" ] && printf '%s' "$QT_THEME_CONTRAST" || printf '%s' "$QT_THEME_NORMAL" )"
+    set_openbox "$theme"
+
+    printf 'Tema %s diterapkan. Aplikasi yang sudah berjalan perlu dimulai ulang.\n' "$theme"
+}
+
+set_motion() {
+    local enabled="$1"
+    set_gtk_ini "$(current_theme)" "$enabled"
+    gsettings_set org.cinnamon.desktop.interface enable-animations "$enabled"
+    gsettings_set org.gnome.desktop.interface enable-animations "$enabled"
+    xfconf_set xsettings /Net/EnableAnimations bool "$enabled"
+    if [ "$enabled" = "false" ]; then
+        printf 'Animasi dikurangi. Efek kompositor desktop tidak dimatikan paksa.\n'
+    else
+        printf 'Animasi antarmuka diaktifkan kembali.\n'
+    fi
+}
+
+current_theme() {
+    local value=""
+    if command -v gsettings >/dev/null 2>&1; then
+        value="$(gsettings get org.cinnamon.desktop.interface gtk-theme 2>/dev/null | tr -d "'" || true)"
+    fi
+    [ -n "$value" ] || value="$THEME_NORMAL"
+    printf '%s' "$value"
+}
+
+[ "$#" -ge 1 ] || { usage; exit 1; }
+command="$1"
+shift
+case "$command" in
+    contrast)
+        value="${1:-toggle}"
+        case "$value" in
+            on) apply_theme "$THEME_CONTRAST" ;;
+            off) apply_theme "$THEME_NORMAL" ;;
+            toggle)
+                if [ "$(current_theme)" = "$THEME_CONTRAST" ]; then
+                    apply_theme "$THEME_NORMAL"
+                else
+                    apply_theme "$THEME_CONTRAST"
+                fi
+                ;;
+            *) die "nilai contrast harus on, off, atau toggle" ;;
+        esac
+        ;;
+    motion)
+        value="${1:-}"
+        case "$value" in
+            on) set_motion true ;;
+            off) set_motion false ;;
+            *) die "nilai motion harus on atau off" ;;
+        esac
+        ;;
+    status)
+        printf 'desktop   : %s\n' "$(desktop_name)"
+        printf 'gtk-theme : %s\n' "$(current_theme)"
+        ;;
+    -h|--help|help) usage ;;
+    *) usage; exit 1 ;;
+esac

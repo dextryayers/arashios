@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" role="img" aria-labelledby="title desc">
   <title id="title">Kage Sumi wallpaper</title>
-  <desc id="desc">Dark sumi gradient with a large ensō, a vermilion accent, and minimal ArashiOS typography.</desc>
+  <desc id="desc">Dark sumi gradient, a large ensō on the right, a vermilion cut on the left, and a quiet red seal.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#070709"/>
       <stop offset="0.55" stop-color="#0A0A0C"/>
       <stop offset="1" stop-color="#121216"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.72" cy="0.45" r="0.48">
-      <stop offset="0" stop-color="#BF4432" stop-opacity="0.18"/>
-      <stop offset="0.55" stop-color="#BF4432" stop-opacity="0.04"/>
+    <radialGradient id="glow" cx="0.70" cy="0.50" r="0.55">
+      <stop offset="0" stop-color="#BF4432" stop-opacity="0.14"/>
+      <stop offset="0.55" stop-color="#BF4432" stop-opacity="0.03"/>
       <stop offset="1" stop-color="#BF4432" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="enso" x1="0" y1="0" x2="1" y2="1">
@@ -19,33 +19,24 @@
       <stop offset="1" stop-color="#8B867D"/>
     </linearGradient>
     <linearGradient id="cut" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#E8917A" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#BF4432" stop-opacity="0.9"/>
+      <stop offset="0" stop-color="#D05545" stop-opacity="0"/>
+      <stop offset="0.22" stop-color="#BF4432" stop-opacity="0.62"/>
       <stop offset="1" stop-color="#BF4432" stop-opacity="0"/>
     </linearGradient>
-    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#8B867D" stroke-opacity="0.035" stroke-width="1"/>
+    <pattern id="grid" width="160" height="160" patternUnits="userSpaceOnUse">
+      <path d="M 160 0 L 0 0 0 160" fill="none" stroke="#8B867D" stroke-opacity="0.030" stroke-width="1"/>
     </pattern>
   </defs>
-
   <rect width="3840" height="2160" fill="url(#bg)"/>
   <rect width="3840" height="2160" fill="url(#grid)"/>
   <rect width="3840" height="2160" fill="url(#glow)"/>
-
-  <path d="M 2760 430 C 2330 430 2020 740 2020 1170 C 2020 1600 2330 1910 2760 1910 C 3190 1910 3500 1600 3500 1170 C 3500 810 3270 520 2940 450"
-        fill="none" stroke="url(#enso)" stroke-width="34" stroke-linecap="round" opacity="0.92"/>
-  <path d="M 2940 450 C 3060 470 3170 520 3250 590" fill="none" stroke="#8B867D" stroke-width="20" stroke-linecap="round" opacity="0.65"/>
-
-  <path d="M 220 280 L 150 980" stroke="url(#cut)" stroke-width="10" stroke-linecap="round"/>
-  <path d="M 3400 1500 L 3560 1660" stroke="#BF4432" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
-
-  <text x="300" y="1680" font-family="Inter, 'Noto Sans', sans-serif" font-size="96" font-weight="700"
-        letter-spacing="28" fill="#EDE8DE" opacity="0.94">ARASHIOS</text>
-  <text x="304" y="1750" font-family="Inter, 'Noto Sans', sans-serif" font-size="28" font-weight="600"
-        letter-spacing="14" fill="#DD785B">KAGE / 影</text>
-  <text x="304" y="1840" font-family="'Noto Serif CJK JP', 'Noto Serif JP', serif" font-size="36"
-        fill="#8B867D">静けさの中に、強さ。</text>
-
-  <path d="M 304 1900 L 520 1900" stroke="#25252D" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="548" cy="1900" r="6" fill="#BF4432"/>
+  <path d="M 3410 520 C 2870 520 2430 950 2430 1500 C 2430 2050 2870 2480 3410 2480"
+        fill="none" stroke="url(#enso)" stroke-width="30" stroke-linecap="round" opacity="0.55"/>
+  <path d="M 2430 1500 C 2430 1180 2570 900 2790 700" fill="none" stroke="#D05545" stroke-width="4" stroke-linecap="round" opacity="0.18"/>
+  <path d="M 220 260 L 220 1560" stroke="url(#cut)" stroke-width="9" stroke-linecap="round"/>
+  <path d="M 220 260 L 360 260" stroke="#BF4432" stroke-width="9" stroke-linecap="round" opacity="0.62"/>
+  <rect x="3200" y="1680" width="110" height="110" fill="#BF4432" opacity="0.90"/>
+  <path d="M 3228 1760 L 3282 1706" fill="none" stroke="#F7F4EE" stroke-width="6" stroke-linecap="round" opacity="0.90"/>
+  <path d="M 300 1920 L 860 1920" stroke="#8B867D" stroke-width="3" stroke-linecap="round" opacity="0.28"/>
+  <circle cx="900" cy="1920" r="7" fill="#D05545" opacity="0.85"/>
 </svg>

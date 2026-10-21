@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">ArashiOS favicon</title>
+  <desc id="desc">Compact ensō mark with a vermilion seal for browser and application icons.</desc>
+  <rect width="64" height="64" rx="3" fill="#070709"/>
+  <path d="M 32 9 C 19.3 9 9 19.3 9 32 C 9 44.7 19.3 55 32 55 C 41.2 55 49.1 49.6 52.7 41.8"
+        fill="none" stroke="#EDE8DE" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 52.7 41.8 C 54.2 38.4 55 34.8 55 31.2" fill="none" stroke="#8B867D" stroke-width="3.5" stroke-linecap="round" opacity="0.75"/>
+  <rect x="43" y="43" width="13" height="13" rx="1.5" fill="#BF4432"/>
+  <path d="M 46 52.5 L 53 45.5" fill="none" stroke="#F7F4EE" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

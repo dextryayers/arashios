@@ -1,0 +1,5 @@
+/* System-wide libadwaita override. The full Kage theme lives in the
+ * arashios-branding package; this file only makes it discoverable to
+ * GTK 4 applications that do not follow GTK 3 theme settings.
+ */
+@import url("/usr/share/themes/ArashiKage/gtk-4.0/gtk.css");
