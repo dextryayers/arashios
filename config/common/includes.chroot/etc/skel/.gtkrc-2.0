@@ -1,0 +1,11 @@
+# ArashiOS Kage GTK2 user defaults.
+gtk-theme-name = "ArashiKage"
+gtk-icon-theme-name = "Papirus-Dark"
+gtk-font-name = "Inter 10"
+gtk-cursor-theme-name = "Bibata-Modern-Classic"
+gtk-cursor-theme-size = 24
+gtk-enable-animations = 1
+gtk-menu-images = 1
+gtk-button-images = 0
+gtk-toolbar-style = 0
+gtk-toolbar-icon-size = 1

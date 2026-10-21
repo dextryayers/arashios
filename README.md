@@ -10,8 +10,8 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 |---|---|---|
 | 0 | Fondasi repository, kebijakan, ADR, design token, CI | Selesai, dua butir eksternal terbuka |
 | 1 | Baseline live ISO amd64, branding, smoke test, QEMU harness | Implementasi selesai, menunggu build host |
-| 2 | Tema desktop penuh dan integrasi Kage | Berikutnya |
-| 3 | Tiga edisi desktop dan matriks QA | Direncanakan |
+| 2 | Tema desktop penuh dan integrasi Kage | Implementasi statis selesai, validasi runtime menunggu ISO |
+| 3 | Tiga edisi desktop dan matriks QA | Integrasi statis selesai, QA runtime menunggu ISO |
 | 4 | Arsenal tool keamanan, termasuk tool vendored | Direncanakan |
 | 5 | Toolchain coding lengkap dan container | Direncanakan |
 | 6 | Aplikasi harian dan printer | Direncanakan |
@@ -22,7 +22,7 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 | 11 | Dokumentasi publik, situs, dan komunitas | Direncanakan |
 | 12 | RC, rilis, dan pemeliharaan | Direncanakan |
 
-Fase 1 menargetkan ISO live yang dapat boot pada QEMU UEFI dan BIOS. Installer Calamares, tool vendored, dan signing produksi belum aktif. Rencana lengkap ada di [plan.md](plan.md) dan status terperinci ada di [laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md).
+Fase 1 menargetkan ISO live yang dapat boot pada QEMU UEFI dan BIOS. Fase 2 dan Fase 3 sudah memiliki tema, paket branding, dan konfigurasi tiga desktop pada tingkat statis. Installer Calamares, tool vendored, signing produksi, dan validasi boot belum aktif. Rencana lengkap ada di [plan.md](plan.md). Status terperinci ada di [laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md) dan [laporan Fase 2 dan 3](docs/PHASE-2-3-REPORT.md).
 
 ## Edisi
 
@@ -91,7 +91,7 @@ make env-strict
 ## Build Cepat
 
 ```bash
-make tokens
+make theme
 make config EDITION=xfce ARCH=amd64
 make build EDITION=cinnamon ARCH=amd64 JOBS=8
 ```
@@ -170,26 +170,34 @@ Validasi konfigurasi semua kombinasi:
 make config-matrix
 ```
 
+Pemeriksaan tema dan desktop:
+
+```bash
+make theme-check
+make desktop-check
+make package-check
+```
+
 Lint dan validasi statis:
 
 ```bash
 make lint
 ```
 
-`make lint` menjalankan shellcheck, pemeriksaan sintaks Python, pemeriksaan dokumen, traceability requirement, validasi token, dan validasi konfigurasi live-build. Token dan aset raster harus sudah dihasilkan dengan `make tokens`.
+`make lint` menghasilkan ulang tema, menjalankan shellcheck, pemeriksaan sintaks Python, pemeriksaan dokumen, traceability requirement, validasi token, validasi konfigurasi live-build, parser CSS GTK3 dan GTK4, pemeriksaan desktop, dan pemeriksaan paket branding. `make package` membangun paket branding lokal secara terpisah.
 
 ## Struktur Repository
 
 ```text
 .
-├── branding/                 Logo, wallpaper, GRUB, Plymouth, token
+├── branding/                 Logo, wallpaper, GRUB, Plymouth, token, template tema
 ├── config/
 │   ├── arches/               Overlay paket khusus arsitektur
 │   ├── common/               Paket, archive, include, hook bersama
 │   └── editions/             Overlay Cinnamon, XFCE, LXQt
 ├── docs/                     Arsitektur, build, desain, legal, ADR
-├── scripts/                  Generator, validator, pemeriksaan host
-├── tests/                    QEMU harness, verifikasi artefak, smoke test
+├── scripts/                  Generator token, aset, tema, validator, pemeriksaan host
+├── tests/                    QEMU harness, verifikasi artefak, smoke test, tema, paket
 ├── build.sh                  Wrapper live-build
 ├── Makefile                  Target harian
 ├── plan.md                   Sumber kebenaran scope dan fase
@@ -214,7 +222,7 @@ Kontras dihitung otomatis. Build gagal jika pasangan warna berada di bawah amban
 | Ember 500 | `#DD785B` | Aksen dan link |
 | Vermilion 500 | `#BF4432` | Aksen kuat dan seal |
 
-Aset raster GRUB dan Plymouth dihasilkan oleh `scripts/generate-brand-assets.py` agar tidak bergantung pada renderer SVG di host.
+Aset raster GRUB, Plymouth, dan wallpaper dihasilkan oleh `scripts/generate-brand-assets.py` agar tidak bergantung pada renderer SVG di host. Tema GTK2, GTK3, GTK4, Cinnamon, Muffin dan Metacity, XFCE, Openbox, dan Kvantum dihasilkan oleh `scripts/generate-theme.py` dari template dan token yang sama. Semua tema dikemas dalam paket lokal `arashios-branding`.
 
 ## Keamanan
 
@@ -244,17 +252,20 @@ Kode berlisensi GPL-3.0-or-later. Aset visual berlisensi CC-BY-SA-4.0. Dokumenta
 - [Arsitektur](docs/ARCHITECTURE.md)
 - [Desain](docs/DESIGN.md)
 - [Laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md)
+- [Laporan Fase 2 dan 3](docs/PHASE-2-3-REPORT.md)
+- [Integrasi desktop](docs/DESKTOP.md)
 - [Architecture Decision Records](docs/adr/README.md)
 - [Kontribusi](CONTRIBUTING.md)
 - [Kode etik](CODE_OF_CONDUCT.md)
 - [Changelog](CHANGELOG.md)
 
-## Batasan Fase 1
+## Batasan Saat Ini
 
 - Build yang divalidasi adalah amd64. arm64 dan i386 disiapkan pada konfigurasi dan diuji pada Fase 10.
+- ISO belum dibangun pada host ini karena toolchain `lb`, `debootstrap`, `xorriso`, dan QEMU belum tersedia.
+- Boot GRUB, Plymouth, LightDM, login desktop, panel XFCE, Openbox, dan rendering Kvantum belum diuji pada sesi nyata.
 - Calamares belum tersedia, sehingga ISO hanya berjalan sebagai live session.
 - Tool T1, T2, dan T3 belum di-vendor.
-- Tema desktop masih memakai basis Adwaita dan Papirus. Tema Kage penuh dikerjakan pada Fase 2.
 - Signing produksi belum aktif.
 - Repository ArashiOS dan mekanisme update mandiri belum aktif.
 - Pengujian dilakukan pada QEMU. Uji perangkat keras nyata masuk checklist RC.

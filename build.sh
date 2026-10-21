@@ -120,9 +120,9 @@ require_cmd() {
 }
 
 if [ "$DRY_RUN" -eq 1 ]; then
-    require_cmd lb
+    require_cmd lb dpkg-deb
 else
-    require_cmd lb debootstrap xorriso mksquashfs
+    require_cmd lb debootstrap xorriso mksquashfs dpkg-deb
     case ",$BOOTLOADERS," in
         *,syslinux,*) require_cmd isohybrid ;;
     esac
@@ -238,7 +238,8 @@ HOST_KERNEL="$(uname -r)"
 HOST_ARCH="$(uname -m)"
 LB_VERSION="$(lb --version 2>/dev/null | head -1 || printf 'unknown')"
 CONFIG_HASH="$(
-    cd "$ROOT" && find config branding versions.env -type f -print0 |
+    cd "$ROOT" && find config branding scripts versions.env -type f \
+        ! -path '*/__pycache__/*' -print0 |
         sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1
 )"
 
@@ -271,36 +272,32 @@ for file in "$INCLUDES/etc/os-release" "$INCLUDES/etc/lsb-release" "$INCLUDES/et
         "$file"
 done
 
-log "Menghasilkan token dan aset brand"
+log "Menghasilkan token, aset brand, dan tema Kage"
 "$ROOT/scripts/generate-tokens.py" >/dev/null
 "$ROOT/scripts/generate-brand-assets.py" >/dev/null
+"$ROOT/scripts/generate-theme.py" >/dev/null
 
-install -Dm644 "$ROOT/branding/logo/arashios-mark.svg" \
-    "$INCLUDES/usr/share/icons/hicolor/scalable/apps/arashios.svg"
-install -Dm644 "$ROOT/branding/logo/arashios-wordmark.svg" \
-    "$INCLUDES/usr/share/arashios/branding/arashios-wordmark.svg"
-install -Dm644 "$ROOT/branding/wallpaper/kage-sumi.svg" \
-    "$INCLUDES/usr/share/backgrounds/arashios/kage-sumi.svg"
+log "Membangun paket branding lokal"
+export ARASHIOS_PACKAGE_VERSION="${VERSION_NUM}-1"
+BRANDING_DEB="$("$ROOT/scripts/build-branding-package.sh")"
+mkdir -p "$WORK/config/packages.chroot"
+install -Dm644 "$BRANDING_DEB" \
+    "$WORK/config/packages.chroot/$(basename "$BRANDING_DEB")"
 
-install -Dm644 "$ROOT/branding/grub/theme.txt" \
-    "$INCLUDES/usr/share/grub/themes/arashios/theme.txt"
-for png in "$ROOT"/branding/grub/*.png; do
-    install -Dm644 "$png" "$INCLUDES/usr/share/grub/themes/arashios/$(basename "$png")"
+# Bootloader assets live in the bootloader source tree, not the chroot package.
+install -Dm644 "$ROOT/branding/boot/grub-splash.png" \
+    "$WORK/config/bootloaders/grub-pc/splash.png"
+# Keep the live-specific theme from config/common. It carries the timeout
+# progress bar and references ../splash.png. Only the nine-slice selection
+# pixmaps are shared with the installed GRUB theme.
+for asset in "$ROOT"/branding/grub/select_*.png; do
+    install -Dm644 "$asset" \
+        "$WORK/config/bootloaders/grub-pc/live-theme/$(basename "$asset")"
 done
-
-install -Dm644 "$ROOT/branding/plymouth/arashios.plymouth" \
-    "$INCLUDES/usr/share/plymouth/themes/arashios/arashios.plymouth"
-install -Dm644 "$ROOT/branding/plymouth/arashios.script" \
-    "$INCLUDES/usr/share/plymouth/themes/arashios/arashios.script"
-install -Dm644 "$ROOT/branding/plymouth/logo.png" \
-    "$INCLUDES/usr/share/plymouth/themes/arashios/logo.png"
-
-install -Dm644 "$ROOT/build/tokens/tokens.css" \
-    "$INCLUDES/usr/share/arashios/theme/tokens.css"
-install -Dm644 "$ROOT/build/tokens/kage.qss" \
-    "$INCLUDES/usr/share/arashios/theme/kage.qss"
-install -Dm644 "$ROOT/build/tokens/tokens.resolved.json" \
-    "$INCLUDES/usr/share/arashios/theme/tokens.resolved.json"
+install -Dm644 "$ROOT/branding/boot/splash.png" \
+    "$WORK/config/bootloaders/syslinux_common/splash.png"
+install -Dm644 "$ROOT/branding/boot/splash800x600.png" \
+    "$WORK/config/bootloaders/syslinux_common/splash800x600.png"
 
 install -Dm644 "$ROOT/LICENSE" "$INCLUDES/usr/share/doc/arashios/LICENSE"
 install -Dm644 "$ROOT/LICENSE" "$INCLUDES/usr/share/doc/arashios/copyright"

@@ -1,0 +1,36 @@
+# ArashiOS XFCE default application associations.
+[Default Applications]
+inode/directory=thunar.desktop
+text/plain=mousepad.desktop
+text/x-markdown=mousepad.desktop
+text/x-python=mousepad.desktop
+text/x-shellscript=mousepad.desktop
+application/json=mousepad.desktop
+application/xml=mousepad.desktop
+text/html=firefox-esr.desktop
+application/xhtml+xml=firefox-esr.desktop
+x-scheme-handler/http=firefox-esr.desktop
+x-scheme-handler/https=firefox-esr.desktop
+x-scheme-handler/mailto=thunderbird.desktop
+application/pdf=org.gnome.Evince.desktop
+application/zip=org.gnome.FileRoller.desktop
+application/x-tar=org.gnome.FileRoller.desktop
+application/gzip=org.gnome.FileRoller.desktop
+application/x-7z-compressed=org.gnome.FileRoller.desktop
+application/x-rar=org.gnome.FileRoller.desktop
+image/png=ristretto.desktop
+image/jpeg=ristretto.desktop
+image/gif=ristretto.desktop
+image/webp=ristretto.desktop
+image/svg+xml=ristretto.desktop
+video/mp4=vlc.desktop
+video/x-matroska=vlc.desktop
+video/webm=vlc.desktop
+audio/mpeg=vlc.desktop
+audio/flac=vlc.desktop
+audio/ogg=vlc.desktop
+application/x-bittorrent=org.qbittorrent.qBittorrent.desktop
+text/csv=libreoffice-calc.desktop
+application/vnd.oasis.opendocument.text=libreoffice-writer.desktop
+application/vnd.oasis.opendocument.spreadsheet=libreoffice-calc.desktop
+application/vnd.oasis.opendocument.presentation=libreoffice-impress.desktop

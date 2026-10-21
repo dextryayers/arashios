@@ -16,6 +16,7 @@ Dokumen ini mencatat keputusan arsitektur yang mengikat proyek. Setiap ADR memil
 | 010 | Podman rootless sebagai default | Accepted |
 | 011 | Neovim dan VSCodium | Accepted |
 | 012 | Cakupan legacy i386 | Accepted |
+| 013 | Pipeline tema Kage | Accepted |
 
 ## Format
 

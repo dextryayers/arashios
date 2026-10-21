@@ -1,23 +1,41 @@
 # Design System Kage
 
-Kage adalah bahasa visual ArashiOS. Kage berarti bayangan. Arahnya adalah minimalisme Jepang dengan disiplin red team: ruang kosong yang lapang, satu aksen vermilion, geometri tajam, dan tipografi yang tenang. Tujuannya bukan dekorasi. Tujuannya adalah antarmuka yang cepat dibaca, tidak melelahkan, dan tidak menyembunyikan informasi penting.
+Kage adalah bahasa visual ArashiOS. Kage berarti bayangan. Arahnya adalah
+minimalisme Jepang dengan disiplin red team: ruang kosong yang lapang, satu
+aksen vermilion, geometri tajam, dan tipografi yang tenang. Tujuannya bukan
+dekorasi. Tujuannya adalah antarmuka yang cepat dibaca, tidak melelahkan, dan
+tidak menyembunyikan informasi penting.
 
-Dokumen ini menjelaskan sumber token, aturan pemakaian, aset boot, dan batas implementasi pada Fase 1. Spesifikasi produk lengkap ada di [plan.md](../plan.md) bagian 6 dan 7.
+Dokumen ini menjelaskan implementasi Fase 2 dan Fase 3 pada tingkat statis.
+Spesifikasi produk lengkap ada di [plan.md](../plan.md) bagian 6 dan 7. Hasil
+pengujian dan batas yang belum diverifikasi dicatat pada
+[PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md).
 
 ## 1. Prinsip
 
-1. **Ma, ruang kosong yang disengaja.** Jarak adalah bagian dari komposisi. Panel tidak dipenuhi kontrol. Menu tidak dipenuhi label.
-2. **Satu benang merah.** Vermilion dipakai untuk aksi utama, fokus, dan penanda risiko. Jika semua elemen berwarna merah, tidak ada yang menonjol.
-3. **Tenang, bukan lemah.** Permukaan gelap dan tipis, tanpa bayangan berlebihan. Kontras teks tetap tinggi.
-4. **Bentuk mengikuti fungsi.** Sudut kecil, garis tipis, dan ikon sederhana. Tidak ada ornamen yang mengganggu alur kerja.
-5. **Kejelasan lebih dulu.** Warna status tidak boleh menjadi satu-satunya pembeda. Teks, ikon, dan bentuk harus tetap jelas pada mode gelap.
-6. **Konsisten lintas desktop.** Cinnamon, XFCE, dan LXQt memakai token yang sama, meskipun toolkit dan komponennya berbeda.
+1. **Ma, ruang kosong yang disengaja.** Jarak adalah bagian dari komposisi.
+   Panel tidak dipenuhi kontrol. Menu tidak dipenuhi label.
+2. **Satu benang merah.** Vermilion dipakai untuk aksi utama, fokus, dan
+   penanda risiko. Jika semua elemen berwarna merah, tidak ada yang menonjol.
+3. **Tenang, bukan lemah.** Permukaan gelap dan tipis, tanpa bayangan
+   berlebihan. Kontras teks tetap tinggi.
+4. **Bentuk mengikuti fungsi.** Sudut kecil, garis tipis, dan ikon sederhana.
+   Tidak ada ornamen yang mengganggu alur kerja.
+5. **Kejelasan lebih dulu.** Warna status tidak boleh menjadi satu-satunya
+   pembeda. Teks, ikon, dan bentuk harus tetap jelas pada mode gelap.
+6. **Konsisten lintas desktop.** Cinnamon, XFCE, dan LXQt memakai token yang
+   sama, meskipun toolkit dan komponennya berbeda.
 
 ## 2. Nama dan Narasi
 
-Nama Arashi berarti badai. Mark memakai ensō, lingkaran kuas yang tidak tertutup, sebagai simbol proses yang tidak pernah selesai dan kewaspadaan yang terus berjalan. Kanji 嵐 di tengah mark merujuk pada badai. Segel vermilion di kanan bawah adalah tanda tangan, bukan hiasan.
+Nama Arashi berarti badai. Mark memakai enso, lingkaran kuas yang tidak
+tertutup, sebagai simbol proses yang tidak pernah selesai dan kewaspadaan yang
+terus berjalan. Kanji 嵐 di tengah mark merujuk pada badai. Segel vermilion di
+kanan bawah adalah tanda tangan, bukan hiasan.
 
-Wallpaper memakai frasa 静けさの中に、強さ。 yang berarti kekuatan di dalam ketenangan. Frasa ini menjadi arahan nada visual: tidak berteriak, tetapi siap.
+Wallpaper memakai frasa 静けさの中に、強さ。 yang berarti kekuatan di dalam
+ketenangan. Frasa ini menjadi arahan nada visual: tidak berteriak, tetapi
+siap.
 
 Aturan narasi:
 
@@ -26,11 +44,12 @@ Aturan narasi:
 3. Tidak ada efek suara atau animasi berlebihan pada boot.
 4. Tidak ada klaim keamanan yang tidak dapat dibuktikan.
 
-## 3. Token
+## 3. Token dan Pipeline
 
-Sumber kebenaran token adalah [branding/tokens.json](../branding/tokens.json). Generator menghasilkan:
+Sumber kebenaran token adalah [branding/tokens.json](../branding/tokens.json).
+Versi token saat ini adalah `0.2.0`. File turunan tidak boleh diedit manual.
 
-| Berkas | Kegunaan |
+| Keluaran | Kegunaan |
 |---|---|
 | `build/tokens/tokens.css` | Variabel CSS untuk web, dokumentasi, dan komponen GTK |
 | `build/tokens/_tokens.scss` | Variabel SCSS |
@@ -38,18 +57,23 @@ Sumber kebenaran token adalah [branding/tokens.json](../branding/tokens.json). G
 | `build/tokens/tokens.resolved.json` | Nilai token yang sudah diresolusi |
 | `build/tokens/contrast.md` | Laporan kontras WCAG |
 | `build/tokens/preview.html` | Preview palet dan komponen |
+| `build/theme/themes/ArashiKage` | Tema normal untuk GTK, Cinnamon, XFCE, Openbox, dan Kvantum |
+| `build/theme/themes/ArashiKage-HC` | Tema kontras tinggi |
+| `build/theme/Kvantum` | Konfigurasi dan SVG Kvantum kedua varian |
+| `build/theme/manifest.json` | SHA-256 dari 164 file tema yang dihasilkan |
 
-`build/tokens` adalah hasil generate. Jangan mengedit berkas di dalamnya. Ubah `branding/tokens.json`, lalu jalankan:
+Perintah:
 
 ```bash
 ./scripts/generate-tokens.py
+./scripts/generate-brand-assets.py
+./scripts/generate-theme.py
+./scripts/generate-theme.py --check
 ```
 
-Validasi sinkronisasi:
-
-```bash
-./scripts/generate-tokens.py --check
-```
+`generate-theme.py --check` menolak keluaran yang hilang, kedaluwarsa, atau
+memiliki hash manifest yang salah. Pipeline tema memakai template di
+`branding/theme/templates/` dan tidak memanggil renderer SVG eksternal.
 
 ## 4. Warna
 
@@ -101,7 +125,8 @@ Validasi sinkronisasi:
 
 ### 4.3 Kontras
 
-Ambang mengikuti WCAG 2.1. Teks normal minimal 4.5:1. Teks besar dan komponen UI minimal 3:1. Pasangan teks utama memakai ambang 7:1.
+Ambang mengikuti WCAG 2.1. Teks normal minimal 4.5:1. Teks besar dan komponen
+UI minimal 3:1. Pasangan teks utama memakai ambang 7:1.
 
 | Pemakaian | Foreground | Background | Rasio | Status |
 |---|---|---|---:|---|
@@ -118,34 +143,26 @@ Ambang mengikuti WCAG 2.1. Teks normal minimal 4.5:1. Teks besar dan komponen UI
 
 Aturan:
 
-1. `vermilion.500` tidak dipakai untuk teks kecil di atas `sumi.800`. Rasio 3.85:1 hanya memenuhi ambang teks besar.
+1. `vermilion.500` tidak dipakai untuk teks kecil di atas `sumi.800`.
 2. Teks di atas `ember.500` memakai `sumi.900`, bukan putih.
 3. Status tidak boleh hanya dibedakan dengan warna. Sertakan ikon atau teks.
 4. Jangan menambah warna baru di luar token tanpa ADR atau pembaruan token.
 
 ## 5. Tipografi
 
-| Peran | Keluarga | Fallback |
-|---|---|---|
-| Sans | Inter | Noto Sans, DejaVu Sans, sans-serif |
-| Display | Inter | Noto Sans JP, Noto Sans, sans-serif |
-| Mono | JetBrains Mono | DejaVu Sans Mono, monospace |
-| CJK | Noto Sans CJK JP | Noto Sans JP |
+| Peran | Keluarga | Ukuran | Pemakaian |
+|---|---|---|---|
+| UI | Inter | 10pt | Panel, dialog, menu, label |
+| Teks isi | Inter | 10pt sampai 11pt | Aplikasi GTK dan Qt |
+| Mono sistem | JetBrains Mono | 10pt | Data dan label teknis |
+| Terminal | JetBrains Mono | 11pt | GNOME Terminal, XFCE Terminal, QTerminal |
+| CJK | Noto Sans CJK JP | Mengikuti UI | Teks Jepang |
 
-Skala:
+Fallback:
 
-| Token | Ukuran | Pemakaian |
-|---|---:|---|
-| `xs` | 0.75rem | Metadata, badge |
-| `sm` | 0.875rem | Label, menu sekunder |
-| `base` | 1rem | Teks tubuh |
-| `lg` | 1.125rem | Subjudul |
-| `xl` | 1.25rem | Judul panel |
-| `2xl` | 1.5rem | Judul dialog |
-| `3xl` | 2rem | Judul halaman |
-| `4xl` | 3rem | Hero dan wallpaper |
-
-Line height: 1.2 untuk judul, 1.5 untuk teks tubuh, 1.7 untuk dokumentasi panjang. Letter spacing: `-0.01em` untuk judul besar, `0` untuk teks tubuh, `0.08em` untuk label kapital.
+- Inter, Noto Sans, DejaVu Sans, sans-serif.
+- JetBrains Mono, DejaVu Sans Mono, monospace.
+- Noto Sans CJK JP untuk teks Jepang.
 
 Aturan:
 
@@ -153,6 +170,8 @@ Aturan:
 2. Label kapital hanya untuk kategori pendek, bukan paragraf.
 3. Teks terminal memakai mono dan tidak memakai letter spacing lebar.
 4. Nama berkas dan perintah selalu memakai mono.
+5. Shippori Mincho tidak tersedia di bookworm. Wordmark memakai aset vektor,
+   bukan font yang dipasang ke sistem.
 
 ## 6. Spacing, Radius, Elevasi, dan Gerak
 
@@ -164,49 +183,52 @@ Spacing mengikuti skala 4 piksel:
 | `2` | 8px | Padding kontrol kecil |
 | `3` | 12px | Padding kontrol |
 | `4` | 16px | Jarak antar elemen |
-| `5` | 20px | Padding panel |
 | `6` | 24px | Jarak antarkelompok |
-| `7` | 32px | Margin dialog |
-| `8` | 40px | Jarak bagian |
-| `9` | 48px | Ruang kosong besar |
-| `10` | 64px | Hero |
-| `11` | 96px | Wallpaper |
-| `12` | 128px | Komposisi boot |
+| `8` | 32px | Margin dialog |
+| `12` | 48px | Ruang kosong besar |
 
 Radius:
 
 | Token | Nilai | Pemakaian |
 |---|---:|---|
 | `none` | 0 | Pemisah dan garis |
-| `sm` | 4px | Tombol kecil, badge |
-| `md` | 8px | Tombol, input |
-| `lg` | 12px | Kartu dan panel |
-| `xl` | 16px | Dialog |
-| `full` | 9999px | Avatar dan pill |
+| `sm` | 2px | Tombol kecil, input, kontrol |
+| `md` | 4px | Dialog dan kartu |
+| `lg` | 4px | Panel dan permukaan |
+| `xl` | 4px | Dialog besar |
+| `full` | 9999px | Pill, avatar, dan kontrol melingkar |
+
+Radius di atas 4px hanya dipakai untuk kontrol melingkar dan pill. Pemeriksaan
+tema menolak radius besar pada selector biasa.
 
 Elevasi:
 
 | Token | Nilai | Pemakaian |
 |---|---|---|
 | `sm` | 0 1px 2px rgba(0,0,0,0.40) | Kontrol |
-| `md` | 0 4px 12px rgba(0,0,0,0.35) | Menu |
-| `lg` | 0 12px 32px rgba(0,0,0,0.45) | Dialog |
-| `glow` | cincin ember 35 persen | Fokus |
+| `md` | 0 8px 24px rgba(0,0,0,0.45) | Menu dan popover |
 
 Gerak:
 
-| Token | Nilai | Pemakaian |
+| Aksi | Durasi | Easing |
 |---|---|---|
-| `durationFast` | 120ms | Hover dan tekan |
-| `durationBase` | 180ms | Buka menu |
-| `durationSlow` | 280ms | Dialog |
-| `easingStandard` | cubic-bezier(0.2, 0, 0, 1) | Semua transisi |
+| Hover | 120ms | cubic-bezier(0.2, 0, 0, 1) |
+| Panel | 180ms | cubic-bezier(0.2, 0, 0, 1) |
+| Dialog | 280ms | cubic-bezier(0.2, 0, 0, 1) |
 
-Gerak harus menghormati preferensi pengurangan animasi. Pada desktop, animasi tidak boleh menunda input.
+Tidak ada bounce, parallax, atau animasi di atas 300ms. Mode reduced motion
+mematikan animasi antarmuka melalui `arashios-accessibility motion off` dan
+menghormati pengaturan GTK `gtk-enable-animations`.
 
 ## 7. Komponen
 
-### 7.1 Tombol
+### 7.1 Panel
+
+Panel berada di atas pada ketiga edisi, dengan tinggi 30px, latar `sumi.900`
+96 persen, border bawah 1px `sumi.500`, dan tanpa bayangan. Panel tidak
+memakai dock melayang dan tidak menampilkan label jendela pada Cinnamon.
+
+### 7.2 Tombol dan Input
 
 | Varian | Latar | Teks | Border |
 |---|---|---|---|
@@ -215,164 +237,291 @@ Gerak harus menghormati preferensi pengurangan animasi. Pada desktop, animasi ti
 | Danger | `vermilion.500` | `washi.50` | Tanpa border |
 | Ghost | Transparan | `washi.100` | `sumi.500` |
 
-Tinggi tombol: 32px untuk kontrol rapat, 36px untuk toolbar, 40px untuk dialog. Radius `md`. Padding horizontal 12px sampai 16px. Fokus memakai cincin 2px `ember.400` dengan offset 2px.
+Tinggi tombol 32px, radius `sm`, padding horizontal 12px. Fokus memakai cincin
+2px `ember.400` dengan offset 2px. Input memakai latar `sumi.900`, border
+`sumi.500`, dan placeholder `ash.500`.
 
-### 7.2 Input
+### 7.3 Menu dan Notifikasi
 
-Input memakai latar `sumi.900`, border `sumi.500`, teks `washi.100`, dan placeholder `ash.500`. Fokus memakai border `ember.400` dan glow tipis. Pesan error memakai `vermilion.400` dengan ikon, bukan hanya warna.
-
-### 7.3 Menu dan Panel
-
-Menu memakai `surfaceRaised`, border `sumi.500`, radius `md`, dan shadow `md`. Item terpilih memakai `ember.500` dengan teks `sumi.900`. Panel desktop memakai `sumi.800` dengan opacity tinggi, border bawah `sumi.500`, dan tinggi 32px sampai 40px.
+Menu memakai `surfaceRaised`, border `sumi.500`, radius `md`, dan shadow `md`.
+Item terpilih memakai `ember.500` dengan teks `sumi.900`. Notifikasi muncul di
+kanan atas, memakai border kiri 3px sesuai status, dan tidak hanya bergantung
+pada warna. Notifikasi kritis tidak hilang otomatis.
 
 ### 7.4 Terminal
 
-Terminal memakai latar `sumi.900`, teks `washi.100`, kursor `ember.500`, dan selection `vermilion.500` dengan teks `washi.50`. Font JetBrains Mono 11pt sampai 12pt. Transparansi tidak aktif secara default agar teks tetap terbaca.
+Terminal memakai latar `sumi.900`, teks `washi.100`, kursor `ember.500`, dan
+selection `vermilion.500` dengan teks `washi.50`. Palet 16 warna diturunkan
+langsung dari token `terminal`. Transparansi tidak aktif secara default.
 
-### 7.5 Notifikasi
+Profil terminal yang disediakan:
 
-Notifikasi memakai `surfaceRaised`, border kiri 3px sesuai status, judul `washi.100`, isi `ash.300`, dan aksi `ember.500`. Durasi default 6 detik. Notifikasi kritis tidak hilang otomatis.
+- GNOME Terminal: profil dconf `Kage` dengan font JetBrains Mono 11.
+- XFCE Terminal: `terminalrc` dengan ColorPalette token Kage.
+- QTerminal: `qterminal.ini` dengan palet token Kage.
 
 ## 8. Logo dan Wallpaper
 
 ### 8.1 Mark
 
-Mark adalah ensō terbuka dengan kanji 嵐 dan segel vermilion. Mark tersedia di:
+Mark adalah enso terbuka dengan kanji 嵐 dan segel vermilion. Mark tersedia
+dalam format SVG dan raster:
 
 - `branding/logo/arashios-mark.svg`
 - `branding/logo/arashios-wordmark.svg`
+- `branding/logo/arashios-mark-mono.svg`
+- `branding/logo/arashios-mark-dark.svg`
+- `branding/logo/arashios-favicon.svg`
+- `branding/logo/hicolor/<size>x<size>/apps/arashios.png`
 
 Aturan:
 
-1. Mark tidak diputar, tidak diberi bayangan tambahan, dan tidak diubah warnanya di luar varian yang disediakan.
-2. Ukuran minimum mark digital adalah 24px. Di bawah ukuran itu, gunakan hanya segel atau ikon monokrom.
-3. Ruang kosong di sekitar mark minimal 25 persen dari lebar mark.
+1. Mark tidak diputar, tidak diberi bayangan tambahan, dan tidak diubah
+   warnanya di luar varian yang disediakan.
+2. Ukuran minimum mark digital adalah 24px. Di bawah ukuran itu, gunakan hanya
+   segel atau ikon monokrom.
+3. Ruang kosong di sekitar mark minimal setengah tinggi mark.
 4. Mark tidak diletakkan di atas latar ramai tanpa bidang pemisah.
-5. Wordmark dipakai untuk dokumen dan wallpaper. Mark dipakai untuk ikon dan boot.
+5. Wordmark dipakai untuk dokumen dan wallpaper. Mark dipakai untuk ikon dan
+   boot.
 
 ### 8.2 Wallpaper
 
-Wallpaper utama adalah `branding/wallpaper/kage-sumi.svg` dengan kanvas 3840x2160. Komposisi:
+Wallpaper didistribusikan sebagai PNG 3840x2160. Sumber SVG tetap disimpan
+untuk edit dan audit.
+
+| Nama | Deskripsi | Mode |
+|---|---|---|
+| `kage-sumi` | Gradien sumi, enso, grain halus | Gelap, default |
+| `kage-shuriken` | Pola geometri shuriken kontras rendah | Gelap |
+| `kage-bamboo` | Siluet bambu rendah kontras | Gelap |
+| `kage-washi` | Tekstur washi dengan segel merah | Terang |
+| `kage-storm` | Garis isobar dan petir tipis | Gelap |
+
+Komposisi `kage-sumi`:
 
 1. Latar gradien sumi dari `#070709` ke `#121216`.
-2. Grid tipis 80px dengan opacity 3.5 persen.
+2. Grid tipis 80px dengan opacity rendah.
 3. Glow vermilion di kanan atas.
-4. Ensō besar di kanan.
+4. Enso besar di kanan.
 5. Garis potong vertikal di kiri.
 6. Wordmark dan frasa Jepang di kiri bawah.
 
-Wallpaper tidak memakai teks yang menutupi ikon desktop. Area kiri bawah sengaja gelap agar label ikon tetap terbaca. Wallpaper tambahan direncanakan pada Fase 2.
+Wallpaper tidak memakai teks yang menutupi ikon desktop. Ikon desktop
+dinonaktifkan pada Cinnamon, XFCE, dan LXQt.
 
 ## 9. Boot Experience
 
 ### 9.1 GRUB
 
-Tema GRUB berada di `branding/grub/theme.txt` dan dipasang ke `/usr/share/grub/themes/arashios/`. Latar `background.png` dihasilkan oleh `scripts/generate-brand-assets.py` dari komposisi SVG. Menu ditempatkan di 58 persen kiri, dengan label `ARASHIOS / KAGE` dan `SECURITY FIRST`.
+Tema GRUB berada di `branding/grub/theme.txt` dan dipasang ke
+`/usr/share/grub/themes/arashios/`. Latar `background.png` 1920x1080 dihasilkan
+oleh `scripts/generate-brand-assets.py`. Menu memakai label `ARASHIOS / KAGE`
+dan `SECURITY FIRST`.
 
-Aturan:
+Untuk ISO live, tema khusus berada di
+`config/common/bootloaders/grub-pc/live-theme/theme.txt`. Tema ini memakai
+`../splash.png`, yaitu `branding/boot/grub-splash.png` 1024x768, dan menyertakan
+progress bar timeout. `build.sh` menyalin pixmap nine-slice `select_*.png` dari
+`branding/grub/` ke direktori live tersebut. Dengan begitu menu GRUB live
+memakai komposisi Kage, bukan tema bawaan live-build.
 
-1. Menu tidak menutupi mark.
-2. Item terpilih memakai `select_*.png` nine-slice dengan teks `sumi.900`.
-3. Tidak ada logo Debian pada layar boot.
-4. Entri serial disediakan untuk debugging.
-5. Timeout default 5 detik, dapat diubah pada Fase 7.
+Konfigurasi live memakai `config/common/bootloaders/grub-pc/config.cfg` dengan
+aturan:
+
+1. Timeout 5 detik.
+2. Resolusi 1024x768, dengan fallback 800x600 dan mode otomatis.
+3. Entri serial `ArashiOS serial console` dengan `console=ttyS0,115200`.
+4. Tidak ada logo Debian.
+5. Tidak ada beep atau suara boot.
 
 ### 9.2 Plymouth
 
-Tema Plymouth berada di `branding/plymouth/`. Komposisi berupa latar gelap, logo, teks `ARASHIOS`, dan subjudul `KAGE` berwarna ember. Tidak ada progress bar dinamis pada Fase 1. Animasi halus direncanakan pada Fase 2 setelah kompatibilitas Plymouth diverifikasi pada boot nyata.
+Tema Plymouth berada di `branding/plymouth/`. Komposisi berupa latar sumi,
+logo enso, teks `ARASHIOS` dengan font Sans 26, subjudul `KAGE` berwarna
+ember, dan progress line 320x2. Hanya progress line yang bergerak.
+
+Aset:
+
+- `logo.png`
+- `progress_box.png`
+- `progress_bar.png`
+- `arashios.script`
+- `arashios.plymouth`
+
+Progress line memakai `Plymouth.SetBootProgressFunction`. Tidak ada suara,
+video, atau animasi berulang.
 
 ### 9.3 LightDM
 
-Greeter memakai `lightdm-gtk-greeter` dengan latar `sumi.800`, teks `washi.100`, dan aksen `ember.500`. Autologin hanya aktif untuk sesi live. Fase 7 harus menghapus autologin pada sistem terpasang.
+Greeter memakai `lightdm-gtk-greeter` dengan tema `ArashiKage`, ikon
+`Papirus-Dark`, kursor `Bibata-Modern-Classic`, font `Inter 10`, panel atas,
+dan wallpaper `kage-sumi.png`. Sesi yang tersedia mengikuti edisi yang
+dipasang.
+
+Autologin hanya aktif pada sesi live. Fase 7 harus menghapus autologin pada
+sistem terpasang.
 
 ## 10. Pemetaan Desktop
 
 | Elemen | Cinnamon | XFCE | LXQt |
 |---|---|---|---|
-| Panel | Bawah, 40px | Atas, 32px | Bawah, 32px |
-| Menu | Menu aplikasi | Whisker Menu | Menu aplikasi LXQt |
+| Panel | Atas, 30px | Atas, 30px | Atas, 30px |
+| Menu | Menu Cinnamon | Whisker Menu | Menu aplikasi LXQt |
+| Window list | Grouped window list, ikon saja | Tasklist | Taskbar |
+| Workspace | 4, indikator vertikal | 4, pager | 4, desktop switch |
 | File manager | Nemo | Thunar | PCManFM-Qt |
 | Terminal | GNOME Terminal | XFCE Terminal | QTerminal |
 | Editor | Gedit | Mousepad | Featherpad |
-| Tema GTK | Adwaita gelap, token Kage | Adwaita gelap, token Kage | Qt Kage QSS |
-| Ikon | Papirus | Papirus | Papirus |
+| Image viewer | Eye of GNOME | Ristretto | LXImage-Qt |
+| Tema GTK | ArashiKage | ArashiKage | ArashiKage |
+| Tema Qt | Kvantum ArashiKage | Tidak berlaku | Kvantum ArashiKage |
+| Window manager | Muffin | xfwm4 | Openbox |
+| Ikon desktop | Nonaktif | Nonaktif | Nonaktif |
 
-Pada Fase 1, desktop memakai basis Adwaita dan Papirus. Tema GTK dan Qt penuh, kursor, dan layout panel final dikerjakan pada Fase 2 dan Fase 3. Token dan QSS sudah tersedia, tetapi belum diterapkan ke seluruh toolkit.
+### 10.1 Cinnamon
 
-## 11. Terminal dan Editor
+1. Panel atas 30px dengan menu, grouped window list, kalender, workspace
+   switcher, systray, notifikasi, keyboard, suara, dan power.
+2. Empat workspace.
+3. Nemo list view, thumbnail nonaktif, hidden file nonaktif.
+4. Desktop tanpa ikon.
+5. Screensaver aktif dengan lock delay 0.
+6. Automount dan autorun dimatikan.
+7. GNOME Terminal memakai profil Kage.
 
-Shell default adalah Zsh. Script live-config `9990-arashios-shell` menetapkan Zsh sebagai shell user live setelah user dibuat. Prompt memakai prompt bawaan Zsh dan warna palet Kage. Konfigurasi Starship sudah disiapkan di `.config/starship.toml`; integrasi akan aktif setelah biner Starship di-vendor pada Fase 4 atau Fase 5. `.zshrc` memuat Starship hanya jika perintah tersedia. Konfigurasi ada di:
+### 10.2 XFCE
 
-- `config/common/includes.chroot/etc/skel/.zshrc`
-- `config/common/includes.chroot/etc/skel/.config/starship.toml`
-- `config/common/includes.chroot/etc/skel/.tmux.conf`
-- `config/common/includes.chroot/etc/skel/.config/nvim/init.lua`
+1. Panel atas 30px dengan Whisker Menu, tasklist, jam, systray, pulseaudio,
+   power manager, notifikasi, dan pager.
+2. xfwm4 memakai tema ArashiKage, compositor dengan shadow halus, tanpa blur.
+3. Thunar list view dan volume management.
+4. Desktop tanpa ikon, trash, home, atau filesystem.
+5. Wallpaper `kage-sumi.png` dengan mode zoom.
+6. XFCE Terminal memakai palet token.
 
-Neovim memakai konfigurasi Lua tanpa plugin berat pada Fase 1. VSCodium ditambahkan pada Fase 5. Editor harus tetap dapat dijalankan tanpa koneksi jaringan.
+### 10.3 LXQt
 
-## 12. Aksesibilitas
+1. Panel atas 30px dengan menu, quick launch, taskbar, desktop switch,
+   status notifier, tray, volume, jam, dan show desktop.
+2. Quick launch berisi QTerminal, PCManFM-Qt, dan Firefox ESR.
+3. Openbox memakai border aktif vermilion 2px, title layout `IMC`, dan empat
+   workspace.
+4. PCManFM-Qt list view, wallpaper `kage-sumi.png`, tanpa desktop shortcut.
+5. Kvantum ArashiKage untuk seluruh aplikasi Qt.
+6. Tanpa compositor berat.
 
-1. Kontras teks memenuhi WCAG AA. Pasangan utama memenuhi AAA.
-2. Fokus selalu terlihat dan tidak hanya bergantung pada warna.
-3. Status memakai ikon atau teks.
-4. Animasi dapat dimatikan.
-5. Ukuran teks dapat diperbesar tanpa memotong label.
-6. Terminal tidak memakai transparansi default.
-7. Wallpaper tidak mengganggu keterbacaan label ikon.
-8. LightDM menyediakan pilihan sesi dan keyboard.
+## 11. Aksesibilitas
 
-Pengujian aksesibilitas penuh, termasuk screen reader dan scaling, dilakukan pada Fase 10.
-
-## 13. Pipeline Aset
+Perintah:
 
 ```bash
-# Token dan stylesheet
-./scripts/generate-tokens.py
-
-# Latar GRUB, nine-slice, dan logo Plymouth
-./scripts/generate-brand-assets.py
-
-# Verifikasi tanpa menulis ulang
-./scripts/generate-tokens.py --check
-./scripts/generate-brand-assets.py --check
+arashios-accessibility contrast on
+arashios-accessibility contrast off
+arashios-accessibility contrast toggle
+arashios-accessibility motion on
+arashios-accessibility motion off
+arashios-accessibility status
+kage-contrast on
 ```
 
-Aset raster dihasilkan dari kode agar tidak bergantung pada renderer SVG di host. Jika aset berubah, jalankan generator dan commit hasilnya bersama sumbernya.
+Perilaku:
 
-## 14. Lisensi
+1. Mode kontras memakai tema `ArashiKage-HC` pada GTK3, GTK4, Cinnamon,
+   XFCE, Openbox, dan Kvantum.
+2. Mode motion menulis `gtk-enable-animations` dan pengaturan desktop yang
+   tersedia. Efek kompositor tidak dimatikan paksa.
+3. Status menampilkan desktop, tema, dan status animasi jika toolkit
+   menyediakan query.
+4. Aplikasi yang sudah berjalan perlu dimulai ulang. Beberapa window manager
+   perlu logout dan login ulang.
+5. Fokus keyboard memakai outline 2px `ember.400`, bukan hanya perubahan
+   warna.
+6. Target klik minimal 32x32px.
+7. Teks tidak lebih kecil dari 10pt untuk UI dan 11pt untuk terminal.
+8. Wallpaper tidak mengganggu keterbacaan label.
+
+Pengujian screen reader, scaling 125 dan 150 persen, serta navigasi installer
+tanpa mouse termasuk Fase 6, 7, dan 10.
+
+## 12. Verifikasi
+
+Pemeriksaan statis yang tersedia:
+
+```bash
+./tests/theme.sh
+./tests/desktop-matrix.sh
+./tests/branding-package.sh
+./scripts/validate-config.sh
+```
+
+Cakupan:
+
+1. 164 file tema dengan hash manifest dan XML yang dapat diparse.
+2. 70 aset XFWM per varian tema.
+3. Parser CSS GTK3 untuk kedua varian.
+4. Pemeriksaan warna, radius, durasi transisi, dan ukuran panel.
+5. Pemeriksaan dconf Cinnamon dengan `dconf compile`.
+6. Pemeriksaan XML XFCE, Openbox, dan Kvantum.
+7. Pemeriksaan MIME, paket, dan layout panel.
+8. Pemeriksaan isi dan metadata paket `arashios-branding`.
+
+Angka aktual dan batas pengujian dicatat di
+[PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md).
+
+## 13. Batas Implementasi
+
+1. ISO belum dibangun pada host ini karena `lb`, `debootstrap`, `xorriso`,
+   dan QEMU belum tersedia.
+2. Boot GRUB, Plymouth, LightDM, login desktop, panel XFCE, Openbox, dan
+   rendering Kvantum belum diuji pada sesi nyata.
+3. Parser CSS GTK4 dilewati karena PyGObject GTK4 tidak tersedia di host.
+4. arm64 dan i386 belum diuji secara runtime.
+5. Screenshot sebelum dan sesudah belum tersedia.
+6. Cinnamon applet default dipatch melalui hook. Pembaruan paket Cinnamon
+   dapat menimpa file JSON sistem.
+7. Aplikasi yang sudah berjalan tidak dimulai ulang otomatis setelah tema
+   diganti.
+8. Autologin masih aktif pada sistem terpasang sampai Fase 7.
+9. Starship dan Shippori Mincho tidak tersedia di bookworm. Prompt memakai
+   fallback Zsh, wordmark memakai aset vektor.
+10. Alamat maintainer memakai domain contoh `.example` sampai domain proyek
+    diverifikasi.
+
+## 14. Checklist QA Visual
+
+Checklist ini wajib dijalankan saat ISO dan sesi desktop tersedia.
+
+| ID | Pemeriksaan | Lulus jika |
+|---|---|---|
+| VQ-01 | Palet | Tidak ada warna di luar token |
+| VQ-02 | Kontras | Semua teks lulus AA |
+| VQ-03 | Tipografi | Maksimal dua keluarga font per layar |
+| VQ-04 | Spacing | Semua jarak kelipatan 4px |
+| VQ-05 | Radius | Tidak ada radius di atas 4px kecuali pill |
+| VQ-06 | Shadow | Hanya menu dan popover |
+| VQ-07 | Aksen | Maksimal satu aksen merah per layar |
+| VQ-08 | Ikon | Tidak ada emoji di UI sistem |
+| VQ-09 | Motion | Tidak ada animasi di atas 300ms |
+| VQ-10 | Empty state | Setiap layar kosong punya pesan jelas |
+| VQ-11 | Boot | GRUB dan Plymouth tidak menampilkan logo Debian |
+| VQ-12 | Greeter | LightDM menampilkan sesi yang benar |
+| VQ-13 | Desktop | Panel, wallpaper, dan ikon sesuai edisi |
+| VQ-14 | Focus | Fokus terlihat pada tombol, input, menu, dan panel |
+| VQ-15 | Keyboard | Greeter dan desktop dapat dinavigasi tanpa mouse |
+| VQ-16 | Scaling | 100, 125, dan 150 persen tidak memotong label |
+
+## 15. Lisensi
 
 | Aset | Lisensi |
 |---|---|
 | Mark, wordmark, wallpaper, tema GRUB, tema Plymouth | CC-BY-SA-4.0 |
 | Token dan stylesheet | CC-BY-SA-4.0 |
-| Kode generator | GPL-3.0-or-later |
+| Kode generator dan tema | GPL-3.0-or-later |
 | Dokumentasi | CC-BY-4.0 |
 | Font | Lisensi masing-masing, umumnya OFL |
+| Papirus | GPL-3.0 |
+| Bibata | GPL-3.0 |
 
-Atribusi dan batasan merek dijelaskan di [docs/LEGAL.md](LEGAL.md) dan [docs/TRADEMARK.md](TRADEMARK.md).
-
-## 15. Checklist QA Visual
-
-1. Mark tidak terpotong pada ukuran 24px, 48px, dan 256px.
-2. Wordmark terbaca pada latar terang dan gelap.
-3. Tidak ada teks yang jatuh di bawah rasio kontras minimum.
-4. Fokus terlihat pada tombol, input, menu, dan panel.
-5. Status sukses, peringatan, dan danger dapat dibedakan tanpa warna.
-6. Wallpaper tidak menutupi label ikon desktop.
-7. GRUB menampilkan menu dan mark tanpa tumpang tindih.
-8. Plymouth menampilkan logo tanpa pecah pada resolusi 1024x768 dan 1920x1080.
-9. LightDM menampilkan sesi yang benar untuk edisi yang dipasang.
-10. Terminal dan editor memakai font yang tersedia di image.
-11. Tidak ada aset Debian yang tersisa pada layar boot.
-12. Semua aset baru memiliki lisensi dan sumber.
-
-## 16. Batas Fase 1
-
-1. Tema GTK penuh belum ada.
-2. Tema Qt penuh belum diterapkan ke seluruh aplikasi.
-3. Kursor Kage belum ada.
-4. Ikon khusus ArashiOS baru mark aplikasi.
-5. Wallpaper baru satu.
-6. Animasi Plymouth belum diverifikasi pada boot nyata.
-7. Layout panel final belum dikunci.
-8. QA visual pada perangkat keras nyata belum dilakukan.
+Atribusi dan batasan merek dijelaskan di [LEGAL.md](LEGAL.md) dan
+[TRADEMARK.md](TRADEMARK.md).

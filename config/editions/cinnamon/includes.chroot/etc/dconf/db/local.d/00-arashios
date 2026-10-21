@@ -18,18 +18,15 @@ icon-theme='Papirus-Dark'
 cursor-theme='Bibata-Modern-Classic'
 cursor-size=24
 font-name='Inter 10'
-document-font-name='Inter 10'
-monospace-font-name='JetBrains Mono 10'
 text-scaling-factor=1.0
 clock-use-24h=true
 clock-show-date=true
 clock-show-seconds=false
 enable-animations=true
-toolkit-accessibility=false
+toolkit-accessibility=true
 
 [org/cinnamon/desktop/background]
 picture-uri='file:///usr/share/backgrounds/arashios/kage-sumi.png'
-picture-uri-dark='file:///usr/share/backgrounds/arashios/kage-sumi.png'
 picture-options='zoom'
 primary-color='#070709'
 secondary-color='#0A0A0C'
@@ -73,7 +70,6 @@ icon-theme='Papirus-Dark'
 cursor-theme='Bibata-Modern-Classic'
 cursor-size=24
 font-name='Inter 10'
-monospace-font-name='JetBrains Mono 10'
 enable-animations=true
 color-scheme='prefer-dark'
 
@@ -88,3 +84,28 @@ secondary-color='#0A0A0C'
 automount=false
 automount-open=false
 autorun-never=true
+
+# GNOME Terminal profile used by gnome-terminal under Cinnamon. Profiles are
+# relocatable dconf keys; the UUID is fixed so the default is stable.
+[org/gnome/terminal/legacy/profiles:]
+default='a1e4f4c2-6a5f-5b6e-9f0a-2f6f9b6d7c11'
+list=['a1e4f4c2-6a5f-5b6e-9f0a-2f6f9b6d7c11']
+
+[org/gnome/terminal/legacy/profiles:/:a1e4f4c2-6a5f-5b6e-9f0a-2f6f9b6d7c11]
+visible-name='Kage'
+use-theme-colors=false
+background-color='#070709'
+foreground-color='#EDE8DE'
+bold-color='#F7F4EE'
+bold-color-same-as-fg=false
+palette=['#070709', '#D05545', '#5FA88C', '#D6B36A', '#B8B2A7', '#DD785B', '#3E8A72', '#D8D2C6', '#6B675F', '#E8917A', '#5FA88C', '#D6B36A', '#EDE8DE', '#E8917A', '#3E8A72', '#F7F4EE']
+font='JetBrains Mono 11'
+use-system-font=false
+cursor-colors-set=true
+cursor-background-color='#DD785B'
+cursor-foreground-color='#070709'
+highlight-colors-set=true
+highlight-background-color='#BF4432'
+highlight-foreground-color='#F7F4EE'
+default-size-columns=120
+default-size-rows=36

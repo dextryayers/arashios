@@ -1,0 +1,5 @@
+/* System-wide libadwaita and GTK 4 override.
+ * XDG_CONFIG_DIRS includes /etc/xdg, so this file is loaded before the
+ * per-user CSS. The full Kage theme lives in the arashios-branding package.
+ */
+@import url("/usr/share/themes/ArashiKage/gtk-4.0/gtk.css");

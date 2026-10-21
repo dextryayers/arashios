@@ -97,6 +97,17 @@ require_file branding/plymouth/arashios.script
 require_file branding/plymouth/logo.png
 require_file scripts/generate-tokens.py
 require_file scripts/generate-brand-assets.py
+require_file scripts/generate-theme.py
+require_file scripts/check-theme.py
+require_file scripts/check-desktop.py
+require_file scripts/build-branding-package.sh
+require_file branding/theme/templates/gtk-3.0/gtk.css.in
+require_file branding/theme/templates/gtk-4.0/gtk.css.in
+require_file branding/theme/templates/cinnamon/cinnamon.css.in
+require_file branding/theme/templates/kvantum/ArashiKage.kvconfig.in
+for wallpaper in kage-sumi kage-shuriken kage-bamboo kage-washi kage-storm; do
+    require_file "branding/wallpaper/$wallpaper.png"
+done
 
 for name in nw n ne w c e sw s se; do
     require_file "branding/grub/select_${name}.png"
@@ -106,7 +117,10 @@ printf '\nHak eksekusi:\n'
 require_exec build.sh
 for file in scripts/check-env.sh scripts/validate-config.sh scripts/check-docs.sh \
             scripts/generate-tokens.py scripts/generate-brand-assets.py \
-            tests/qemu-boot.sh tests/smoke.sh tests/verify-artifact.sh tests/config-matrix.sh; do
+            scripts/generate-theme.py scripts/check-theme.py scripts/check-desktop.py \
+            scripts/build-branding-package.sh \
+            tests/qemu-boot.sh tests/smoke.sh tests/verify-artifact.sh tests/config-matrix.sh \
+            tests/theme.sh tests/desktop-matrix.sh tests/branding-package.sh; do
     require_exec "$file"
 done
 for file in "$ROOT"/config/common/hooks/live/*.chroot; do
@@ -117,6 +131,8 @@ for file in "$ROOT"/config/common/hooks/live/*.chroot; do
     fi
 done
 require_exec config/common/includes.chroot/usr/local/bin/arashios-wallpaper
+require_exec config/common/includes.chroot/usr/local/bin/arashios-accessibility
+require_exec config/common/includes.chroot/usr/local/bin/kage-contrast
 require_exec config/common/includes.chroot/lib/live/config/9990-arashios-shell
 
 printf '\nMetadata sistem:\n'
@@ -214,7 +230,8 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 root = Path(sys.argv[1])
 failed = []
-for path in sorted(root.glob("**/*.svg")):
+paths = list(root.glob("**/*.svg")) + list(root.glob("config/**/*.xml"))
+for path in sorted(set(paths)):
     try:
         ET.parse(path)
     except ET.ParseError as exc:
@@ -224,9 +241,31 @@ if failed:
     raise SystemExit(1)
 PY
 then
-    ok "semua SVG valid"
+    ok "semua SVG dan XML konfigurasi valid"
 else
-    fail "SVG tidak valid"
+    fail "SVG atau XML tidak valid"
+fi
+
+if command -v grub-script-check >/dev/null 2>&1; then
+    if grub-script-check config/common/bootloaders/grub-pc/config.cfg >/dev/null 2>&1; then
+        ok "konfigurasi GRUB dapat diparse"
+    else
+        fail "konfigurasi GRUB tidak dapat diparse"
+    fi
+else
+    info "grub-script-check tidak tersedia, pemeriksaan GRUB dilewati"
+fi
+
+if command -v dconf >/dev/null 2>&1; then
+    dconf_tmp="$(mktemp)"
+    TMP_FILES+=("$dconf_tmp")
+    if dconf compile "$dconf_tmp" "$ROOT/config/editions/cinnamon/includes.chroot/etc/dconf/db/local.d" >/dev/null 2>&1; then
+        ok "database dconf Cinnamon valid"
+    else
+        fail "database dconf Cinnamon tidak valid"
+    fi
+else
+    info "dconf tidak tersedia, kompilasi database dilewati"
 fi
 
 printf '\nSinkronisasi artefak:\n'
@@ -239,6 +278,11 @@ if "$ROOT/scripts/generate-brand-assets.py" --check >/dev/null 2>&1; then
     ok "aset raster sinkron"
 else
     fail "aset raster kedaluwarsa, jalankan scripts/generate-brand-assets.py"
+fi
+if "$ROOT/scripts/generate-theme.py" --check >/dev/null 2>&1; then
+    ok "tema desktop sinkron"
+else
+    fail "tema desktop kedaluwarsa atau hilang, jalankan scripts/generate-theme.py"
 fi
 
 printf '\n'

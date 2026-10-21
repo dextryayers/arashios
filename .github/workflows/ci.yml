@@ -24,7 +24,8 @@ jobs:
       - name: Install lint tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck python3
+          sudo apt-get install -y shellcheck python3 python3-gi \
+            gir1.2-gtk-3.0 gir1.2-gtk-4.0 libgtk-4-1 dconf-cli dpkg-dev
 
       - name: Shell syntax
         run: |
@@ -49,6 +50,21 @@ jobs:
 
       - name: Verify brand assets are current
         run: ./scripts/generate-brand-assets.py --check
+
+      - name: Generate Kage theme
+        run: ./scripts/generate-theme.py
+
+      - name: Verify Kage theme is current
+        run: ./scripts/generate-theme.py --check
+
+      - name: Validate theme assets
+        run: ./tests/theme.sh
+
+      - name: Validate desktop integration
+        run: ./tests/desktop-matrix.sh
+
+      - name: Validate branding package
+        run: ./tests/branding-package.sh
 
       - name: Validate build configuration
         run: ./scripts/validate-config.sh

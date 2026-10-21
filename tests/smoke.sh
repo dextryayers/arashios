@@ -97,17 +97,43 @@ esac
 check_file /etc/arashios/build-info
 
 printf '\nBranding dan tema:\n'
-check_file /usr/share/backgrounds/arashios/kage-sumi.svg
+for wallpaper in kage-sumi kage-shuriken kage-bamboo kage-washi kage-storm; do
+    check_file "/usr/share/backgrounds/arashios/$wallpaper.png"
+done
 check_file /usr/share/icons/hicolor/scalable/apps/arashios.svg
+check_file /usr/share/icons/hicolor/256x256/apps/arashios.png
 check_file /usr/share/grub/themes/arashios/theme.txt
 check_file /usr/share/grub/themes/arashios/background.png
 check_file /usr/share/plymouth/themes/arashios/arashios.plymouth
 check_file /usr/share/plymouth/themes/arashios/arashios.script
 check_file /usr/share/plymouth/themes/arashios/logo.png
+check_file /usr/share/plymouth/themes/arashios/progress_box.png
+check_file /usr/share/plymouth/themes/arashios/progress_bar.png
+check_grep 'SetBootProgressFunction' /usr/share/plymouth/themes/arashios/arashios.script 'progress Plymouth'
 check_file /usr/share/arashios/theme/kage.qss
 check_file /usr/share/arashios/theme/tokens.css
+check_file /usr/share/arashios/theme/theme-manifest.json
+check_file /usr/share/themes/ArashiKage/index.theme
+check_file /usr/share/themes/ArashiKage/gtk-3.0/gtk.css
+check_file /usr/share/themes/ArashiKage/gtk-4.0/gtk.css
+check_file /usr/share/themes/ArashiKage-HC/index.theme
+check_file /usr/share/Kvantum/ArashiKage/ArashiKage.kvconfig
 check_exec /usr/local/bin/arashios-wallpaper
+check_exec /usr/local/bin/arashios-accessibility
+check_exec /usr/local/bin/kage-contrast
 check_file /etc/xdg/autostart/arashios-wallpaper.desktop
+check_grep '^gtk-theme-name=ArashiKage$' /etc/gtk-3.0/settings.ini 'tema GTK3 ArashiKage'
+check_grep '^gtk-icon-theme-name=Papirus-Dark$' /etc/gtk-3.0/settings.ini 'ikon Papirus-Dark'
+check_grep '^gtk-cursor-theme-name=Bibata-Modern-Classic$' /etc/gtk-3.0/settings.ini 'kursor Bibata'
+check_grep '^gtk-theme-name = "ArashiKage"$' /etc/gtk-2.0/gtkrc 'tema GTK2 ArashiKage'
+check_grep 'ArashiKage/gtk-4.0/gtk.css' /etc/xdg/gtk-4.0/gtk.css 'import GTK4 XDG'
+check_grep '^theme-name = ArashiKage$' /etc/lightdm/lightdm-gtk-greeter.conf.d/50-arashios.conf 'tema LightDM ArashiKage'
+check_grep '^background = /usr/share/backgrounds/arashios/kage-sumi.png$' /etc/lightdm/lightdm-gtk-greeter.conf.d/50-arashios.conf 'wallpaper LightDM PNG'
+if /usr/local/bin/kage-contrast status >/dev/null 2>&1; then
+    pass 'status aksesibilitas Kage'
+else
+    fail 'status aksesibilitas Kage'
+fi
 
 printf '\nLayanan dan keamanan:\n'
 if systemctl is-active --quiet lightdm 2>/dev/null; then pass 'lightdm aktif'; else fail 'lightdm tidak aktif'; fi
@@ -187,18 +213,29 @@ case "$EDITION" in
         check_cmd nemo
         check_cmd gnome-terminal
         check_cmd gedit
+        check_cmd eog
+        check_file /usr/share/themes/ArashiKage/cinnamon/cinnamon.css
+        check_grep "name='ArashiKage'" /etc/dconf/db/local.d/00-arashios 'tema Cinnamon ArashiKage'
+        check_grep "visible-name='Kage'" /etc/dconf/db/local.d/00-arashios 'profil GNOME Terminal Kage'
         ;;
     xfce)
         check_cmd xfce4-session
         check_cmd xfce4-terminal
         check_cmd thunar
         check_cmd mousepad
+        check_cmd ristretto
+        check_file /usr/share/themes/ArashiKage/xfwm4/themerc
+        check_grep 'value="ArashiKage"' /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml 'tema XFCE ArashiKage'
         ;;
     lxqt)
         check_cmd lxqt-session
         check_cmd qterminal
         check_cmd pcmanfm-qt
         check_cmd featherpad
+        check_cmd lximage-qt
+        check_cmd openbox
+        check_file /usr/share/themes/ArashiKage/openbox-3/themerc
+        check_grep '^theme=ArashiKage$' /etc/xdg/lxqt/lxqt.conf 'tema LXQt ArashiKage'
         ;;
 esac
 check_grep '^autologin-user=arashi$' /etc/lightdm/lightdm.conf.d/50-arashios.conf 'autologin live user'

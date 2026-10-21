@@ -1,0 +1,36 @@
+# ArashiOS LXQt default application associations.
+[Default Applications]
+inode/directory=pcmanfm-qt.desktop
+text/plain=featherpad.desktop
+text/x-markdown=featherpad.desktop
+text/x-python=featherpad.desktop
+text/x-shellscript=featherpad.desktop
+application/json=featherpad.desktop
+application/xml=featherpad.desktop
+text/html=firefox-esr.desktop
+application/xhtml+xml=firefox-esr.desktop
+x-scheme-handler/http=firefox-esr.desktop
+x-scheme-handler/https=firefox-esr.desktop
+x-scheme-handler/mailto=thunderbird.desktop
+application/pdf=org.gnome.Evince.desktop
+application/zip=lxqt-archiver.desktop
+application/x-tar=lxqt-archiver.desktop
+application/gzip=lxqt-archiver.desktop
+application/x-7z-compressed=lxqt-archiver.desktop
+application/x-rar=lxqt-archiver.desktop
+image/png=lximage-qt.desktop
+image/jpeg=lximage-qt.desktop
+image/gif=lximage-qt.desktop
+image/webp=lximage-qt.desktop
+image/svg+xml=lximage-qt.desktop
+video/mp4=vlc.desktop
+video/x-matroska=vlc.desktop
+video/webm=vlc.desktop
+audio/mpeg=vlc.desktop
+audio/flac=vlc.desktop
+audio/ogg=vlc.desktop
+application/x-bittorrent=org.qbittorrent.qBittorrent.desktop
+text/csv=libreoffice-calc.desktop
+application/vnd.oasis.opendocument.text=libreoffice-writer.desktop
+application/vnd.oasis.opendocument.spreadsheet=libreoffice-calc.desktop
+application/vnd.oasis.opendocument.presentation=libreoffice-impress.desktop

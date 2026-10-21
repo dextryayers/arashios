@@ -33,7 +33,73 @@ if command -v fc-cache >/dev/null 2>&1; then
     fc-cache -f >/dev/null 2>&1 || true
 fi
 
+# Cinnamon reads applet defaults from the installed JSON schema. ArashiOS
+# uses a date and time clock rather than the upstream locale-default label.
+CALENDAR_SCHEMA=/usr/share/cinnamon/applets/calendar@cinnamon.org/settings-schema.json
+if [ -f "$CALENDAR_SCHEMA" ] && command -v python3 >/dev/null 2>&1; then
+    python3 - "$CALENDAR_SCHEMA" <<'PY_CALENDAR'
+import json
+import sys
+
+path = sys.argv[1]
+with open(path, encoding="utf-8") as handle:
+    schema = json.load(handle)
+schema.setdefault("use-custom-format", {})["default"] = True
+schema.setdefault("custom-format", {})["default"] = "%Y.%m.%d %H:%M"
+schema.setdefault("custom-tooltip-format", {})["default"] = "%A, %d %B %Y %H:%M"
+with open(path, "w", encoding="utf-8") as handle:
+    json.dump(schema, handle, indent=4, ensure_ascii=False)
+    handle.write("\n")
+PY_CALENDAR
+fi
+
+if [ -f /usr/share/cinnamon/applets/menu@cinnamon.org/settings-schema.json ] && command -v python3 >/dev/null 2>&1; then
+    python3 - /usr/share/cinnamon/applets/menu@cinnamon.org/settings-schema.json <<'PY_MENU'
+import json
+import sys
+
+path = sys.argv[1]
+with open(path, encoding="utf-8") as handle:
+    schema = json.load(handle)
+schema.setdefault("menu-custom", {})["default"] = True
+schema.setdefault("menu-icon", {})["default"] = "arashios"
+schema.setdefault("menu-icon-size", {})["default"] = 18
+schema.setdefault("menu-label", {})["default"] = "Arashi"
+with open(path, "w", encoding="utf-8") as handle:
+    json.dump(schema, handle, indent=4, ensure_ascii=False)
+    handle.write("\n")
+PY_MENU
+fi
+
+if [ -f /usr/share/cinnamon/applets/workspace-switcher@cinnamon.org/settings-schema.json ] && command -v python3 >/dev/null 2>&1; then
+    python3 - /usr/share/cinnamon/applets/workspace-switcher@cinnamon.org/settings-schema.json <<'PY_WORKSPACE'
+import json
+import sys
+
+path = sys.argv[1]
+with open(path, encoding="utf-8") as handle:
+    schema = json.load(handle)
+schema.setdefault("display-type", {})["default"] = "buttons"
+with open(path, "w", encoding="utf-8") as handle:
+    json.dump(schema, handle, indent=4, ensure_ascii=False)
+    handle.write("\n")
+PY_WORKSPACE
+fi
+
+if command -v dconf >/dev/null 2>&1 && [ -d /etc/dconf/db/local.d ]; then
+    dconf update >/dev/null 2>&1 || true
+fi
+
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -f -t /usr/share/icons/hicolor >/dev/null 2>&1 || true
+fi
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database /usr/share/applications >/dev/null 2>&1 || true
+fi
+
 chmod 0755 /usr/local/bin/arashios-wallpaper 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-accessibility /usr/local/bin/kage-contrast 2>/dev/null || true
 chmod 0644 /etc/xdg/autostart/arashios-wallpaper.desktop 2>/dev/null || true
 chmod 0644 /etc/skel/.zshrc /etc/skel/.tmux.conf /etc/skel/.gitconfig /etc/skel/.ripgreprc 2>/dev/null || true
 find /etc/skel -type d -exec chmod 0755 {} + 2>/dev/null || true

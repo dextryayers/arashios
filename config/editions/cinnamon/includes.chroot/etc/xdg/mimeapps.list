@@ -1,0 +1,36 @@
+# ArashiOS Cinnamon default application associations.
+[Default Applications]
+inode/directory=nemo.desktop
+text/plain=org.gnome.gedit.desktop
+text/x-markdown=org.gnome.gedit.desktop
+text/x-python=org.gnome.gedit.desktop
+text/x-shellscript=org.gnome.gedit.desktop
+application/json=org.gnome.gedit.desktop
+application/xml=org.gnome.gedit.desktop
+text/html=firefox-esr.desktop
+application/xhtml+xml=firefox-esr.desktop
+x-scheme-handler/http=firefox-esr.desktop
+x-scheme-handler/https=firefox-esr.desktop
+x-scheme-handler/mailto=thunderbird.desktop
+application/pdf=org.gnome.Evince.desktop
+application/zip=org.gnome.FileRoller.desktop
+application/x-tar=org.gnome.FileRoller.desktop
+application/gzip=org.gnome.FileRoller.desktop
+application/x-7z-compressed=org.gnome.FileRoller.desktop
+application/x-rar=org.gnome.FileRoller.desktop
+image/png=org.gnome.eog.desktop
+image/jpeg=org.gnome.eog.desktop
+image/gif=org.gnome.eog.desktop
+image/webp=org.gnome.eog.desktop
+image/svg+xml=org.gnome.eog.desktop
+video/mp4=vlc.desktop
+video/x-matroska=vlc.desktop
+video/webm=vlc.desktop
+audio/mpeg=vlc.desktop
+audio/flac=vlc.desktop
+audio/ogg=vlc.desktop
+application/x-bittorrent=org.qbittorrent.qBittorrent.desktop
+text/csv=libreoffice-calc.desktop
+application/vnd.oasis.opendocument.text=libreoffice-writer.desktop
+application/vnd.oasis.opendocument.spreadsheet=libreoffice-calc.desktop
+application/vnd.oasis.opendocument.presentation=libreoffice-impress.desktop

@@ -1,10 +1,10 @@
 # Arsitektur ArashiOS
 
-Dokumen ini menjelaskan arsitektur teknis ArashiOS pada Fase 0 dan Fase 1. Sumber kebenaran scope tetap [plan.md](../plan.md). Keputusan arsitektur yang mengikat dicatat di [docs/adr](adr/README.md).
+Dokumen ini menjelaskan arsitektur teknis ArashiOS pada Fase 0 sampai Fase 3. Sumber kebenaran scope tetap [plan.md](../plan.md). Keputusan arsitektur yang mengikat dicatat di [docs/adr](adr/README.md).
 
 ## 1. Tujuan dan Batasan
 
-ArashiOS adalah distribusi berbasis Debian 12 bookworm dengan tiga edisi desktop dan tiga arsitektur. Fase 1 membuktikan pipeline build, boot hybrid, branding dasar, dan pengujian otomatis pada amd64. Fase 1 belum menyediakan installer, repository mandiri, atau tool keamanan yang di-vendor.
+ArashiOS adalah distribusi berbasis Debian 12 bookworm dengan tiga edisi desktop dan tiga arsitektur. Fase 1 membuktikan pipeline build, boot hybrid, branding dasar, dan pengujian otomatis pada amd64. Fase 2 dan Fase 3 menambahkan paket branding, tema Kage untuk GTK, Cinnamon, XFCE, Openbox, dan Kvantum, serta konfigurasi tiga desktop pada tingkat statis. Installer, repository mandiri, tool keamanan yang di-vendor, dan validasi boot belum aktif.
 
 Batasan yang memengaruhi arsitektur:
 
@@ -203,7 +203,9 @@ Autologin hanya boleh berlaku pada sesi live. Pada Fase 7, Calamares harus mengh
 | `/etc/arashios/build-info` | Metadata build | `build.sh` |
 | `/etc/os-release` | Identitas sistem | `config/common/includes.chroot` |
 | `/etc/arashios/` | Metadata runtime | Generated |
-| `/usr/share/arashios/theme/` | Token CSS, QSS, JSON | `build/tokens` |
+| `/usr/share/arashios/theme/` | Token CSS, QSS, JSON, manifest tema | `build/tokens`, `build/theme` |
+| `/usr/share/themes/ArashiKage*` | Tema GTK, Cinnamon, XFCE, Openbox | `build/theme` |
+| `/usr/share/Kvantum/ArashiKage*` | Tema Qt | `build/theme` |
 | `/usr/share/arashios/branding/` | Wordmark dan aset merek | `branding/` |
 | `/usr/share/backgrounds/arashios/` | Wallpaper | `branding/wallpaper` |
 | `/usr/share/grub/themes/arashios/` | Tema GRUB | `branding/grub` |
@@ -332,8 +334,8 @@ Batas pengujian:
 
 | Fase | Perubahan arsitektur |
 |---|---|
-| 2 | Tema Kage penuh, GRUB dan Plymouth final, QA boot |
-| 3 | Tiga edisi desktop dengan tema dan layout teruji |
+| 2 | Tema Kage, GRUB dan Plymouth final, QA boot. Implementasi statis selesai, QA boot menunggu ISO |
+| 3 | Tiga edisi desktop dengan tema dan layout. Implementasi statis selesai, QA sesi menunggu ISO |
 | 4 | Arsenal tool keamanan, manifest vendored, verifikasi checksum |
 | 5 | Toolchain coding lengkap dan profil container |
 | 6 | Aplikasi harian, printer, dan integrasi desktop |
@@ -360,6 +362,7 @@ Batas pengujian:
 | [ADR-010](adr/010-podman-rootless.md) | Podman rootless sebagai default |
 | [ADR-011](adr/011-editors.md) | Neovim dan VSCodium |
 | [ADR-012](adr/012-i386-scope.md) | Cakupan legacy i386 |
+| [ADR-013](adr/013-theme-pipeline.md) | Pipeline tema Kage |
 
 ## 13. Penyimpangan dan Risiko
 
@@ -367,7 +370,8 @@ Batas pengujian:
 |---|---|---|
 | i386 UEFI | Tidak didukung | Boot BIOS saja, ditegaskan pada ADR-012 |
 | Calamares | Belum ada | Fase 7 |
-| Tema Kage penuh | Belum ada | Fase 2 |
+| Tema Kage penuh | Selesai statis, runtime belum diuji | Validasi ISO Fase 2 |
+| Paket branding | Selesai dan reproducible | Validasi instalasi pada ISO |
 | Tool vendored | Belum ada | Fase 4 |
 | Signing | Belum ada | Fase 9 |
 | arm64 dan i386 | Belum dibangun | Fase 10 |

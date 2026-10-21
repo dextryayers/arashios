@@ -594,6 +594,9 @@ def theme_files(variant: Variant, resolved: dict[str, Any]) -> dict[str, bytes]:
         "cinnamon/metacity-theme-3.xml": render_template(
             "cinnamon/metacity-theme-3.xml.in", variant.variables
         ).encode(),
+        "metacity-1/metacity-theme-3.xml": render_template(
+            "cinnamon/metacity-theme-3.xml.in", variant.variables
+        ).encode(),
         "cinnamon/thumbnail.png": build_thumbnail(variant.colors),
         "xfwm4/themerc": render_template("xfwm4/themerc.in", variant.variables).encode(),
         "openbox-3/themerc": render_template("openbox-3/themerc.in", variant.variables).encode(),

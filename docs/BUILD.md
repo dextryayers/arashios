@@ -100,8 +100,9 @@ Aturan cache:
 # 1. Periksa host
 make env
 
-# 2. Hasilkan token dan aset brand
-make tokens
+# 2. Hasilkan token, aset brand, tema, dan paket branding
+make theme
+make package
 
 # 3. Validasi konfigurasi tanpa membangun ISO
 make config EDITION=cinnamon ARCH=amd64
@@ -162,7 +163,7 @@ Contoh:
 ./build.sh --edition lxqt --arch i386 --jobs 4
 ```
 
-`build.sh` menolak edisi, arsitektur, versi, dan jumlah job yang tidak valid. Build sebagai root memberi peringatan. Jalankan sebagai user biasa.
+`build.sh` menolak edisi, arsitektur, versi, dan jumlah job yang tidak valid. Versi paket branding lokal mengikuti nilai `--version`. Build sebagai root memberi peringatan. Jalankan sebagai user biasa.
 
 ## 7. Variabel Lingkungan
 
@@ -202,12 +203,13 @@ SOURCE_DATE_EPOCH=1792540800 make build EDITION=cinnamon ARCH=amd64
 7. Salin config/arches/<arch> jika ada
 8. Tulis /etc/arashios/{version,edition,arch,build-info}
 9. Ganti placeholder os-release, lsb-release, issue
-10. Generate token dan aset raster
-11. Pasang branding, theme, dokumentasi, smoke test
-12. lb build
-13. Pindahkan ISO ke out/
-14. Hitung SHA-256 dan SHA-512
-15. Tanda tangan minisign jika kunci tersedia
+10. Generate token, aset raster, dan tema Kage
+11. Bangun dan pasang paket branding lokal, tema GRUB live, serta aset bootloader
+12. Pasang dokumentasi dan smoke test
+13. lb build
+14. Pindahkan ISO ke out/
+15. Hitung SHA-256 dan SHA-512
+16. Tanda tangan minisign jika kunci tersedia
 ```
 
 Urutan overlay bersifat menimpa. File dengan nama sama di edisi akan menggantikan file common. File arsitektur menggantikan file edisi.
@@ -229,7 +231,7 @@ Urutan overlay bersifat menimpa. File dengan nama sama di edisi akan menggantika
 | `BUILD_DATE` | Waktu UTC |
 | `BUILD_JOBS` | Jumlah proses |
 | `ISO_VOLUME` | Volume ID |
-| `CONFIG_HASH` | Hash isi `config/`, `branding/`, `versions.env` |
+| `CONFIG_HASH` | Hash isi `config/`, `branding/`, `scripts/`, `versions.env` |
 | `HOST_OS` | Nama host |
 | `HOST_KERNEL` | Kernel host |
 | `HOST_ARCH` | Arsitektur host |
@@ -344,7 +346,7 @@ Jangan jalankan sebagai root. Pemeriksaan Podman rootless akan gagal jika dijala
 Cakupan:
 
 1. Identitas sistem dan versi.
-2. Berkas branding, tema, dan boot.
+2. Berkas branding, tema, wallpaper, dan boot.
 3. LightDM, NetworkManager, SSH, UFW, dan AppArmor.
 4. sysctl hardening.
 5. Tidak ada repository Kali.
@@ -376,7 +378,10 @@ Perintah ini menjalankan:
 3. `shellcheck -x` untuk semua skrip.
 4. `scripts/check-docs.sh` untuk gaya dan tautan dokumentasi.
 5. `scripts/check-traceability.py` untuk requirement dan test case.
-6. `scripts/validate-config.sh` untuk struktur, paket, hook, metadata, token, dan SVG.
+6. `scripts/validate-config.sh` untuk struktur, paket, hook, metadata, token, XML, dan dconf.
+7. `tests/theme.sh` untuk tema, manifest, XML, dan parser CSS GTK3 serta GTK4.
+8. `tests/desktop-matrix.sh` untuk konfigurasi Cinnamon, XFCE, LXQt, Openbox, dan aksesibilitas.
+9. `tests/branding-package.sh` untuk isi, metadata, `md5sums`, dan reproduksibilitas paket.
 
 Validasi individual:
 
@@ -386,6 +391,10 @@ Validasi individual:
 ./scripts/validate-config.sh
 ./scripts/generate-tokens.py --check
 ./scripts/generate-brand-assets.py --check
+./scripts/generate-theme.py --check
+./tests/theme.sh
+./tests/desktop-matrix.sh
+./tests/branding-package.sh
 ```
 
 Validasi konfigurasi `live-build` untuk semua kombinasi:
@@ -394,7 +403,7 @@ Validasi konfigurasi `live-build` untuk semua kombinasi:
 make config-matrix
 ```
 
-Perintah ini menjalankan `build.sh --dry-run` untuk tujuh kombinasi di `SUPPORTED_COMBINATIONS`, lalu memeriksa `os-release`, metadata build, sesi LightDM, bootloader, dan kernel flavour. Perintah ini memerlukan `live-build` dan tidak memerlukan akses root.
+Perintah ini menjalankan `build.sh --dry-run` untuk tujuh kombinasi di `SUPPORTED_COMBINATIONS`, lalu memeriksa `os-release`, metadata build, sesi LightDM, paket branding, splash GRUB dan syslinux, konfigurasi GTK, MIME, bootloader, dan kernel flavour. Perintah ini memerlukan `live-build` dan tidak memerlukan akses root.
 
 ## 14. Reproducibility
 
@@ -538,11 +547,20 @@ Arsitektur baru memerlukan:
 
 Fase 1 belum selesai sampai seluruh baris berstatus lulus.
 
-## 21. Referensi
+## 21. Status Fase 2 dan Fase 3
+
+Fase 2 dan Fase 3 sudah memiliki implementasi statis: tema Kage, paket
+branding, konfigurasi Cinnamon, XFCE, dan LXQt, serta pemeriksaan otomatis.
+Exit gate runtime belum lulus karena ISO belum dibangun dan boot belum diuji.
+Rincian ada di [PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md).
+
+## 22. Referensi
 
 - [plan.md](../plan.md)
 - [ARCHITECTURE.md](ARCHITECTURE.md)
 - [DESIGN.md](DESIGN.md)
 - [PHASE-0-1-REPORT.md](PHASE-0-1-REPORT.md)
+- [PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md)
+- [DESKTOP.md](DESKTOP.md)
 - [ADR index](adr/README.md)
 - [README](../README.md)

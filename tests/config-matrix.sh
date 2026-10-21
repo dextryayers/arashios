@@ -35,6 +35,20 @@ for combo in $SUPPORTED_COMBINATIONS; do
     [ -f "$config/includes.chroot/etc/os-release" ] || die "os-release hilang untuk $combo"
     [ -f "$config/includes.chroot/etc/arashios/build-info" ] || die "build-info hilang untuk $combo"
     [ -f "$config/includes.chroot/etc/lightdm/lightdm.conf.d/50-arashios.conf" ] || die "konfigurasi LightDM hilang untuk $combo"
+    branding_deb="$config/packages.chroot/arashios-branding_${ARASHIOS_VERSION#V}-1_all.deb"
+    [ -f "$branding_deb" ] || die "paket branding hilang untuk $combo"
+    [ -f "$config/bootloaders/grub-pc/splash.png" ] || die "splash GRUB hilang untuk $combo"
+    [ -f "$config/bootloaders/grub-pc/live-theme/theme.txt" ] || die "tema GRUB live hilang untuk $combo"
+    [ -f "$config/bootloaders/grub-pc/live-theme/select_c.png" ] || die "pixmap pilihan GRUB hilang untuk $combo"
+    grep -q 'ARASHIOS / KAGE' "$config/bootloaders/grub-pc/live-theme/theme.txt" || \
+        die "tema GRUB live bukan Kage untuk $combo"
+    grep -q 'desktop-image: "../splash.png"' "$config/bootloaders/grub-pc/live-theme/theme.txt" || \
+        die "latar tema GRUB live salah untuk $combo"
+    [ -f "$config/bootloaders/syslinux_common/splash.png" ] || die "splash syslinux hilang untuk $combo"
+    [ -f "$config/includes.chroot/etc/gtk-3.0/settings.ini" ] || die "konfigurasi GTK3 hilang untuk $combo"
+    [ -f "$config/includes.chroot/etc/xdg/mimeapps.list" ] || die "mimeapps.list hilang untuk $combo"
+    grep -q '^gtk-theme-name=ArashiKage$' "$config/includes.chroot/etc/gtk-3.0/settings.ini" || \
+        die "tema GTK3 bukan ArashiKage untuk $combo"
 
     grep -q '^ID=arashios$' "$config/includes.chroot/etc/os-release" || die "ID os-release salah untuk $combo"
     grep -q "^ARASHIOS_ARCH=$arch$" "$config/includes.chroot/etc/arashios/build-info" || die "arsitektur build-info salah untuk $combo"

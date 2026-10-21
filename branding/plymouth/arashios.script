@@ -1,5 +1,6 @@
 # ArashiOS Kage Plymouth theme.
-# Static composition: ensō mark, wordmark, and a vermilion subtitle.
+# Static composition: ensō mark, wordmark, vermilion subtitle, and a thin
+# boot progress line. The line is intentionally the only moving element.
 
 Window.SetBackgroundTopColor(0.027, 0.027, 0.031);
 Window.SetBackgroundBottomColor(0.071, 0.071, 0.086);
@@ -10,16 +11,52 @@ logo_sprite.SetX(Window.GetWidth() / 2 - logo.GetWidth() / 2);
 logo_sprite.SetY(Window.GetHeight() / 2 - logo.GetHeight() / 2 - 48);
 logo_sprite.SetOpacity(1.0);
 
-title = Text("ARASHIOS");
-title.SetFont("Sans 26");
-title.SetColor(0.929, 0.910, 0.871, 1.0);
-title.SetX(Window.GetWidth() / 2 - title.GetWidth() / 2);
+title_image = Image.Text("ARASHIOS", 0.929, 0.910, 0.871, 1.0, "Sans 26", "center");
+title = Sprite(title_image);
+title.SetX(Window.GetWidth() / 2 - title_image.GetWidth() / 2);
 title.SetY(Window.GetHeight() / 2 + 84);
 title.SetOpacity(1.0);
 
-subtitle = Text("KAGE");
-subtitle.SetFont("Sans 11");
-subtitle.SetColor(0.867, 0.471, 0.357, 1.0);
-subtitle.SetX(Window.GetWidth() / 2 - subtitle.GetWidth() / 2);
+subtitle_image = Image.Text("KAGE", 0.867, 0.471, 0.357, 1.0, "Sans 11", "center");
+subtitle = Sprite(subtitle_image);
+subtitle.SetX(Window.GetWidth() / 2 - subtitle_image.GetWidth() / 2);
 subtitle.SetY(Window.GetHeight() / 2 + 124);
 subtitle.SetOpacity(1.0);
+
+progress_box_image = Image("progress_box.png");
+progress_box = Sprite(progress_box_image);
+progress_width = progress_box_image.GetWidth();
+progress_height = progress_box_image.GetHeight();
+progress_x = Window.GetWidth() / 2 - progress_width / 2;
+progress_y = Window.GetHeight() / 2 + 164;
+progress_box.SetPosition(progress_x, progress_y, 1);
+progress_box.SetOpacity(0.9);
+
+progress_image = Image("progress_bar.png");
+progress_sprite = Sprite();
+progress_sprite.SetPosition(progress_x, progress_y, 2);
+progress_sprite.SetOpacity(0);
+global.last_width = -1;
+
+fun progress_callback(duration, progress)
+  {
+    if (progress < 0)
+      progress = 0;
+    if (progress > 1)
+      progress = 1;
+
+    target_width = Math.Int(progress_width * progress);
+    if (target_width < 1)
+      {
+        progress_sprite.SetOpacity(0);
+        return;
+      }
+    if (target_width != global.last_width)
+      {
+        progress_sprite.SetImage(progress_image.Scale(target_width, progress_height));
+        progress_sprite.SetOpacity(1);
+        global.last_width = target_width;
+      }
+  }
+
+Plymouth.SetBootProgressFunction(progress_callback);

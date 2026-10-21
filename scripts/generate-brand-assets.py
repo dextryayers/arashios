@@ -5,6 +5,8 @@ Outputs:
   branding/grub/background.png
   branding/grub/select_*.png
   branding/plymouth/logo.png
+  branding/plymouth/progress_box.png
+  branding/plymouth/progress_bar.png
   branding/logo/arashios-favicon.ico
   branding/logo/hicolor/<size>x<size>/apps/arashios.png
   branding/wallpaper/*.png
@@ -415,6 +417,12 @@ def build_plymouth_logo(palette: dict[str, Color]) -> bytes:
     return encode_png(width, height, rows, 6)
 
 
+def build_plymouth_progress_bar(palette: dict[str, Color], color_name: str) -> bytes:
+    width, height = 320, 2
+    color = palette[color_name]
+    return encode_png(width, height, [bytes(color) * width] * height, 2)
+
+
 def build_wallpaper(name: str, palette: dict[str, Color]) -> bytes:
     width, height = 3840, 2160
     sumi900 = palette["sumi.900"]
@@ -601,6 +609,8 @@ def generate() -> dict[Path, bytes]:
     files: dict[Path, bytes] = {
         GRUB_DIR / "background.png": build_background(palette),
         PLYMOUTH_DIR / "logo.png": build_plymouth_logo(palette),
+        PLYMOUTH_DIR / "progress_box.png": build_plymouth_progress_bar(palette, "sumi.500"),
+        PLYMOUTH_DIR / "progress_bar.png": build_plymouth_progress_bar(palette, "vermilion.500"),
     }
     select = build_select_pixmap(palette)
     for name in SELECT_NAMES:

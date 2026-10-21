@@ -6,12 +6,19 @@ JOBS ?= $(shell nproc)
 ISO ?= $(firstword $(wildcard out/*.iso))
 BOOT_MODE ?= uefi
 
-.PHONY: help tokens env env-strict config config-matrix build verify test smoke lint clean distclean
+.PHONY: help env env-strict tokens brand-assets theme theme-check desktop-check \
+        package package-check design config config-matrix build verify test smoke lint clean distclean
 
 help:
 	@printf '%s\n' \
 	  'make env' \
 	  'make tokens' \
+	  'make brand-assets' \
+	  'make theme' \
+	  'make theme-check' \
+	  'make desktop-check' \
+	  'make package' \
+	  'make package-check' \
 	  'make config EDITION=xfce ARCH=amd64' \
 	  'make config-matrix' \
 	  'make build EDITION=cinnamon ARCH=amd64' \
@@ -24,7 +31,26 @@ help:
 
 tokens:
 	./scripts/generate-tokens.py
+
+brand-assets:
 	./scripts/generate-brand-assets.py
+
+theme: tokens brand-assets
+	./scripts/generate-theme.py
+
+theme-check:
+	./tests/theme.sh
+
+desktop-check:
+	./tests/desktop-matrix.sh
+
+package: theme
+	./scripts/build-branding-package.sh
+
+package-check:
+	./tests/branding-package.sh
+
+design: theme package
 
 env:
 	./scripts/check-env.sh
@@ -51,7 +77,7 @@ test: verify
 smoke:
 	./tests/smoke.sh
 
-lint:
+lint: theme
 	bash -n build.sh
 	bash -n scripts/*.sh
 	bash -n tests/*.sh
@@ -60,6 +86,9 @@ lint:
 	./scripts/check-docs.sh
 	./scripts/check-traceability.py
 	./scripts/validate-config.sh
+	./tests/theme.sh
+	./tests/desktop-matrix.sh
+	./tests/branding-package.sh
 
 clean:
 	rm -rf build out

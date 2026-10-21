@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_menu xmlns="http://openbox.org/3.4/menu">
+  <menu id="root-menu" label="ArashiOS">
+    <item label="Terminal">
+      <action name="Execute"><command>qterminal</command></action>
+    </item>
+    <item label="File Manager">
+      <action name="Execute"><command>pcmanfm-qt</command></action>
+    </item>
+    <item label="Web Browser">
+      <action name="Execute"><command>firefox-esr</command></action>
+    </item>
+    <separator/>
+    <menu id="applications" label="Applications">
+      <item label="Text Editor">
+        <action name="Execute"><command>featherpad</command></action>
+      </item>
+      <item label="Archive Manager">
+        <action name="Execute"><command>lxqt-archiver</command></action>
+      </item>
+      <item label="Image Viewer">
+        <action name="Execute"><command>lximage-qt</command></action>
+      </item>
+      <item label="Screenshot">
+        <action name="Execute"><command>flameshot gui</command></action>
+      </item>
+    </menu>
+    <menu id="settings" label="Settings">
+      <item label="LXQt Settings">
+        <action name="Execute"><command>lxqt-config</command></action>
+      </item>
+      <item label="Appearance">
+        <action name="Execute"><command>lxqt-config-appearance</command></action>
+      </item>
+      <item label="Openbox Configuration">
+        <action name="Execute"><command>obconf</command></action>
+      </item>
+      <item label="High Contrast">
+        <action name="Execute"><command>kage-contrast toggle</command></action>
+      </item>
+    </menu>
+    <separator/>
+    <item label="Reconfigure Openbox">
+      <action name="Reconfigure"/>
+    </item>
+    <item label="Restart Openbox">
+      <action name="Restart"/>
+    </item>
+    <separator/>
+    <item label="Log Out">
+      <action name="Execute"><command>lxqt-session-logout</command></action>
+    </item>
+  </menu>
+</openbox_menu>

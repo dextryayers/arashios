@@ -7,7 +7,7 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 ### Added
 
 - Fondasi repository Fase 0: README, lisensi, panduan kontribusi, kebijakan keamanan, kode etik, dan changelog.
-- Dua belas ADR untuk basis Debian, live-build, edisi desktop, vendoring, installer, desain, versi, telemetry, systemd, Podman, editor, dan i386.
+- Tiga belas ADR untuk basis Debian, live-build, edisi desktop, vendoring, installer, desain, versi, telemetry, systemd, Podman, editor, i386, dan pipeline tema.
 - Design system Kage dengan token JSON, generator CSS, SCSS, QSS, laporan kontras, dan preview.
 - Aset merek: mark, wordmark, wallpaper, tema GRUB, tema Plymouth, latar raster, dan nine-slice.
 - Skrip pemeriksaan host, validasi konfigurasi, pemeriksaan dokumen, dan traceability.
@@ -19,7 +19,14 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 - Skeletons Zsh, tmux, Neovim, Git, GTK, XFCE Terminal, QTerminal, ripgrep, dan bat, serta konfigurasi Starship.
 - Build wrapper dengan dry-run, overlay arsitektur, snapshot, metadata, checksum, dan signature opsional.
 - Verifikasi artefak ISO, harness boot QEMU UEFI dan BIOS, serta smoke test runtime.
-- Dokumentasi build, arsitektur, desain, dan laporan Fase 0 dan 1.
+- Dokumentasi build, arsitektur, desain, integrasi desktop, laporan Fase 0 dan 1, serta laporan Fase 2 dan 3.
+- Tema ArashiKage dan ArashiKage-HC untuk GTK2, GTK3, GTK4 dan libadwaita, Cinnamon, Muffin dan Metacity, XFCE, Openbox, dan Kvantum.
+- Pipeline tema deterministik dengan manifest SHA-256 dan pemeriksaan output kedaluwarsa.
+- Paket lokal arashios-branding berisi tema, lima wallpaper PNG, ikon, aset GRUB, dan aset Plymouth.
+- Konfigurasi desktop Cinnamon, XFCE, dan LXQt dengan panel atas 30px, wallpaper Kage, dan ikon desktop nonaktif.
+- Profil terminal Kage untuk GNOME Terminal, XFCE Terminal, dan QTerminal.
+- Perintah arashios-accessibility untuk kontras tinggi, reduced motion, dan status.
+- Pemeriksaan statis tema, desktop, dan paket branding di CI dan Makefile.
 
 ### Changed
 
@@ -48,9 +55,11 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 
 - ISO amd64 belum dibangun pada host ini karena toolchain build belum terpasang.
 - Calamares, tool vendored, repository mandiri, dan signing produksi belum aktif.
-- Tema desktop masih memakai basis Adwaita dan Papirus.
-- arm64 dan i386 belum dibangun atau diuji boot.
+- Tema Kage sudah dihasilkan dan dikemas, tetapi rendering GTK4, Cinnamon, XFCE, Openbox, Kvantum, LightDM, dan Plymouth belum diuji pada sesi nyata.
+- arm64 dan i386 belum dibangun atau diuji boot. Validasi runtime ketiga arsitektur menunggu toolchain dan ISO.
 - Autologin belum dihapus pada sistem terpasang.
+- Parser CSS GTK4 memerlukan GIR GTK4. Di host ini parser dijalankan dari typelib lokal di `.toolchain`.
+- Cinnamon applet defaults dipatch di hook dan dapat tertimpa pembaruan paket.
 
 ## [2.0] - 2026-10-21
 

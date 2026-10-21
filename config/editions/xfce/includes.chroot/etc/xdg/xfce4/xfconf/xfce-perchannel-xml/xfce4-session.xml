@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-session" version="1.0">
+  <property name="general" type="empty">
+    <property name="SessionName" type="string" value="ArashiOS"/>
+    <property name="SaveOnExit" type="bool" value="false"/>
+    <property name="AutoSave" type="bool" value="false"/>
+    <property name="PromptOnLogout" type="bool" value="true"/>
+    <property name="AlwaysDisplayLogout" type="bool" value="false"/>
+    <property name="LogoutCommand" type="string" value="xfce4-session-logout"/>
+    <property name="ShutdownCommand" type="string" value="xfce4-session-logout --halt --fast"/>
+    <property name="RestartCommand" type="string" value="xfce4-session-logout --reboot --fast"/>
+  </property>
+  <property name="compatibility" type="empty">
+    <property name="LaunchGNOME" type="bool" value="true"/>
+    <property name="LaunchKDE" type="bool" value="false"/>
+    <property name="LaunchROX" type="bool" value="false"/>
+    <property name="LaunchXFCE" type="bool" value="true"/>
+  </property>
+</channel>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="thunar" version="1.0">
+  <property name="misc-single-click" type="bool" value="false"/>
+  <property name="misc-thumbnail-mode" type="string" value="THUNAR_THUMBNAIL_MODE_ONLY_LOCAL"/>
+  <property name="misc-show-delete-action" type="bool" value="true"/>
+  <property name="misc-date-style" type="string" value="THUNAR_DATE_STYLE_SHORT"/>
+  <property name="misc-folders-first" type="bool" value="true"/>
+  <property name="misc-text-beside-icons" type="bool" value="true"/>
+  <property name="misc-tree-view" type="bool" value="false"/>
+  <property name="misc-file-size-binary" type="bool" value="false"/>
+  <property name="misc-case-sensitive" type="bool" value="false"/>
+  <property name="misc-volume-management" type="bool" value="true"/>
+  <property name="misc-remember-geometry" type="bool" value="true"/>
+  <property name="last-view" type="string" value="ThunarDetailsView"/>
+  <property name="last-icon-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_100_PERCENT"/>
+  <property name="last-details-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_38_PERCENT"/>
+  <property name="last-details-view-column-widths" type="string" value="120,120,80,80,120,120,80,100"/>
+  <property name="last-separator-position" type="int" value="180"/>
+</channel>

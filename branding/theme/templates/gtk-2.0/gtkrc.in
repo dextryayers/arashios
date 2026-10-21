@@ -3,7 +3,7 @@
 # Source template: branding/theme/templates/gtk-2.0/gtkrc.in
 
 gtk-color-scheme = "fg_color:$text\nbg_color:$bg\nbase_color:$surface_sunken\ntext_color:$text\nselected_bg_color:$accent_strong\nselected_fg_color:$washi_50\ntooltip_bg_color:$surface\ntooltip_fg_color:$text\nlink_color:$accent\nvisited_link_color:$accent_pressed"
-gtk-font-name = "Inter 11"
+gtk-font-name = "Inter 10"
 gtk-icon-theme-name = "Papirus-Dark"
 gtk-enable-animations = 1
 gtk-menu-images = 1
