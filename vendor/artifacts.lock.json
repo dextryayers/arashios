@@ -1,0 +1,17 @@
+{
+  "artifacts": {
+    "nuclei": {
+      "amd64": {
+        "path": "vendor/build/nuclei-amd64/nuclei",
+        "sha256": "ecacf22de092f06b7611e7061202d65a6ae117024624797cf15a95c9aa81fd53"
+      }
+    },
+    "subfinder": {
+      "amd64": {
+        "path": "vendor/build/subfinder-amd64/subfinder",
+        "sha256": "ed98bbff5e168d3de1bd67cd53ca5cf71044f1823763187365e61776448e2ec4"
+      }
+    }
+  },
+  "schema_version": 1
+}

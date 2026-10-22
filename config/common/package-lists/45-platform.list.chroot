@@ -1,0 +1,46 @@
+# ArashiOS platform and daily use support, tier T0.
+# Networking, power, printing, audio, locale, and firmware helpers used by
+# the daily driver workflow. Packages stay conservative to keep the ISO lean.
+
+# Networking
+avahi-daemon
+avahi-utils
+mtr-tiny
+iwd
+wpasupplicant
+
+# Power and thermal
+powertop
+tlp
+zram-tools
+earlyoom
+
+# Printing and scanning
+cups-filters
+printer-driver-cups-pdf
+xsane
+
+# Audio
+alsa-utils
+libasound2-plugins
+playerctl
+
+# Locale and spellcheck
+hunspell-id
+hunspell-en-us
+
+# Firmware and hardware inventory
+fwupd
+firmware-sof-signed
+gsmartcontrol
+usbutils
+pciutils
+lshw
+lm-sensors
+
+# Desktop integration helpers
+seahorse
+xclip
+appstream
+appstream-util
+menhir

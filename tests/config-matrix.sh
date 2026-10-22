@@ -50,6 +50,21 @@ for combo in $SUPPORTED_COMBINATIONS; do
     grep -q '^gtk-theme-name=ArashiKage$' "$config/includes.chroot/etc/gtk-3.0/settings.ini" || \
         die "tema GTK3 bukan ArashiKage untuk $combo"
 
+    [ -f "$config/includes.chroot/usr/share/arashios/toolstack/catalog.json" ] || \
+        die "katalog toolstack hilang untuk $combo"
+    [ -f "$config/includes.chroot/usr/share/arashios/toolchain/catalog.json" ] || \
+        die "katalog toolchain hilang untuk $combo"
+    [ -f "$config/includes.chroot/usr/share/arashios/labs.json" ] || die "katalog lab hilang untuk $combo"
+    [ -f "$config/includes.chroot/usr/local/bin/arashios-arsenal" ] || die "Arsenal hilang untuk $combo"
+    [ -f "$config/includes.chroot/usr/local/bin/arashios-toolchain" ] || die "toolchain CLI hilang untuk $combo"
+    [ -f "$config/includes.chroot/usr/local/bin/arashios-lab" ] || die "lab CLI hilang untuk $combo"
+    [ -f "$config/includes.chroot/usr/share/wordlists/arashios/manifest.json" ] || \
+        die "manifest wordlist hilang untuk $combo"
+    [ -f "$config/includes.chroot/etc/containers/containers.conf" ] || die "konfigurasi container hilang untuk $combo"
+    [ -f "$config/includes.chroot/usr/share/doc/arashios/TOOLSTACK.md" ] || die "dokumen toolstack hilang untuk $combo"
+    grep -q '"T0"' "$config/includes.chroot/usr/share/arashios/toolstack/catalog.json" || \
+        die "katalog toolstack tidak memuat tier T0 untuk $combo"
+
     grep -q '^ID=arashios$' "$config/includes.chroot/etc/os-release" || die "ID os-release salah untuk $combo"
     grep -q "^ARASHIOS_ARCH=$arch$" "$config/includes.chroot/etc/arashios/build-info" || die "arsitektur build-info salah untuk $combo"
     grep -q "^ARASHIOS_EDITION=$edition$" "$config/includes.chroot/etc/arashios/build-info" || die "edisi build-info salah untuk $combo"

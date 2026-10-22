@@ -108,12 +108,12 @@ check_command qemu-img qemu-utils test
 
 printf '\nTool toolstack:\n'
 check_command python3 python3 build
-python3 -c "import yaml" >/dev/null 2>&1 && {
+if python3 -c "import yaml" >/dev/null 2>&1; then
     printf '  OK    %-22s %s\n' "python3-yaml" "$(python3 -c 'import yaml; print(yaml.__file__)')"
-} || {
+else
     printf '  MISS  %-22s paket: python3-yaml\n' "python3-yaml"
     MISSING_BUILD+=("python3-yaml")
-}
+fi
 
 printf '\nTool opsional:\n'
 for tool in shellcheck minisign git rsync; do

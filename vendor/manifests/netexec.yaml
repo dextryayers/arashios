@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: python3 -m pip install --no-deps --prefix=$PREFIX netexec
+  command: python3 -m pip install --no-deps --prefix="$PREFIX" .
   kind: python
   source_commit: c7dc286ba65daf10402cdc470e531b84e6d3d911
   source_ref: v1.5.1

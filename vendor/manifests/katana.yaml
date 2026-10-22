@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/katana
+  command: CGO_ENABLED=0 GOOS=linux GOARCH="$GOARCH" go build -trimpath -ldflags '-s -w' -o "$OUT" ./cmd/katana
   go_version: '1.23'
   kind: go
   source_commit: 35267ac5c8ff1db9694a319d0eb466ed97b0969f

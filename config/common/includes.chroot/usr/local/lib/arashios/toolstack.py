@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import platform
 import shutil
 import subprocess
 import time
@@ -157,11 +158,26 @@ def installed_entries() -> dict:
     return load_state().get("installed", {})
 
 
+def current_arch() -> str:
+    machine = platform.machine().lower()
+    return {"x86_64": "amd64", "amd64": "amd64", "aarch64": "arm64", "arm64": "arm64",
+            "i386": "i386", "i686": "i386"}.get(machine, machine)
+
+
 def binary_path(tool: dict) -> str:
     binary = tool.get("test", {}).get("command", [""])[0]
     if not binary or binary == "none":
         return ""
     return shutil.which(binary) or ""
+
+
+def repo_build_dir() -> Path | None:
+    """Locate the in-tree vendor build directory when running from the repository."""
+    for parent in Path(__file__).resolve().parents:
+        candidate = parent / "vendor" / "build"
+        if candidate.is_dir():
+            return candidate
+    return None
 
 
 def artifact_candidates(tool: dict) -> list[Path]:
@@ -178,6 +194,11 @@ def artifact_candidates(tool: dict) -> list[Path]:
         f"{name}.zip",
     ):
         found.extend(sorted(cache.glob(pattern)))
+    build_dir = repo_build_dir()
+    if build_dir is not None:
+        for arch_dir in sorted(build_dir.glob(f"{name}-*")):
+            if arch_dir.is_dir():
+                found.extend(sorted(path for path in arch_dir.iterdir() if path.is_file()))
     return found
 
 
@@ -202,7 +223,11 @@ def verify_tool(tool: dict) -> dict:
             result["detail"] = f"binary {binary} tidak ditemukan"
         return result
     if tier == "T1":
-        expected = str(tool.get("artifact_sha256", "") or "")
+        built = tool.get("artifact_built", {}) or {}
+        current = current_arch()
+        expected = str(built.get(current, {}).get("sha256", "") or "")
+        if not expected:
+            expected = str(tool.get("artifact_sha256", "") or "")
         candidates = artifact_candidates(tool)
         if not expected:
             result["status"] = "pending"

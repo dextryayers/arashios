@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: install -d $PREFIX && cp -a 2026.1/. $PREFIX/
+  command: install -d "$PREFIX" && cp -a . "$PREFIX"/
   kind: data
   source_commit: 190c6f7bd58c847ceadfe57d9853592737f059e8
   source_ref: 2026.1

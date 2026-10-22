@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/httpx
+  command: CGO_ENABLED=0 GOOS=linux GOARCH="$GOARCH" go build -trimpath -ldflags '-s -w' -o "$OUT" ./cmd/httpx
   go_version: '1.23'
   kind: go
   source_commit: 4b6a9a9d476f94a4f3a630f37051f5671ecfb1f8

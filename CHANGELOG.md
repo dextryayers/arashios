@@ -2,7 +2,7 @@
 
 Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi produk memakai pola V major.MM.DD.
 
-## [V1.10.21] - 2026-10-21
+## [V1.10.21] - 2026-10-22
 
 ### Added
 
@@ -27,6 +27,22 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 - Profil terminal Kage untuk GNOME Terminal, XFCE Terminal, dan QTerminal.
 - Perintah arashios-accessibility untuk kontras tinggi, reduced motion, dan status.
 - Pemeriksaan statis tema, desktop, dan paket branding di CI dan Makefile.
+- Katalog tool ArashiOS dengan 215 entri, 159 paket tier 0, 41 tool tier 1, 10 tool tier 2, dan 5 image tier 3.
+- Manifest YAML per tool di vendor/manifests dengan versi, sumber, commit, lisensi, arsitektur, build, install, dan smoke test.
+- Pin sumber upstream untuk 41 tool tier 1 pada tag dan commit yang dapat diverifikasi.
+- Pipeline vendor tool tier 1 dengan verifikasi commit, audit glibc 2.36, dan penguncian hash artefak.
+- Artefak tier 1 nuclei 3.11.1 dan subfinder 2.17.0 yang dibangun dari commit terkunci dan lolos audit glibc.
+- Arsenal dengan perintah list, info, workflows, verify, install, remove, doctor, dan smoke.
+- Harness smoke test toolstack tanpa jaringan dengan laporan JSON.
+- Wordlist ArashiOS dengan enam berkas kurasi internal berlisensi CC-BY-SA-4.0 dan manifest checksum.
+- Konfigurasi container rootless Podman dengan policy, registry, dan template Containerfile ber-digest.
+- Perintah arashios-lab untuk lab container dengan digest terkunci dan tanpa mode privileged.
+- Toolchain user level untuk uv, fnm, node, rustup, rust, go, starship, eza, dan vscodium dengan lock checksum.
+- Installer toolchain tanpa sudo yang memverifikasi checksum, menolak arsip keluar direktori, dan melepas diri dengan bersih.
+- Tujuh template proyek: Python, Go, Rust, Node, C, Java, dan template laporan keamanan.
+- Harness hello world untuk sepuluh bahasa dengan status lulus, dilewati, dan gagal yang terpisah.
+- Perintah arashios-doctor untuk pemeriksaan kesehatan sistem dan arashios-help untuk dokumentasi offline.
+- Dokumentasi toolstack, arsenal, coding, container, vendoring, lisensi, dan laporan Fase 4 dan Fase 5.
 
 ### Changed
 
@@ -53,6 +69,10 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 
 ### Known limitations
 
+- Artefak binary tool tier 1 belum dibangun sehingga hash artefak pada manifest masih kosong.
+- Image lab juice-shop belum memiliki digest terkunci dan ditolak sampai digest tersedia.
+- Host pengembangan tidak memasang Podman sehingga diagnosis container menandai masalah.
+- Empat bahasa dilewati pada smoke test karena kompilatornya tidak terpasang pada host.
 - ISO amd64 belum dibangun pada host ini karena toolchain build belum terpasang.
 - Calamares, tool vendored, repository mandiri, dan signing produksi belum aktif.
 - Tema Kage sudah dihasilkan dan dikemas, tetapi rendering GTK4, Cinnamon, XFCE, Openbox, Kvantum, LightDM, dan Plymouth belum diuji pada sesi nyata.

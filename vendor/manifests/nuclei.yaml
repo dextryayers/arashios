@@ -3,11 +3,15 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built:
+    amd64:
+      path: vendor/build/nuclei-amd64/nuclei
+      sha256: ecacf22de092f06b7611e7061202d65a6ae117024624797cf15a95c9aa81fd53
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
-  sha256: ''
-  status: source-locked
+  sha256: ecacf22de092f06b7611e7061202d65a6ae117024624797cf15a95c9aa81fd53
+  status: built
 build:
-  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/nuclei
+  command: CGO_ENABLED=0 GOOS=linux GOARCH="$GOARCH" go build -trimpath -ldflags '-s -w' -o "$OUT" ./cmd/nuclei
   go_version: '1.23'
   kind: go
   source_commit: a8c88feb4a1c8e961b7902534ce3af97e9d524a4

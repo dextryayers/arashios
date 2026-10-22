@@ -107,6 +107,7 @@ require_file scripts/generate-toolchain.py
 require_file scripts/check-wordlists.py
 require_file scripts/check-licenses.py
 require_file scripts/refresh-toolchain-lock.py
+require_file scripts/refresh-source-pins.py
 require_file scripts/build-vendor-tools.sh
 require_file scripts/check-glibc.py
 require_file tools/catalog.yaml

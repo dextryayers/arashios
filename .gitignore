@@ -15,3 +15,6 @@ __pycache__/
 node_modules/
 .toolchain/
 cache/
+vendor/build/
+vendor/cache/
+

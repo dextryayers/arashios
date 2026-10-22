@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: gem install --install-dir=$PREFIX metasploit-framework
+  command: gem build && gem install --install-dir="$PREFIX" --local *.gem
   kind: ruby
   source_commit: d1dde11225376661c484f394d554457c8f475974
   source_ref: v4.11.7

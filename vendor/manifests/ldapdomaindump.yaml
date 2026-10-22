@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: python3 -m pip install --no-deps --prefix=$PREFIX ldapdomaindump
+  command: python3 -m pip install --no-deps --prefix="$PREFIX" .
   kind: python
   source_commit: 35b357e1286470d39ee472d3fdd10b11c0e00fdc
   source_ref: v0.10.0

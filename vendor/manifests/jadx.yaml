@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: java -jar jadx.jar
+  command: install -d "$PREFIX" && install -m 0644 dist/*.jar "$PREFIX"/
   kind: java
   source_commit: 4c0ac37699aa8c9803f1c73cfaacd9205acb044b
   source_ref: v1.5.6

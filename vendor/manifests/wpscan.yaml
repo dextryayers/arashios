@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: gem install --install-dir=$PREFIX wpscan
+  command: gem build && gem install --install-dir="$PREFIX" --local *.gem
   kind: ruby
   source_commit: f6169f00652c07feb45f57ff2a10e38949c28d56
   source_ref: v4.1.0

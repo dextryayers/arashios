@@ -167,23 +167,47 @@ with open('$manifest', encoding='utf-8') as handle:
 
     rm -rf "$workdir"
     mkdir -p "$workdir"
-    git clone --filter=blob:none --no-checkout "$source_url" "$workdir" >/dev/null
-    git -C "$workdir" checkout --detach "$source_commit" >/dev/null
+    # Fetch hanya commit yang dipin agar hemat bandwidth dan waktu.
+    git -C "$workdir" init --quiet
+    git -C "$workdir" remote add origin "$source_url"
+    cloned=0
+    for attempt in 1 2 3 4 5; do
+        if git -C "$workdir" fetch --quiet --depth 1 origin "$source_commit" >/dev/null 2>&1; then
+            cloned=1
+            break
+        fi
+        log "gagal fetch $source_commit, percobaan $attempt"
+        sleep $((attempt * 5))
+    done
+    [ "$cloned" -eq 1 ] || die "$name: sumber tidak dapat diambil dari $source_url"
+    git -C "$workdir" checkout --detach FETCH_HEAD >/dev/null
     actual_commit="$(git -C "$workdir" rev-parse HEAD)"
     if [ "$actual_commit" != "$source_commit" ]; then
         die "$name: commit checkout $actual_commit tidak cocok dengan pin $source_commit"
     fi
 
+    export GOARCH="$ARCH"
+    export OUT="$workdir/$name"
+    export PREFIX="$workdir/prefix"
+    export DESTDIR="$workdir/dest"
+
     case "$build_kind" in
         go)
             command -v go >/dev/null 2>&1 || die "$name: go tidak tersedia di host build"
-            CGO_ENABLED=0 GOOS=linux GOARCH="$ARCH" \
-                sh -c "cd '$workdir' && $build_command" >/dev/null
+            (
+                cd "$workdir"
+                export GOCACHE="$workdir/.gocache"
+                export GOPATH="$workdir/.gopath"
+                eval "$build_command"
+            ) >/dev/null
             ;;
         python)
             command -v python3 >/dev/null 2>&1 || die "$name: python3 tidak tersedia di host build"
             python3 -m venv "$workdir/venv"
-            "$workdir/venv/bin/pip" install --no-deps "$workdir" >/dev/null
+            (
+                cd "$workdir"
+                "$workdir/venv/bin/pip" install --no-deps --prefix="$PREFIX" . >/dev/null
+            )
             ;;
         ruby)
             command -v gem >/dev/null 2>&1 || die "$name: gem tidak tersedia di host build"
@@ -199,15 +223,16 @@ with open('$manifest', encoding='utf-8') as handle:
             ;;
     esac
 
-    artifact="$workdir/${name}"
+    artifact="$OUT"
     if [ ! -f "$artifact" ]; then
-        artifact="$(find "$workdir" -maxdepth 2 -type f -name "$name" -print -quit || true)"
+        artifact="$(find "$workdir" -maxdepth 3 -type f -name "$name" -not -path '*/.gopath/*' -print -quit || true)"
     fi
     [ -n "$artifact" ] && [ -f "$artifact" ] || die "$name: artefak tidak ditemukan setelah build"
 
     digest="$(sha256sum "$artifact" | cut -d' ' -f1)"
-    log "$name: artefak $artifact sha256 $digest"
-    lock_update "$name" "$ARCH" "$artifact" "$digest"
+    relative_path="${artifact#"$ROOT/"}"
+    log "$name: artefak $relative_path sha256 $digest"
+    lock_update "$name" "$ARCH" "$relative_path" "$digest"
 
     python3 "$ROOT/scripts/check-glibc.py" "$artifact" --max-glibc "2.36" || true
 done

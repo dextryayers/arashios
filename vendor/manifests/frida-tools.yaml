@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: python3 -m pip install --no-deps --prefix=$PREFIX frida-tools
+  command: python3 -m pip install --no-deps --prefix="$PREFIX" .
   kind: python
   source_commit: adf8be5f5b7f3840521783b628a191b62d7e6f66
   source_ref: 17.24.3

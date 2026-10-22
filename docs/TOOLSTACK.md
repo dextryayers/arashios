@@ -108,11 +108,11 @@ test:
 
 ### 5.3 Status saat ini
 
-Status sumber sudah terkunci untuk 41 tool. Pemeriksaan `artifact.sha256`
-masih kosong karena artefak belum dibangun pada host ini. Pipeline build,
-audit glibc, dan penguncian checksum sudah tersedia dan diuji secara statis.
-Pembuatan artefak nyata memerlukan host build dengan Go, Python, Ruby, dan
-Java yang tersedia.
+Status sumber sudah terkunci untuk 41 tool. Artefak nuclei 3.11.1 dan
+subfinder 2.17.0 sudah dibangun dari commit yang dipin, lolos audit glibc
+sebagai binary statis, dan hash-nya tercatat di `vendor/artifacts.lock.json`
+serta di manifest masing-masing. Sembilan puluh satu tool lain masih
+berstatus `source-locked` karena artefaknya belum dibangun.
 
 ## 6. Smoke test
 

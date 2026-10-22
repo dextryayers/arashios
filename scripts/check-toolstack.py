@@ -36,6 +36,7 @@ RUNTIME_CATALOG = (
     / "catalog.json"
 )
 SECURITY_LIST = ROOT / "config" / "common" / "package-lists" / "20-security.list.chroot"
+ARTIFACT_LOCK = ROOT / "vendor" / "artifacts.lock.json"
 
 SUPPORTED_ARCHES = ("amd64", "arm64", "i386")
 WORKFLOWS = tuple(f"WF-{index:02d}" for index in range(1, 13))
@@ -216,6 +217,32 @@ def main() -> int:
         check(set(runtime.get("workflows", {})) == set(WORKFLOWS), "katalog runtime kehilangan alur kerja")
     else:
         check(False, "katalog runtime tidak ditemukan")
+
+    if ARTIFACT_LOCK.is_file():
+        lock = json.loads(ARTIFACT_LOCK.read_text(encoding="utf-8"))
+        artifacts = lock.get("artifacts", {})
+        check(bool(artifacts), "vendor/artifacts.lock.json tidak memuat artefak")
+        for name, arches in artifacts.items():
+            check(name in names, f"artefak lock untuk tool tidak dikenal: {name}")
+            for arch, record in arches.items():
+                check(arch in SUPPORTED_ARCHES, f"{name}: arsitektur artefak tidak dikenal {arch}")
+                check(
+                    bool(SHA256_RE.match(str(record.get("sha256", "")))),
+                    f"{name}: sha256 artefak {arch} tidak valid",
+                )
+                check(bool(record.get("path", "")), f"{name}: path artefak {arch} kosong")
+        for name, arches in artifacts.items():
+            manifest = load_yaml(MANIFEST_DIR / f"{name}.yaml")
+            artifact = manifest.get("artifact", {})
+            check(artifact.get("status") == "built", f"{name}: status artefak manifest belum built")
+            for arch, record in arches.items():
+                built = artifact.get("built", {})
+                check(
+                    built.get(arch, {}).get("sha256") == record.get("sha256"),
+                    f"{name}: sha256 artefak {arch} tidak sinkron dengan lock",
+                )
+    else:
+        check(False, "vendor/artifacts.lock.json tidak ditemukan")
 
     result = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "generate-toolstack.py"), "--check"],

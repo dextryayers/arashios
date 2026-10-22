@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: python3 -m pip install --no-deps --prefix=$PREFIX responder
+  command: python3 -m pip install --no-deps --prefix="$PREFIX" .
   kind: python
   source_commit: 61a028e8413053a2ead258824737609811a726cb
   source_ref: v3.2.2.0

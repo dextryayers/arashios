@@ -3,11 +3,15 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built:
+    amd64:
+      path: vendor/build/subfinder-amd64/subfinder
+      sha256: ed98bbff5e168d3de1bd67cd53ca5cf71044f1823763187365e61776448e2ec4
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
-  sha256: ''
-  status: source-locked
+  sha256: ed98bbff5e168d3de1bd67cd53ca5cf71044f1823763187365e61776448e2ec4
+  status: built
 build:
-  command: CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/subfinder
+  command: CGO_ENABLED=0 GOOS=linux GOARCH="$GOARCH" go build -trimpath -ldflags '-s -w' -o "$OUT" ./cmd/subfinder
   go_version: '1.23'
   kind: go
   source_commit: c97f25802892093060f0fc424bfc3f39e273693a

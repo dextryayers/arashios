@@ -43,6 +43,7 @@ RUNTIME_CATALOG = (
     / "toolstack"
     / "catalog.json"
 )
+ARTIFACT_LOCK = ROOT / "vendor" / "artifacts.lock.json"
 
 SUPPORTED_ARCHES = ("amd64", "arm64", "i386")
 TIERS = ("T0", "T1", "T2", "T3")
@@ -101,25 +102,33 @@ def arch_map(arches: list[str]) -> dict:
 def build_command(kind: str, name: str, source: dict) -> str:
     if kind == "go":
         return (
-            "CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH "
-            "go build -trimpath -ldflags '-s -w' -o $OUT ./cmd/" + name
+            'CGO_ENABLED=0 GOOS=linux GOARCH="$GOARCH" '
+            "go build -trimpath -ldflags '-s -w' -o \"$OUT\" ./cmd/" + name
         )
     if kind == "python":
-        return f"python3 -m pip install --no-deps --prefix=$PREFIX {name}"
+        return "python3 -m pip install --no-deps --prefix=\"$PREFIX\" ."
     if kind == "ruby":
-        return f"gem install --install-dir=$PREFIX {name}"
+        return "gem build && gem install --install-dir=\"$PREFIX\" --local *.gem"
     if kind == "java":
-        return f"java -jar {name}.jar"
+        return "install -d \"$PREFIX\" && install -m 0644 dist/*.jar \"$PREFIX\"/"
     if kind == "source":
-        return f"make -C {source.get('ref', 'source')} install PREFIX=$PREFIX"
+        return "make install PREFIX=\"$PREFIX\" DESTDIR=\"$DESTDIR\""
     if kind == "data":
-        return f"install -d $PREFIX && cp -a {source.get('ref', 'source')}/. $PREFIX/"
+        return "install -d \"$PREFIX\" && cp -a . \"$PREFIX\"/"
     if kind == "binary":
-        return f"install -m 0755 {name} $PREFIX/bin/{name}"
+        return "install -m 0755 \"$OUT\" \"$PREFIX/bin/" + name + "\""
     return ""
 
 
-def normalize_tool(raw: dict, catalog: dict, pins: dict) -> dict:
+def load_artifact_lock() -> dict:
+    if not ARTIFACT_LOCK.is_file():
+        return {}
+    with ARTIFACT_LOCK.open(encoding="utf-8") as handle:
+        data = json.load(handle)
+    return data.get("artifacts", {})
+
+
+def normalize_tool(raw: dict, catalog: dict, pins: dict, artifacts: dict) -> dict:
     name = raw["name"]
     tier = raw["tier"]
     defaults = catalog.get("defaults", {})
@@ -185,9 +194,14 @@ def normalize_tool(raw: dict, catalog: dict, pins: dict) -> dict:
         if kind == "go":
             build["go_version"] = GO_VERSION
         tool["build"] = build
+        built = artifacts.get(name, {})
         tool["artifact"] = {
-            "status": "source-locked",
-            "sha256": "",
+            "status": "built" if built else "source-locked",
+            "sha256": built.get("amd64", {}).get("sha256", ""),
+            "built": {
+                arch: {"sha256": record.get("sha256", ""), "path": record.get("path", "")}
+                for arch, record in sorted(built.items())
+            },
             "note": "Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.",
         }
         test_kind = "version"
@@ -309,6 +323,7 @@ def runtime_entry(tool: dict) -> dict:
     if "artifact" in tool:
         entry["artifact_status"] = tool["artifact"]["status"]
         entry["artifact_sha256"] = tool["artifact"]["sha256"]
+        entry["artifact_built"] = tool["artifact"].get("built", {})
     if "notes" in tool:
         entry["notes"] = tool["notes"]
     return entry
@@ -322,6 +337,7 @@ def main() -> int:
     catalog = load_yaml(CATALOG)
     pins = load_yaml(PINS).get("sources", {})
 
+    artifacts = load_artifact_lock()
     tools = []
     seen = set()
     for raw in catalog["tools"]:
@@ -329,7 +345,7 @@ def main() -> int:
         if name in seen:
             raise SystemExit(f"ERROR: nama tool duplikat di katalog: {name}")
         seen.add(name)
-        tools.append(normalize_tool(raw, catalog, pins))
+        tools.append(normalize_tool(raw, catalog, pins, artifacts))
     tools.sort(key=lambda item: item["name"])
 
     outputs: dict[Path, str] = {}

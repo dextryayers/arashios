@@ -71,11 +71,11 @@ line yang bergerak.
 | Package | `arashios-branding` |
 | Version | `1.10.21-1` |
 | Architecture | `all` |
-| Ukuran | 723368 byte |
+| Ukuran | 724216 byte |
 | File payload | 214 file |
 | Maintainer | `maintainers@arashios.example` |
 | Reproducible | Ya, dengan `SOURCE_DATE_EPOCH` |
-| Hash contoh | `40f6c22e39ea57912758ecfa6e1377400837a30515a0b390d80457d8292ccb4d` |
+| Hash contoh | `e159268a5f67a70a8414b6271ce9c0d6186cf235b9f9db1ba09fc51fe7125685` |
 
 Paket berisi tema, wallpaper, ikon, aset GRUB, aset Plymouth, token, manifest,
 dokumentasi lisensi termasuk `NOTICE`, dan changelog. Paket tidak memasang
@@ -200,6 +200,11 @@ membuktikan ISO dapat dibangun.
 Setiap dry run memeriksa paket branding, splash GRUB, tema live GRUB beserta
 pixmap nine-slice, splash syslinux, konfigurasi GTK, MIME, sesi LightDM, kernel
 flavour, dan metadata build.
+
+Matriks konfigurasi dijalankan ulang setelah perubahan tema Muffin pada
+Fase 3. Hasil rerun tetap lulus tujuh dari tujuh kombinasi. Rerun setelah
+penambahan toolstack dan toolchain pada Fase 4 dan Fase 5 juga lulus tujuh
+dari tujuh kombinasi.
 
 ### 4.4 Perintah
 

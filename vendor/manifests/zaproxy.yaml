@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: java -jar zaproxy.jar
+  command: install -d "$PREFIX" && install -m 0644 dist/*.jar "$PREFIX"/
   kind: java
   source_commit: 1af83afeaa52e5b8389af494fcb9b7a540b82bf5
   source_ref: w2026-10-15

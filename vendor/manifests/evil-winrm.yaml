@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: gem install --install-dir=$PREFIX evil-winrm
+  command: gem build && gem install --install-dir="$PREFIX" --local *.gem
   kind: ruby
   source_commit: 64d8e0f962d239643c4efadacce9f716bd5cb775
   source_ref: v4.1

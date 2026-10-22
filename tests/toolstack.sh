@@ -138,6 +138,49 @@ assert report["failures"] == 0, report
 print("OK:   arsenal JSON dan smoke harness")
 PY
 
+if [ -f "$ROOT/vendor/artifacts.lock.json" ]; then
+    printf '\nSiklus pasang tier 1:\n'
+    artifact="$(python3 - "$ROOT/vendor/artifacts.lock.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+artifacts = data.get("artifacts", {})
+for name, arches in sorted(artifacts.items()):
+    for arch, record in sorted(arches.items()):
+        if arch == "amd64":
+            print(f"{name}|{record['path']}")
+            raise SystemExit(0)
+raise SystemExit(1)
+PY
+)" || artifact=""
+    if [ -n "$artifact" ]; then
+        tool_name="${artifact%%|*}"
+        tool_path="${artifact#*|}"
+        if [ -f "$ROOT/$tool_path" ]; then
+            sandbox="$TMP/home"
+            mkdir -p "$sandbox"
+            if HOME="$sandbox" XDG_DATA_HOME="$sandbox/.local/share" \
+                "$BIN/arashios-arsenal" install "$tool_name" --from "$ROOT/$tool_path" >"$TMP/out" 2>&1; then
+                ok "artefak $tool_name dipasang setelah checksum cocok"
+            else
+                fail "pemasangan $tool_name gagal"
+                sed -n '1,20p' "$TMP/out" >&2
+            fi
+            if HOME="$sandbox" XDG_DATA_HOME="$sandbox/.local/share" \
+                "$BIN/arashios-arsenal" remove "$tool_name" >"$TMP/out" 2>&1; then
+                ok "artefak $tool_name dilepas bersih"
+            else
+                fail "pelepasan $tool_name gagal"
+                sed -n '1,20p' "$TMP/out" >&2
+            fi
+        else
+            printf '  catatan: artefak %s tidak ada di host, pengujian dilewati\n' "$tool_name"
+        fi
+    fi
+fi
+
 printf '\nLab dan container:\n'
 expect_zero "daftar lab" "$BIN/arashios-lab" list
 expect_zero "rencana lab dengan digest" "$BIN/arashios-lab" plan dvwa

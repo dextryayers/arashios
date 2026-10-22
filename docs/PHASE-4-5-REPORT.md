@@ -17,7 +17,7 @@ rootless, harness hello world untuk sepuluh bahasa, dan dokumentasi offline.
 
 Yang belum ada:
 
-1. Artefak binary tool tier 1 dan `artifact.sha256` pada manifest.
+1. Artefak binary tool tier 1 selain dua tool yang sudah dibuktikan.
 2. Image ISO dan boot UEFI serta BIOS.
 3. Eksekusi smoke test toolstack pada image.
 4. Login desktop dan pengujian VSCodium.
@@ -84,9 +84,22 @@ Sumber upstream dikunci pada tag dan commit untuk 41 tool. Contoh:
 | volatility3 | 2.28.2 | 881e970121c16f0932fb9d16fbd5fb258cbcbf75 | VSL |
 | kismet | 2025.09 | 7a3b5d207e6b15d7dcbb8fa916e121e51d3280e0 | GPL-3.0-only |
 
-Pipeline build tersedia di `scripts/build-vendor-tools.sh`. Skrip mengkloning
-sumber, memverifikasi commit checkout, menjalankan build sesuai manifest, lalu
-mencatat hash artefak di `vendor/artifacts.lock.json`.
+Pipeline build tersedia di `scripts/build-vendor-tools.sh`. Skrip mengambil
+hanya commit yang dipin, memverifikasi commit checkout, menjalankan build
+sesuai manifest, mengaudit glibc, lalu mencatat hash artefak di
+`vendor/artifacts.lock.json`.
+
+Dua artefak tier 1 sudah dibangun dan diverifikasi pada host pengembangan:
+
+| Tool | Versi | SHA-256 artefak | Audit glibc | Bukti versi |
+|---|---|---|---|---|
+| nuclei | 3.11.1 | ecacf22de092f06b7611e7061202d65a6ae117024624797cf15a95c9aa81fd53 | lulus, binary statik | Nuclei Engine Version v3.11.1 |
+| subfinder | 2.17.0 | ed98bbff5e168d3de1bd67cd53ca5cf71044f1823763187365e61776448e2ec4 | lulus, binary statik | Current Version v2.17.0 |
+
+Kedua binary memiliki versi yang sama dengan tag yang dipin. Manifest kedua
+tool berstatus `built` dan hash pada manifest sudah sama dengan lock artefak.
+Sembilan puluh satu tool tier 1 lain masih berstatus `source-locked` karena
+artefaknya belum dibangun.
 
 ### 4.4 Audit glibc
 
@@ -225,14 +238,14 @@ bahasa lulus dan empat dilewati karena kompilatornya tidak terpasang:
 
 | Pemeriksaan | Hasil |
 |---|---|
-| Katalog toolstack dan manifest | 6705 pemeriksaan lulus |
+| Katalog toolstack dan manifest | 6720 pemeriksaan lulus |
 | Wordlist dan checksum | 31 pemeriksaan lulus |
 | Metadata lisensi | 156 pemeriksaan lulus |
 | Katalog runtime toolstack | sinkron |
 | Katalog runtime toolchain | sinkron |
 | Lock checksum toolchain | lengkap untuk 9 komponen dan 3 arsitektur |
 | Validasi konfigurasi live-build | lulus |
-| Toolstack dan Arsenal | lulus |
+| Toolstack dan Arsenal | lulus, termasuk siklus pasang dan lepas artefak tier 1 |
 | Lingkungan coding | lulus |
 | ShellCheck, bash -n, py_compile | lulus |
 
@@ -272,9 +285,10 @@ make lint
 
 ## 5. Penyimpangan dan Risiko
 
-1. Artefak binary tier 1 belum dibangun sehingga `artifact.sha256` pada
-   manifest masih kosong dan statusnya `source-locked`.
-2. Smoke test tool只能在 image yang sudah dibangun dijalankan.
+1. Artefak binary tier 1 baru tersedia untuk nuclei dan subfinder. Sembilan
+   puluh satu tool lain masih berstatus `source-locked` dan `artifact.sha256`
+   pada manifest masih kosong.
+2. Smoke test tool hanya dapat dijalankan pada image yang sudah dibangun.
 3. Image lab juice-shop belum memiliki digest terkunci dan ditolak sampai
    digest tersedia.
 4. Host pengembangan tidak memasang Podman sehingga diagnosis container
@@ -300,7 +314,7 @@ Fase 4 dan Fase 5 belum dapat ditutup sampai:
 6. `arashios-toolchain install uv` selesai tanpa sudo dan checksum cocok.
 7. `arashios-new-project create` menghasilkan proyek yang bisa dikompilasi.
 8. VSCodium berjalan pada sesi desktop nyata.
-9. Artefak tier 1 dibangun dan `artifact.sha256` terisi.
+9. Artefak tier 1 dibangun untuk seluruh tool dan `artifact.sha256` terisi.
 10. Audit glibc lulus untuk seluruh artefak tier 1.
 11. Image lab ditarik dengan digest terkunci dan berjalan.
 12. Waktu boot, RAM, dan ukuran ISO diukur.

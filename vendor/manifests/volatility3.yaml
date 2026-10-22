@@ -3,11 +3,12 @@ arch:
   arm64: supported
   i386: supported
 artifact:
+  built: {}
   note: Hash binary diisi oleh scripts/build-vendor-tools.sh saat artifact dibangun.
   sha256: ''
   status: source-locked
 build:
-  command: python3 -m pip install --no-deps --prefix=$PREFIX volatility3
+  command: python3 -m pip install --no-deps --prefix="$PREFIX" .
   kind: python
   source_commit: 881e970121c16f0932fb9d16fbd5fb258cbcbf75
   source_ref: v2.28.2
