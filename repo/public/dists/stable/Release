@@ -6,26 +6,26 @@ Version: 1.0
 Architectures: amd64 arm64 i386
 Components: main
 Description: ArashiOS package repository
-Date: Thu, 22 Oct 2026 01:55:17 UTC
+Date: Thu, 22 Oct 2026 02:01:24 UTC
 Acquire-By-Hash: no
 MD5Sum:
- a678ba1bd66a7c234216e6b6ecb5d61a 13690 main/binary-amd64/Packages
- d70113b1742c4052ac91111e5520cd48 4597 main/binary-amd64/Packages.gz
- a678ba1bd66a7c234216e6b6ecb5d61a 13690 main/binary-arm64/Packages
- d70113b1742c4052ac91111e5520cd48 4597 main/binary-arm64/Packages.gz
- a678ba1bd66a7c234216e6b6ecb5d61a 13690 main/binary-i386/Packages
- d70113b1742c4052ac91111e5520cd48 4597 main/binary-i386/Packages.gz
+ 679e7a015fe39ebfc2e7b07bad1adb76 13690 main/binary-amd64/Packages
+ 3c9bee0d42290a9e7560972fde1b7908 4593 main/binary-amd64/Packages.gz
+ 679e7a015fe39ebfc2e7b07bad1adb76 13690 main/binary-arm64/Packages
+ 3c9bee0d42290a9e7560972fde1b7908 4593 main/binary-arm64/Packages.gz
+ 679e7a015fe39ebfc2e7b07bad1adb76 13690 main/binary-i386/Packages
+ 3c9bee0d42290a9e7560972fde1b7908 4593 main/binary-i386/Packages.gz
 SHA1:
- 00d43aa542f48940d56ac48699ac6a43eefb1cd1 13690 main/binary-amd64/Packages
- c99370a2a7c00ee093121ca4188aeebbc73223dc 4597 main/binary-amd64/Packages.gz
- 00d43aa542f48940d56ac48699ac6a43eefb1cd1 13690 main/binary-arm64/Packages
- c99370a2a7c00ee093121ca4188aeebbc73223dc 4597 main/binary-arm64/Packages.gz
- 00d43aa542f48940d56ac48699ac6a43eefb1cd1 13690 main/binary-i386/Packages
- c99370a2a7c00ee093121ca4188aeebbc73223dc 4597 main/binary-i386/Packages.gz
+ 87a5a93e1c307365503808127c484a840f31b37d 13690 main/binary-amd64/Packages
+ bb5369f53cd973587b009ab460a0eacd0d328b45 4593 main/binary-amd64/Packages.gz
+ 87a5a93e1c307365503808127c484a840f31b37d 13690 main/binary-arm64/Packages
+ bb5369f53cd973587b009ab460a0eacd0d328b45 4593 main/binary-arm64/Packages.gz
+ 87a5a93e1c307365503808127c484a840f31b37d 13690 main/binary-i386/Packages
+ bb5369f53cd973587b009ab460a0eacd0d328b45 4593 main/binary-i386/Packages.gz
 SHA256:
- e4db2951e840150379f7c2fc80073bedb3b1aa4d32c01e45cb8b021cca28e154 13690 main/binary-amd64/Packages
- 5769fa2c3c05807efe39156ad981783411582974ab190cb47b2cf2923ffb1851 4597 main/binary-amd64/Packages.gz
- e4db2951e840150379f7c2fc80073bedb3b1aa4d32c01e45cb8b021cca28e154 13690 main/binary-arm64/Packages
- 5769fa2c3c05807efe39156ad981783411582974ab190cb47b2cf2923ffb1851 4597 main/binary-arm64/Packages.gz
- e4db2951e840150379f7c2fc80073bedb3b1aa4d32c01e45cb8b021cca28e154 13690 main/binary-i386/Packages
- 5769fa2c3c05807efe39156ad981783411582974ab190cb47b2cf2923ffb1851 4597 main/binary-i386/Packages.gz
+ bea729f5c5ff15baa740821f02f7a4d4e7ef3119acd3113d5127317b1e983586 13690 main/binary-amd64/Packages
+ 38666dad701bfa66a9fdba49ba52e075f69063b7ccd1d1a09d32b2da5aa7abce 4593 main/binary-amd64/Packages.gz
+ bea729f5c5ff15baa740821f02f7a4d4e7ef3119acd3113d5127317b1e983586 13690 main/binary-arm64/Packages
+ 38666dad701bfa66a9fdba49ba52e075f69063b7ccd1d1a09d32b2da5aa7abce 4593 main/binary-arm64/Packages.gz
+ bea729f5c5ff15baa740821f02f7a4d4e7ef3119acd3113d5127317b1e983586 13690 main/binary-i386/Packages
+ 38666dad701bfa66a9fdba49ba52e075f69063b7ccd1d1a09d32b2da5aa7abce 4593 main/binary-i386/Packages.gz

@@ -187,7 +187,7 @@ paket identik. Laporan ditulis di `build/reproducibility-report.json`.
 | Repository offline | apt membaca repo bertanda tangan dan pool membangun ulang indeks yang identik |
 | Reproduksibilitas | paket identik antar dua build |
 | Repository offline | apt membaca repo bertanda tangan, pool membangun indeks identik |
-| Dokumen | 458 berkas lulus |
+| Dokumen | 460 berkas lulus |
 | Traceability | 58 requirement, 52 test case |
 
 ### 4.2 Perintah
