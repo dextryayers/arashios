@@ -10,6 +10,11 @@ Kanal ini menerima laporan untuk:
 4. Build pipeline dan CI.
 5. Website resmi.
 6. Konfigurasi default yang melemahkan keamanan.
+7. SBOM, tanda tangan artefak, dan checksum rilis.
+8. Kunci signing repository dan rotasi kunci.
+
+Artefak rilis yang dilindungi adalah berkas `.iso`, `.sha256`, `.sha512`,
+`.sig`, dan `.sbom.json`. Laporan disertai perintah verifikasi akan membantu reproduksi.
 
 ## Kanal
 
@@ -45,6 +50,27 @@ Riset yang dilakukan dengan niat baik, tanpa merusak data, dan tanpa mengakses d
 2. Kredit peneliti jika diizinkan.
 3. Advisory dipublikasikan di website dan GitHub Security.
 4. CVE diminta jika dampak mencukupi.
+
+## Verifikasi Rilis
+
+Setiap rilis menyertakan checksum SHA-256 dan SHA-512, SBOM CycloneDX, dan
+tanda tangan. Verifikasi dilakukan sebagai berikut:
+
+```bash
+sha256sum -c ArashiOS-amd64-V1.10.21.iso.sha256
+./scripts/sign-artifact.sh --verify ArashiOS-amd64-V1.10.21.iso.sig
+python3 ./scripts/check-sbom.py ArashiOS-amd64-V1.10.21.iso.sbom.json
+```
+
+Fingerprint kunci repository ada di `repo/keys/arashios-archive.fingerprint`
+dan dipublikasikan bersama release notes. Kunci privat tidak pernah ada di
+image maupun repository publik.
+
+## Rotasi Kunci
+
+Kunci repository dan kunci tanda tangan artefak mengikuti jadwal rotasi yang
+tercantum pada [docs/KEY-ROTATION.md](docs/KEY-ROTATION.md). Penghapusan kunci
+memerlukan dua maintainer.
 
 ## Dukungan Versi
 

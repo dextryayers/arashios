@@ -114,6 +114,9 @@ jobs:
       - name: Validate packaging standard
         run: python3 ./scripts/check-packages.py
 
+      - name: Validate offline repository
+        run: ./tests/repo-offline.sh
+
       - name: Validate hardening checklist
         run: python3 ./scripts/check-hardening.py --config
 

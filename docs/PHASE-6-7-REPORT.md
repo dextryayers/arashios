@@ -200,7 +200,7 @@ sepuluh skenario untuk tiga edisi. Skenario nyata menunggu image ISO.
 |---|---|
 | Konfigurasi penggunaan harian | 88 pemeriksaan lulus |
 | Konfigurasi installer, persistence, dan pemulihan | 153 pemeriksaan lulus |
-| Audit paket bookworm | 2138 nama paket, 0 hilang pada 7 kombinasi |
+| Audit paket bookworm | 2145 nama paket, 0 hilang pada 7 kombinasi |
 | Katalog toolstack | 6732 pemeriksaan lulus |
 | Validasi konfigurasi live-build | lulus |
 | Testsuite harian | lulus |
@@ -211,13 +211,13 @@ sepuluh skenario untuk tiga edisi. Skenario nyata menunggu image ISO.
 
 | Kombinasi | Paket unik | Hilang |
 |---|---:|---:|
-| amd64 cinnamon | 309 | 0 |
-| amd64 xfce | 309 | 0 |
-| amd64 lxqt | 318 | 0 |
-| arm64 xfce | 304 | 0 |
-| arm64 lxqt | 313 | 0 |
-| i386 lxqt | 297 | 0 |
-| i386 xfce | 288 | 0 |
+| amd64 cinnamon | 310 | 0 |
+| amd64 xfce | 310 | 0 |
+| amd64 lxqt | 319 | 0 |
+| arm64 xfce | 305 | 0 |
+| arm64 lxqt | 314 | 0 |
+| i386 lxqt | 298 | 0 |
+| i386 xfce | 289 | 0 |
 
 ### 4.3 Perintah
 

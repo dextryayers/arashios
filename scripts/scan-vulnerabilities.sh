@@ -10,7 +10,6 @@
 #   scripts/scan-vulnerabilities.sh --root build/squashfs-root
 set -Eeuo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT=""
 TARGET=""
 THRESHOLD="high"
@@ -44,7 +43,6 @@ done
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-SCANNERS="[]"
 DEBSECAN_STATUS="skipped"
 TRIVY_STATUS="skipped"
 GRYPE_STATUS="skipped"

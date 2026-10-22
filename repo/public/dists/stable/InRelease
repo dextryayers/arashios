@@ -1,20 +1,50 @@
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-
+Origin: ArashiOS Project
+Label: ArashiOS
+Suite: stable
+Codename: stable
+Version: 1.0
+Architectures: amd64 arm64 i386
+Components: main
+Description: ArashiOS package repository
+Date: Thu, 22 Oct 2026 01:41:26 UTC
+Acquire-By-Hash: no
+MD5Sum:
+ 158d07234b0761a00825dc833376781f 13690 main/binary-amd64/Packages
+ 6bb9e07dc038464133f2fb7fd3616bcc 4598 main/binary-amd64/Packages.gz
+ 158d07234b0761a00825dc833376781f 13690 main/binary-arm64/Packages
+ 6bb9e07dc038464133f2fb7fd3616bcc 4598 main/binary-arm64/Packages.gz
+ 158d07234b0761a00825dc833376781f 13690 main/binary-i386/Packages
+ 6bb9e07dc038464133f2fb7fd3616bcc 4598 main/binary-i386/Packages.gz
+SHA1:
+ bcec09617fd3452cfa56e0e3e6f0733f3d379bad 13690 main/binary-amd64/Packages
+ 58825686b9098e61c5d3215a8b316ba52882b3d1 4598 main/binary-amd64/Packages.gz
+ bcec09617fd3452cfa56e0e3e6f0733f3d379bad 13690 main/binary-arm64/Packages
+ 58825686b9098e61c5d3215a8b316ba52882b3d1 4598 main/binary-arm64/Packages.gz
+ bcec09617fd3452cfa56e0e3e6f0733f3d379bad 13690 main/binary-i386/Packages
+ 58825686b9098e61c5d3215a8b316ba52882b3d1 4598 main/binary-i386/Packages.gz
+SHA256:
+ 0ed819c3d17519560f48633881eba53e7a7ded4aaf44ea86e83ff88d8343ade4 13690 main/binary-amd64/Packages
+ 23ed987f0663aa29d46153ece351e7d9a67ceb4d3de0959ff246ae494edc4890 4598 main/binary-amd64/Packages.gz
+ 0ed819c3d17519560f48633881eba53e7a7ded4aaf44ea86e83ff88d8343ade4 13690 main/binary-arm64/Packages
+ 23ed987f0663aa29d46153ece351e7d9a67ceb4d3de0959ff246ae494edc4890 4598 main/binary-arm64/Packages.gz
+ 0ed819c3d17519560f48633881eba53e7a7ded4aaf44ea86e83ff88d8343ade4 13690 main/binary-i386/Packages
+ 23ed987f0663aa29d46153ece351e7d9a67ceb4d3de0959ff246ae494edc4890 4598 main/binary-i386/Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEBNM5fnla25QGfXgtPCz2Rk8IKAQFAmrZY8YACgkQPCz2Rk8I
-KASUfQ/8DdUgE5XanuMpHfrc9NWUQUn1Zd8pEeeKeXN4q89tt5i+Axp4Pq4IhEzV
-0jj1orYV4KGepVWscMmnMmmvUnBL1r1Ql15VSveCwsLG7G8bU7MN0CRR06cN8Ojg
-PpS3024y+jZ8fU7b8L7zxye5pHj/2z4HMYWdRIDKJFYW/VPKDBJazU4bcsi7uYGC
-R7CLNM4EMG3G2Nk85R6eKf83FIRnEh/dZg/eUC7exAsuKg+P+1zWSVwcuLe2pSth
-vxunX3OjJ1ww+vrogB1YqXLzP9AeFLwZJSps/sQI6pbel/ISiPu885tujtPIPDRw
-PxHnQL3pFzNglHsPg/yAVf7/558tqk4ZOCdPGeJ87YafuPSMlZW9spd9vPVMDNcn
-fds/fjtTToTaiJf1ur6G+Z1MAo2dH+o2IUyTxqsyTXha6ZemDf5Zcjh8g9U+kpyT
-YOHcvNQ0b0M4npef4w5UNrN6TausYie3Ol0bRhlbWS2i/mX/VDMp2OoCw9c5Zhno
-m9S5zjJn4utIagFOan4DnIKv9jWFjEOyUa6bE1CE2vVGNJqGS3jNU5cxjFF7ARfu
-U0VkxZbPQyb/9grTEkvcX1EnvHQCsa75h96ptSuB1k/kiIUzY0ZY7o62kn9Hw9MW
-V0CzE+mmtS1Q72Lm9uQ4ZM/mzA0iPEYI3cUb572VLOHmZe70F8A=
-=aUD9
+iQIzBAEBCgAdFiEEBNM5fnla25QGfXgtPCz2Rk8IKAQFAmrZacYACgkQPCz2Rk8I
+KAR/rw//W1crTGSoAOY644O5ewLMC5R/9hOeZdOYq5oRq0F3pzzE504VU3MRxhTm
+dIdAMBJeQn/SDouIVyihuoQebrY03hCQ/gj9oEqBO4GcqQU2dn2nTOj/UDrqm2ok
+3rF2RvWx9f05v1XgtxrD0qjsL2QbMakmXc2QmcTQXFhS75jMMxhAn+FZM8SJMsxb
+pHNP8UXFN98T7WOg1bM8snSauZmReYnE9qsQeUVki9esnYAct/MGvkOv13qrbLhF
+lg4g8bbX5DCTy8WFQo3ZqTdN00pMdm9O7F/74IKj7gUVy8aDsEV4edJNfRL3BUVf
+DyPFrFdP6rJYMwzHsYkw69JrVuqOyTQz4WIrknBEsa4gWwg9Oj+1WrRZiomtjd0g
+TsmQrOQOEYy9KRgFAHHMhzuNKFXTZ1R+XHL8qDk3ud3YELBrKjHGqeua3IqORq0b
+pGOJK135/b8DBEfMyxNw9LFhdsoVxeRVTQok7iV67FlDao01NKU0II5gGBGtNWHa
+FScxHZjuem6mbi3dyosa/ioT5LNepklTdsT0Mf5zdAyX2J2hHJze3JzUpfntDj4G
+4EErfzZiFHYmygD1DwwJhCDjmU9+6tyZw8Ub2s8w5ZHOZyg9P4susvCQppfbBjD2
+MCM4hnmkD5cAmf4bmwPa4ZteAHmCb6umJ4zb+ExNBk54iPvgM2s=
+=3QfE
 -----END PGP SIGNATURE-----

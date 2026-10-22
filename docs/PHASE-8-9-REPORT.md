@@ -69,6 +69,12 @@ Bukti: `gpgv` memverifikasi `InRelease` dengan kunci RSA 4096 dengan fingerprint
 `04D3397E795ADB94067D782D3C2CF6464F082804`. Konfigurasi aptly tersedia di
 `repo/conf/distributions.yaml`.
 
+`tests/repo-offline.sh` membuktikan jalur secara penuh: repository disalin ke
+direktori sementara, `apt update` membacanya memakai keyring archive, `apt`
+melihat paket `arashios-arsenal`, indeks dibangun ulang dari pool menghasilkan
+daftar paket yang identik dengan indeks yang dipublikasikan, dan pool memuat 16
+paket.
+
 ### 8.4 Integrasi ISO
 
 `build.sh` membangun paket dan repository lokal pada setiap build, menyalin
@@ -178,6 +184,7 @@ paket identik. Laporan ditulis di `build/reproducibility-report.json`.
 | Katalog toolstack | 6732 pemeriksaan lulus |
 | Manifest snapshot | sinkron, 16 paket, hash konfigurasi tercatat |
 | Repository | InRelease terverifikasi dengan kunci repo |
+| Repository offline | apt membaca repo bertanda tangan dan pool membangun ulang indeks yang identik |
 | Reproduksibilitas | paket identik antar dua build |
 | Dokumen | 458 berkas lulus |
 | Traceability | 58 requirement, 52 test case |

@@ -9,7 +9,6 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 KEY_DIR="$ROOT/repo/keys"
 GNUPG_HOME="$KEY_DIR/gnupg"
-KEY_UID="ArashiOS Archive Signing Key <maintainers@arashios.example>"
 FINGERPRINT_FILE="$KEY_DIR/arashios-archive.fingerprint"
 
 command -v gpg >/dev/null 2>&1 || {

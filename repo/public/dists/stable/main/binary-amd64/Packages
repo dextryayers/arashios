@@ -9,33 +9,32 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-arsenal/arashios-arsenal_1.10.21-1_all.deb
-Size: 19832
-MD5sum: 0b2508749e57cd02c2501b9f153160e7
-SHA1: 91227d991d5fd8894626c280e25e5c0f4107028b
-SHA256: d20c4a58b6eb70753e213a7799b3be526bfb249daaf78791398060b6b8494ebb
+Size: 19756
+MD5sum: dca62b2631d92b2973d869787c45ba81
+SHA1: 580d5f2aa150956fe2c439f8b8c6b2271853e4bc
+SHA256: 70dcb1db1a10ae6a5b52364aca15cfe825a2ed9a3b404b564c8f98b345c0877c
 Description: ArashiOS tool catalog and arsenal command
-Provides the arashios-arsenal command and the toolstack catalog used
-to list, install, verify, and remove the ArashiOS security tools.
+ Provides the arashios-arsenal command and the toolstack catalog used
+ to list, install, verify, and remove the ArashiOS security tools.
 
 Package: arashios-branding
 Version: 1.10.21-1
 Architecture: all
 Maintainer: ArashiOS Project <maintainers@arashios.example>
-Installed-Size: 1
-Depends: fonts-inter, fonts-jetbrains-mono
+Installed-Size: 2384
+Depends: gtk2-engines-murrine, qt5-style-kvantum, qt5ct, papirus-icon-theme, bibata-cursor-theme, fonts-inter, fonts-jetbrains-mono
+Recommends: cinnamon | xfce4 | lxqt-core
 Section: x11
 Priority: optional
-Homepage: https://arashios.example
-Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-branding/arashios-branding_1.10.21-1_all.deb
-Size: 1388
-MD5sum: 69d541418f76a85eb00c44b9e9973583
-SHA1: 52f6e473c8fed5000c5de5015d333825adfbf12a
-SHA256: 1730ea73b558f8cf5ed94ed2fe0bc679b0ebb7346b9cd5327a29776c1f4b6d92
+Size: 724944
+MD5sum: 1877fcee9ce7f470c4ef4c5e0acd056e
+SHA1: 070fd8ddcd669860f8731b172e28a443765a2733
+SHA256: 268fdacce604651262cfde7e7e2d12d32ece2f2f43db1b3ce23354a5ed232d72
 Description: ArashiOS Kage branding, desktop themes, and boot assets
-The package installs the ArashiKage GTK, Cinnamon, XFWM, Openbox, and
-Kvantum themes plus the Kage wallpaper, icon, GRUB, and Plymouth assets.
-It is built locally from the pinned design tokens during each image build.
+ The package installs the ArashiKage GTK, Cinnamon, XFWM, Openbox, and
+ Kvantum themes plus the Kage wallpaper, icon, GRUB, and Plymouth assets.
+ It is built locally from the pinned design tokens during each image build.
 
 Package: arashios-desktop-cinnamon
 Version: 1.10.21-1
@@ -48,13 +47,13 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-desktop-cinnamon/arashios-desktop-cinnamon_1.10.21-1_all.deb
-Size: 3352
-MD5sum: 67f1d50ac1bd93097e4c6e0724952940
-SHA1: af05c28570dba1e233646dbbbe55296cb178e029
-SHA256: 5ef1356fd52f58033bdadda82270b9ed4e98cbf265cb07c1695cd89d6e455398
+Size: 3348
+MD5sum: 563e98bd9830014904d397b3c109f03d
+SHA1: addb3259b585f70c11bfac7b1c3aaca40484dcd5
+SHA256: cb3b62dd3ecae2b30bd493bcfedcb42fab8992cdc7fc602abfb7f85d2a69a240
 Description: ArashiOS Cinnamon desktop configuration
-Provides the Cinnamon panel, dconf defaults, Nemo, and terminal settings
-for the ArashiOS Cinnamon edition.
+ Provides the Cinnamon panel, dconf defaults, Nemo, and terminal settings
+ for the ArashiOS Cinnamon edition.
 
 Package: arashios-desktop-common
 Version: 1.10.21-1
@@ -67,14 +66,14 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-desktop-common/arashios-desktop-common_1.10.21-1_all.deb
-Size: 15292
-MD5sum: 659f19a2b197835072355ad5cda02189
-SHA1: 6cad1b59a15fe89232b52e20e89bf89a52a5cf74
-SHA256: 1dee51181412be9b93e87e63fa7f842afc57e905d9792fa65df8ee14b2adfbf2
+Size: 15172
+MD5sum: 3693067ea927d1abe98a76ec084e6fab
+SHA1: a4fbdf3be7d67564524631895b2d07ab3fbda2f9
+SHA256: 6beed9474e4b61811271b578beb5c86873e9e8a6eb0f9a01a53937a73551fab4
 Description: ArashiOS shared desktop configuration and user skeleton
-Provides the shared user skeleton for the ArashiOS desktops: Zsh, tmux,
-Neovim, Git, ripgrep, bat, terminal profiles, the accessibility helper,
-and the daily use diagnostics.
+ Provides the shared user skeleton for the ArashiOS desktops: Zsh, tmux,
+ Neovim, Git, ripgrep, bat, terminal profiles, the accessibility helper,
+ and the daily use diagnostics.
 
 Package: arashios-desktop-lxqt
 Version: 1.10.21-1
@@ -88,12 +87,12 @@ Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-desktop-lxqt/arashios-desktop-lxqt_1.10.21-1_all.deb
 Size: 8856
-MD5sum: b08da27d8e597f804372da65af993b0b
-SHA1: f732f80a76e29dfb765c4521adf9f0b84510b0d4
-SHA256: 8c157b18d981fb39dfb90900fb0c63f304472abe82d13cbecaad423d59bb380e
+MD5sum: e67f0f729c2c9ae5fdd0ed682dbb5db3
+SHA1: 76b71cc5ef34206bc06bd9bb5e84a6434e3a7c24
+SHA256: 12a286ef13b569f590a06047d91063ddcc0237d512e8bd28c089c572d316dfe4
 Description: ArashiOS LXQt desktop configuration
-Provides the LXQt panel, Openbox, PCManFM, and terminal settings for
-the ArashiOS LXQt edition.
+ Provides the LXQt panel, Openbox, PCManFM, and terminal settings for
+ the ArashiOS LXQt edition.
 
 Package: arashios-desktop-xfce
 Version: 1.10.21-1
@@ -107,12 +106,12 @@ Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-desktop-xfce/arashios-desktop-xfce_1.10.21-1_all.deb
 Size: 4440
-MD5sum: e403068108c95c0eb423c6948eb97e49
-SHA1: 548f5b663307090e147f298afde2215cb2d8eef5
-SHA256: bf6c67061020caa35f5b2d6ccf1a9b0be408517f0437ff87e387a987420196df
+MD5sum: 99a5aa4092523b3719d4537af3d8e27e
+SHA1: 01120a1b2718e650d69435730d95cbd6d0a27e60
+SHA256: da8e0e15512d21345433b15df186678ad93fcc97a618b81892e57500209e80f1
 Description: ArashiOS XFCE desktop configuration
-Provides the XFCE panel, xfconf settings, Thunar, and terminal
-settings for the ArashiOS XFCE edition.
+ Provides the XFCE panel, xfconf settings, Thunar, and terminal
+ settings for the ArashiOS XFCE edition.
 
 Package: arashios-icons
 Version: 1.10.21-1
@@ -125,33 +124,33 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-icons/arashios-icons_1.10.21-1_all.deb
-Size: 4808
-MD5sum: 62313b0ce08f9a853d8acd2030ae1c3a
-SHA1: 07fdaddef11bcf762ace08a537bd86451a835afb
-SHA256: 593ad1de8d53992ec33f6ee77030baaf5d755ded8881f0b7680245c71061b56b
+Size: 4816
+MD5sum: b29f8fe7bd2743f5ff28f2b7de029df3
+SHA1: 44039bd234f5e672509801396fc4b5937f3bdafe
+SHA256: e20c8c82337db984649e4c91732dbd9e59e5591ccf3ca45bc92fd8faaa6d2875
 Description: ArashiOS application icons
-Provides the ArashiOS application icon in the standard hicolor theme
-directories so the brand appears in menus, launchers, and the file
-manager.
+ Provides the ArashiOS application icon in the standard hicolor theme
+ directories so the brand appears in menus, launchers, and the file
+ manager.
 
 Package: arashios-meta-daily
 Version: 1.10.21-1
 Architecture: all
 Maintainer: ArashiOS Project <maintainers@arashios.example>
 Installed-Size: 1
-Depends: arashios-desktop-common, firefox-esr, thunderbird, libreoffice, vlc, gimp, inkscape, evince, file-roller, flameshot, keepassxc, timeshift, gparted, gnome-disk-utility, remmina, filezilla, qbittorrent, cups, system-config-printer, sane-utils, bluez, blueman, flatpak, firefox-esr-l10n-id, firefox-esr-l10n-ja, thunderbird-l10n-id, thunderbird-l10n-ja, mpv, playerctl, pandoc, hunspell-id, libreoffice-l10n-id, libreoffice-l10n-ja, avahi-daemon, avahi-utils, mtr-tiny, wpasupplicant, powertop, tlp, zram-tools, earlyoom, cups-filters, printer-driver-cups-pdf, xsane, alsa-utils, libasound2-plugins, fwupd, firmware-sof-signed, gsmartcontrol, lshw, lm-sensors, seahorse, xclip
+Depends: arashios-desktop-common, firefox-esr, thunderbird, libreoffice, vlc, gimp, inkscape, evince, file-roller, flameshot, keepassxc, timeshift, gparted, gnome-disk-utility, remmina, filezilla, qbittorrent, cups, system-config-printer, sane-utils, bluez, blueman, flatpak, firefox-esr-l10n-id, firefox-esr-l10n-ja, thunderbird-l10n-id, thunderbird-l10n-ja, mpv, playerctl, pandoc, hunspell-id, libreoffice-l10n-id, libreoffice-l10n-ja, avahi-daemon, avahi-utils, mtr-tiny, wpasupplicant, powertop, tlp, zram-tools, earlyoom, cups-filters, printer-driver-cups-pdf, xsane, alsa-utils, libasound2-plugins, fwupd, firmware-sof-signed, gsmartcontrol, lshw, lm-sensors, seahorse, xclip, firejail
 Section: misc
 Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-meta-daily/arashios-meta-daily_1.10.21-1_all.deb
-Size: 1624
-MD5sum: e6872e35f6930dbad192e21201a02cd4
-SHA1: c11831a18c53885fcffd06c554733915aace1065
-SHA256: cbe8939b933b96925e542593da6aebad811d9b5f1a91b4fa7bd87273f404ff62
+Size: 1632
+MD5sum: e425149921236e61e741647a11ac3fbb
+SHA1: 96c6e269f7733bff6a8d346fa13a2da71c288ea4
+SHA256: f45d4a829d237be3f3774f0ba01e22533f99fd6d7f990ac31c1b7cdd511a47ff
 Description: ArashiOS daily driver metapackage
-Installs the browser, office, media, printing, and maintenance
-applications used by the ArashiOS daily driver workflow.
+ Installs the browser, office, media, printing, and maintenance
+ applications used by the ArashiOS daily driver workflow.
 
 Package: arashios-meta-dev
 Version: 1.10.21-1
@@ -164,13 +163,13 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-meta-dev/arashios-meta-dev_1.10.21-1_all.deb
-Size: 1568
-MD5sum: f7f2e0e0e824c7a9741e1658df2a2eaf
-SHA1: f45a0d771faf31fad034904dc4b84c5065c3a320
-SHA256: 79f5490062667eed7a8070c8211bfdfc387c7de0f33e2496e8f365616fe0e27a
+Size: 1572
+MD5sum: d2983a7da22994b86e5cb78f034f42cc
+SHA1: dacf5478d461945cda48989468738065d204baa8
+SHA256: d3d997bdf7f7721951c8901d0a908c9a3fc334b1244f049745211d92c938ad3f
 Description: ArashiOS development toolchain metapackage
-Installs the compilers, interpreters, editors, and command line tools
-used by the ArashiOS coding workflow.
+ Installs the compilers, interpreters, editors, and command line tools
+ used by the ArashiOS coding workflow.
 
 Package: arashios-meta-redteam
 Version: 1.10.21-1
@@ -184,32 +183,32 @@ Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-meta-redteam/arashios-meta-redteam_1.10.21-1_all.deb
 Size: 1840
-MD5sum: 473fd62352b54b162fb131f936fd72f3
-SHA1: 7747516deea59484da55c5ad8cf07d1191d49095
-SHA256: 00d3bf1bae6dfe936d9d3a5888b0dbe19b553d02f9ecfc1e0a22bc864d951c90
+MD5sum: f7d4c2970ea3c843b81b7c3dd80b071d
+SHA1: 8b33c4ec8df534f835186ffe93dd2dd7e44b4512
+SHA256: 185e6c8f824e83b5ea3011c0077e71e3e5c346042c03150c3cd3772bf35109e7
 Description: ArashiOS red team workstation metapackage
-Installs the tier 0 security toolset that covers the twelve ArashiOS
-workflows. The tool list is generated from the audited package lists so
-the metapackage always matches the image.
+ Installs the tier 0 security toolset that covers the twelve ArashiOS
+ workflows. The tool list is generated from the audited package lists so
+ the metapackage always matches the image.
 
 Package: arashios-repo-keyring
 Version: 1.10.21-1
 Architecture: all
 Maintainer: ArashiOS Project <maintainers@arashios.example>
-Installed-Size: 1
+Installed-Size: 2
 Section: admin
 Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-repo-keyring/arashios-repo-keyring_1.10.21-1_all.deb
-Size: 1304
-MD5sum: 2d2489d8a37194112dc6e1159b07d0f2
-SHA1: 54aaa4f1c8dbf461a3551162b0a5ddbed443a9cd
-SHA256: ae8ff01736124d9064f429d442c0bcdb5dbf69d475e4205d0ac5f9535ec5d350
+Size: 2644
+MD5sum: 5e743d8e1fd881bd9040484cd53380d7
+SHA1: f2d8ec71148624505eac91524bb0e9bca62b32a9
+SHA256: 675d6889f34ef5d8601097da9883de76dd5f97f61be893c8f0c42b6d77a3c78f
 Description: ArashiOS repository signing key
-Provides the public key used to verify the ArashiOS APT repository.
-The key is generated during the release process and its fingerprint is
-published with the release notes.
+ Provides the public key used to verify the ArashiOS APT repository.
+ The key is generated during the release process and its fingerprint is
+ published with the release notes.
 
 Package: arashios-theme-cinnamon
 Version: 1.10.21-1
@@ -222,13 +221,13 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-theme-cinnamon/arashios-theme-cinnamon_1.10.21-1_all.deb
-Size: 9568
-MD5sum: e7dba0367a07b6a9da78a534f9cd3163
-SHA1: 905e7c0c9895e363d078c8a0fe279e00bcd53597
-SHA256: bade788635c99ec989971b9c30973e08eb701722fd7b61a859a5eaaaabdf6fcc
+Size: 9576
+MD5sum: b13b05cd4799b1508fcc0f0f4c36c707
+SHA1: 20dbba213c1899005f7e3a56f339e34fd3e2d56e
+SHA256: 69b0f985d1b320391f1ac1bb61e711094151d144b7b5b8c9b3889e30afe79b9c
 Description: ArashiOS Cinnamon shell theme
-Provides the Cinnamon stylesheet for the ArashiKage and ArashiKage-HC
-themes so the shell matches the rest of the Kage visual language.
+ Provides the Cinnamon stylesheet for the ArashiKage and ArashiKage-HC
+ themes so the shell matches the rest of the Kage visual language.
 
 Package: arashios-theme-gtk
 Version: 1.10.21-1
@@ -241,13 +240,13 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-theme-gtk/arashios-theme-gtk_1.10.21-1_all.deb
-Size: 7684
-MD5sum: 1f92981e93eb6af6f9146fa588bf6df9
-SHA1: a976e5df8f88c3abb236b8c7780fb819087ddca0
-SHA256: 9f9dd0686147ad60568f17130e2e6363104d39143e3299413945580c953fb0b7
+Size: 7668
+MD5sum: ab328d47b6d2925dba3cd557b72f2369
+SHA1: d4407a136a3f221136d5368c71c4722e9a3397da
+SHA256: fc5a65bf9f93ba568d9867cd5def37d23ccac5424c3a86f0ad832dffa7a3fef6
 Description: ArashiOS GTK2, GTK3, GTK4, and libadwaita theme
-Provides the ArashiKage and ArashiKage-HC GTK themes, the GTK4 style
-override, and the cursor and icon settings used by the Kage design.
+ Provides the ArashiKage and ArashiKage-HC GTK themes, the GTK4 style
+ override, and the cursor and icon settings used by the Kage design.
 
 Package: arashios-theme-openbox
 Version: 1.10.21-1
@@ -260,13 +259,13 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-theme-openbox/arashios-theme-openbox_1.10.21-1_all.deb
-Size: 2264
-MD5sum: a0be5857d29f119253c801f1a79dd571
-SHA1: 3505a12f2bbad9a5edd4adf8c6e1097a7acc969e
-SHA256: 6bc551b32875755c018a0aa8648714ae1aca3956f77888707b27a4f69ecec93e
+Size: 2260
+MD5sum: e4c2483decd3203b2113bd68cc7989b7
+SHA1: 09896c6b07aac2e7f8e99549a6e0d7f4f7266f75
+SHA256: 9e8c8fa93be255df431239b02b7f06ad2dc22d1fc698036e25dd6b8a530e1a33
 Description: ArashiOS Openbox window manager theme
-Provides the Openbox theme for ArashiOS with the vermilion border and
-the Kage title layout used on the LXQt edition.
+ Provides the Openbox theme for ArashiOS with the vermilion border and
+ the Kage title layout used on the LXQt edition.
 
 Package: arashios-theme-qt
 Version: 1.10.21-1
@@ -279,13 +278,13 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-theme-qt/arashios-theme-qt_1.10.21-1_all.deb
-Size: 11104
-MD5sum: 7c8ff58c7a40abb7d9b65b31a45582f7
-SHA1: f8dd4e4849b208920ed16b4de29487b4d96b41ea
-SHA256: 96b4df568e33ab80de25397dcffc5588269f34ca62f57506f91c06c79b070fe0
+Size: 11076
+MD5sum: 0b5c36356177ea772a09b3ade2fc1fb7
+SHA1: c59e93898d7f86387e04108c9c6582cf84e0d930
+SHA256: 48e4fb5bd5df89b261f8ab097eec25cd3f3b07389a3c6e8a6913bfd23a059189
 Description: ArashiOS Kvantum theme and Qt application settings
-Provides the Kvantum theme for ArashiOS together with the qt5ct
-configuration that keeps Qt applications aligned with the Kage palette.
+ Provides the Kvantum theme for ArashiOS together with the qt5ct
+ configuration that keeps Qt applications aligned with the Kage palette.
 
 Package: arashios-theme-xfce
 Version: 1.10.21-1
@@ -298,11 +297,11 @@ Priority: optional
 Homepage: https://arashios.example
 Bugs: https://arashios.example/bugs
 Filename: pool/main/a/arashios-theme-xfce/arashios-theme-xfce_1.10.21-1_all.deb
-Size: 9788
-MD5sum: 405d62535b571f6add7bb5b4525674d7
-SHA1: 1f6c18e36e9ca0bc9901c95eb8f9a472c2a3846e
-SHA256: 6fd15ab8fe7768643fc3a4ca757d2ea2a6ead77d2d92dd96d61991d49a5233e0
+Size: 9768
+MD5sum: 763aee6314118da732c619b35ae0e49d
+SHA1: 0204c8aa73f6f4ce2217cbd7b445bd4935bffe9b
+SHA256: c3d597459241fb049a107bde8c99e757fa69eddff21f8b85f22a9e8e54d7a780
 Description: ArashiOS XFCE window manager theme and terminal profile
-Provides the xfwm4 theme for ArashiOS and the terminal color profile
-that matches the Kage palette on XFCE.
+ Provides the xfwm4 theme for ArashiOS and the terminal color profile
+ that matches the Kage palette on XFCE.
 

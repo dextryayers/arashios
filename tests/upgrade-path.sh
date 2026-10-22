@@ -50,8 +50,6 @@ else
 fi
 
 printf '\nPemetaan versi paket:\n'
-from_number="${FROM_VERSION#V}"
-to_number="${TO_VERSION#V}"
 if dpkg --compare-versions "1.10.21-1" lt "1.10.28-1"; then
     ok "paket 1.10.21-1 lebih lama dari 1.10.28-1"
 else

@@ -62,8 +62,8 @@ log "membandingkan hasil build"
 DIFFERENT=0
 FIRST_LIST="$TMP/first.list"
 SECOND_LIST="$TMP/second.list"
-( cd "$TMP/first" && sha256sum *.deb | sort ) > "$FIRST_LIST"
-( cd "$TMP/second" && sha256sum *.deb | sort ) > "$SECOND_LIST"
+( cd "$TMP/first" && sha256sum -- ./*.deb | sort ) > "$FIRST_LIST"
+( cd "$TMP/second" && sha256sum -- ./*.deb | sort ) > "$SECOND_LIST"
 if ! diff -u "$FIRST_LIST" "$SECOND_LIST" > "$TMP/packages.diff"; then
     DIFFERENT=1
     log "paket berbeda antar dua build"

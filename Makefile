@@ -98,6 +98,7 @@ repo:
 repo-check:
 	python3 ./scripts/check-packages.py
 	python3 ./scripts/snapshot-manifest.py --check
+	./tests/repo-offline.sh
 
 sbom:
 	python3 ./scripts/generate-sbom.py --output build/arashios.sbom.json
@@ -168,6 +169,7 @@ lint: theme
 	python3 ./scripts/check-packages.py
 	python3 ./scripts/check-hardening.py --config
 	python3 ./scripts/check-compliance.py
+	./tests/repo-offline.sh
 
 clean:
 	rm -rf build out

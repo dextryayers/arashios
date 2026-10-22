@@ -99,7 +99,10 @@ def package_entry(deb: Path, pool_path: str) -> str:
     lines.append(f"SHA1: {digest(deb, 'sha1')}")
     lines.append(f"SHA256: {digest(deb, 'sha256')}")
     description = control.get("Description", "")
-    lines.append(f"Description: {description}")
+    parts = description.split("\n")
+    lines.append(f"Description: {parts[0]}")
+    for extra in parts[1:]:
+        lines.append(f" {extra}".rstrip())
     return "\n".join(lines) + "\n"
 
 
@@ -200,9 +203,26 @@ def main() -> int:
             env = dict(os.environ)
             env["GNUPGHOME"] = str(KEY_DIR / "gnupg")
             passphrase = os.environ.get("ARASHIOS_REPO_KEY_PASSPHRASE", "")
-            for command, target in (
-                (["gpg", "--batch", "--yes", "--armor", "--detach-sign", "--output", str(dists / "Release.gpg")], None),
-                (["gpg", "--batch", "--yes", "--clearsign", "--output", str(dists / "InRelease")], None),
+            for command in (
+                [
+                    "gpg",
+                    "--batch",
+                    "--yes",
+                    "--armor",
+                    "--detach-sign",
+                    "--output",
+                    str(dists / "Release.gpg"),
+                    str(dists / "Release"),
+                ],
+                [
+                    "gpg",
+                    "--batch",
+                    "--yes",
+                    "--clearsign",
+                    "--output",
+                    str(dists / "InRelease"),
+                    str(dists / "Release"),
+                ],
             ):
                 args_list = list(command)
                 if passphrase:
