@@ -1,4 +1,4 @@
-# ArashiOS V1.10.21
+# ArashiOS
 
 ArashiOS adalah distribusi Linux berbasis Debian 12 bookworm untuk pekerjaan red team, pengembangan perangkat lunak, dan penggunaan harian. Prioritas produk: keamanan lebih dulu, coding kedua, kenyamanan harian ketiga.
 
