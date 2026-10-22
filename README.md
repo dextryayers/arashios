@@ -16,8 +16,8 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 | 5 | Toolchain coding lengkap dan container | Implementasi statis selesai, runtime menunggu ISO |
 | 6 | Aplikasi harian, jaringan, audio, daya, cetak, dan locale | Implementasi statis selesai, QA hardware menunggu ISO |
 | 7 | Calamares, enkripsi, persistence, dan recovery | Implementasi statis selesai, skenario instalasi menunggu ISO |
-| 8 | Update, repository, dan mirror | Direncanakan |
-| 9 | Hardening rilis, signing, dan supply chain | Direncanakan |
+| 8 | Paket Debian, repository APT bertanda tangan, dan upgrade path | Implementasi statis selesai, repository publik menunggu domain |
+| 9 | QA, hardening, SBOM, signing, kepatuhan, dan reproduksibilitas | Implementasi statis selesai, runtime dan scan CVE menunggu ISO |
 | 10 | arm64, i386, dan aksesibilitas | Direncanakan |
 | 11 | Dokumentasi publik, situs, dan komunitas | Direncanakan |
 | 12 | RC, rilis, dan pemeliharaan | Direncanakan |
@@ -54,7 +54,9 @@ ArashiOS-i386-V1.10.21.iso
 ArashiOS-i386-V1.10.21-xfce.iso
 ```
 
-Setiap artefak memiliki checksum SHA-256 dan SHA-512. Build wrapper mendukung tanda tangan minisign opsional; signing produksi diaktifkan pada Fase 9.
+Setiap artefak memiliki checksum SHA-256 dan SHA-512, SBOM CycloneDX, dan tanda
+tangan minisign atau GPG. Build wrapper menandatangani artefak dan SBOM bila
+kunci tersedia.
 
 ## Prasyarat Build
 
@@ -188,6 +190,23 @@ make lint
 
 `make lint` menghasilkan ulang tema, menjalankan shellcheck, pemeriksaan sintaks Python, pemeriksaan dokumen, traceability requirement, validasi token, validasi konfigurasi live-build, parser CSS GTK3 dan GTK4, pemeriksaan desktop, pemeriksaan paket branding, pemeriksaan toolstack, dan pemeriksaan lingkungan coding. `make package` membangun paket branding lokal secara terpisah.
 
+## Repository dan Rilis
+
+```bash
+make packages          # bangun 16 paket Debian
+make repo              # bangun repository APT lokal yang ditandatangani
+make sbom              # buat dan periksa SBOM CycloneDX
+make hardening-check   # periksa 15 kontrol hardening
+make compliance-check  # audit lisensi, privasi, dan ekspor
+make reproducibility   # build dua kali dan bandingkan
+make upgrade-check     # uji jalur upgrade antar rilis
+```
+
+Repository lokal memakai kunci GPG RSA 4096, `InRelease` dan `Release.gpg`,
+serta `arashios-repo-keyring` untuk verifikasi sisi klien. Kunci privat tidak
+pernah masuk image. Domain belum ditetapkan sehingga `REPO_ENABLED` bernilai 0
+secara bawaan.
+
 ## Penggunaan Harian dan Installer
 
 ```bash
@@ -318,6 +337,14 @@ Kode berlisensi GPL-3.0-or-later. Aset visual berlisensi CC-BY-SA-4.0. Dokumenta
 - [Persistensi sesi live](docs/PERSISTENCE.md)
 - [Pemulihan sistem](docs/RECOVERY.md)
 - [Laporan Fase 6 dan 7](docs/PHASE-6-7-REPORT.md)
+- [Packaging](docs/PACKAGING.md)
+- [Repository APT](docs/REPOSITORY.md)
+- [Rotasi kunci](docs/KEY-ROTATION.md)
+- [Rencana QA](docs/QA-PLAN.md)
+- [Hardening](docs/HARDENING.md)
+- [Kepatuhan](docs/COMPLIANCE.md)
+- [Kebijakan kerentanan](docs/VULNERABILITIES.md)
+- [Laporan Fase 8 dan 9](docs/PHASE-8-9-REPORT.md)
 - [Laporan Fase 4 dan 5](docs/PHASE-4-5-REPORT.md)
 - [Architecture Decision Records](docs/adr/README.md)
 - [Kontribusi](CONTRIBUTING.md)

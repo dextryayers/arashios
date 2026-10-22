@@ -253,6 +253,8 @@ def main() -> int:
     check(result.returncode == 0, f"hasil generate toolstack kedaluwarsa: {result.stdout.strip()} {result.stderr.strip()}")
 
     for path in sorted((ROOT / "config").rglob("*.list*")):
+        if not path.is_file():
+            continue
         text = path.read_text(encoding="utf-8").lower()
         check("kali" not in text, f"{path.relative_to(ROOT)}:Mention repository Kali")
         check("blackarch" not in text, f"{path.relative_to(ROOT)}: mention repository BlackArch")

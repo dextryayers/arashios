@@ -9,7 +9,9 @@ BOOT_MODE ?= uefi
 .PHONY: help env env-strict tokens brand-assets theme theme-check desktop-check \
         package package-check design config config-matrix build verify test smoke lint clean distclean \
         toolstack toolstack-check wordlists licenses toolchain-lock toolchain-check coding-check \
-        daily-check installer-check package-audit
+        daily-check installer-check package-audit \
+        packages repo repo-check sbom hardening-check compliance-check \
+        vuln-scan reproducibility boot-matrix smoke-suite upgrade-check
 
 help:
 	@printf '%s\n' \
@@ -86,6 +88,42 @@ installer-check:
 package-audit:
 	./scripts/check-packages-bookworm.py --index-dir $(INDEX_DIR) --fetch
 
+packages:
+	./scripts/build-branding-package.sh
+	python3 ./scripts/build-packages.py --all
+
+repo:
+	python3 ./scripts/build-repo.py --packages build/packages --output repo/public --sign
+
+repo-check:
+	python3 ./scripts/check-packages.py
+	python3 ./scripts/snapshot-manifest.py --check
+
+sbom:
+	python3 ./scripts/generate-sbom.py --output build/arashios.sbom.json
+	python3 ./scripts/check-sbom.py build/arashios.sbom.json
+
+hardening-check:
+	python3 ./scripts/check-hardening.py --config
+
+compliance-check:
+	python3 ./scripts/check-compliance.py --output build/compliance-report.json
+
+vuln-scan:
+	./scripts/scan-vulnerabilities.sh --output build/vulnerability-report.json
+
+reproducibility:
+	./scripts/check-reproducibility.sh
+
+boot-matrix:
+	./tests/boot-matrix.sh
+
+smoke-suite:
+	./tests/smoke-suite.sh --output build/smoke-report.json
+
+upgrade-check:
+	./tests/upgrade-path.sh
+
 env:
 	./scripts/check-env.sh
 
@@ -127,6 +165,9 @@ lint: theme
 	./tests/coding.sh
 	./tests/daily.sh
 	./tests/installer.sh
+	python3 ./scripts/check-packages.py
+	python3 ./scripts/check-hardening.py --config
+	python3 ./scripts/check-compliance.py
 
 clean:
 	rm -rf build out

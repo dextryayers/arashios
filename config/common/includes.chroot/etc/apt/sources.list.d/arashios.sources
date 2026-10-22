@@ -1,0 +1,6 @@
+Types: deb
+URIs: @REPO_URI@
+Suites: stable
+Components: main
+Architectures: @REPO_ARCH@
+Signed-By: /usr/share/keyrings/arashios-archive-keyring.gpg

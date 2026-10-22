@@ -182,7 +182,42 @@ Installer memakai Calamares dari Debian bookworm. Paket installer hanya ada
 pada sesi live dan dihapus dari sistem terpasang oleh
 `arashios-postinstall`.
 
-## 8. Referensi Perintah
+## 8. Perintah Paket, Repository, dan Rilis
+
+```bash
+# Bangun 16 paket Debian
+make packages
+
+# Bangun repository APT lokal dan periksa keyring
+make repo
+make repo-check
+
+# SBOM, hardening, kepatuhan, dan kerentanan
+make sbom
+make hardening-check
+make compliance-check
+make vuln-scan
+
+# Reproduksibilitas dan jalur upgrade
+make reproducibility
+make upgrade-check
+
+# Matriks boot dan smoke suite
+make boot-matrix
+make smoke-suite
+```
+
+Variabel repository pada `versions.env`:
+
+| Variabel | Bawaan | Fungsi |
+|---|---|---|
+| `REPO_ENABLED` | 0 | Mengaktifkan entri repository pada image |
+| `REPO_URI` | https://repo.arashios.example | Alamat repository rilis |
+| `REPO_SUITE` | stable | Suite repository |
+| `REPO_COMPONENT` | main | Komponen repository |
+| `REPO_KEYRING` | /usr/share/keyrings/arashios-archive-keyring.gpg | Keyring verifikasi |
+
+## 9. Referensi Perintah
 
 ```bash
 ./build.sh --edition <cinnamon|xfce|lxqt> --arch <amd64|arm64|i386> [opsi]
@@ -212,7 +247,7 @@ Contoh:
 
 `build.sh` menolak edisi, arsitektur, versi, dan jumlah job yang tidak valid. Versi paket branding lokal mengikuti nilai `--version`. Build sebagai root memberi peringatan. Jalankan sebagai user biasa.
 
-## 9. Variabel Lingkungan
+## 10. Variabel Lingkungan
 
 | Variabel | Default | Fungsi |
 |---|---|---|
@@ -238,7 +273,7 @@ Contoh timestamp tetap:
 SOURCE_DATE_EPOCH=1792540800 make build EDITION=cinnamon ARCH=amd64
 ```
 
-## 10. Pipeline Build
+## 11. Pipeline Build
 
 ```text
 1. Validasi argumen, versi, edisi, arsitektur, job
@@ -290,7 +325,7 @@ Metadata ini dapat dibaca dari sesi live:
 cat /etc/arashios/build-info
 ```
 
-## 11. Nama dan Edisi
+## 12. Nama dan Edisi
 
 | Arsitektur | Edisi default | Sufiks | Contoh |
 |---|---|---|---|
@@ -310,7 +345,7 @@ ARASHIOS_V1_10_21
 
 Panjang volume ID dibatasi 32 karakter. Build gagal jika melebihi batas.
 
-## 12. Verifikasi Artefak
+## 13. Verifikasi Artefak
 
 ```bash
 make verify ISO=out/ArashiOS-amd64-V1.10.21.iso
@@ -338,7 +373,7 @@ Batas ukuran:
 
 Batas ini adalah anggaran, bukan target. Jika ISO melebihi batas, audit paket dan pertimbangkan memindahkan tool ke Fase 4.
 
-## 13. Uji Boot QEMU
+## 14. Uji Boot QEMU
 
 ```bash
 make test ISO=out/ArashiOS-amd64-V1.10.21.iso BOOT_MODE=uefi
@@ -380,7 +415,7 @@ out/qemu-amd64-uefi.log
 
 Uji ini membuktikan firmware dapat memuat bootloader dan kernel serta mencapai layar grafis. Uji ini tidak membuktikan kompatibilitas perangkat keras, audio, Wi-Fi, atau suspend.
 
-## 14. Smoke Test Runtime
+## 15. Smoke Test Runtime
 
 Di dalam sesi live, jalankan sebagai user `arashi`:
 
@@ -412,7 +447,7 @@ Smoke test mengembalikan status 1 jika ada pemeriksaan gagal. Simpan output ke b
 arashios-smoke 2>&1 | tee ~/arashios-smoke.log
 ```
 
-## 15. Lint dan Validasi
+## 16. Lint dan Validasi
 
 ```bash
 make lint
@@ -468,7 +503,7 @@ make config-matrix
 
 Perintah ini menjalankan `build.sh --dry-run` untuk tujuh kombinasi di `SUPPORTED_COMBINATIONS`, lalu memeriksa `os-release`, metadata build, sesi LightDM, paket branding, splash GRUB dan syslinux, konfigurasi GTK, MIME, bootloader, dan kernel flavour. Perintah ini memerlukan `live-build` dan tidak memerlukan akses root.
 
-## 16. Reproducibility
+## 17. Reproducibility
 
 Reproducibility penuh belum aktif pada Fase 1. Yang sudah tersedia:
 
@@ -488,7 +523,7 @@ Yang belum tersedia:
 
 Jangan mengklaim reproducible build sebelum dua build pada host dan snapshot yang sama menghasilkan hash identik.
 
-## 17. CI dan Rilis
+## 18. CI dan Rilis
 
 CI berjalan pada push ke `main`, pull request, dan manual. Pekerjaan lint berjalan pada Ubuntu 24.04. Pekerjaan config matrix berjalan pada container Debian 12 dan menguji tujuh kombinasi arsitektur dan edisi yang didukung.
 
@@ -506,7 +541,7 @@ Release workflow berjalan manual pada self-hosted runner dengan label `arashios-
 
 Setiap artefak diverifikasi sebelum diunggah. Release job menggabungkan checksum dan menerbitkan GitHub Release jika input `publish` bernilai true.
 
-## 18. Troubleshooting
+## 19. Troubleshooting
 
 | Gejala | Kemungkinan penyebab | Tindakan |
 |---|---|---|
@@ -540,7 +575,7 @@ make clean
 
 `make clean` menghapus `build/` dan `out/`. Sumber, token, dan aset yang sudah di-commit tidak dihapus.
 
-## 19. Menambah Paket
+## 20. Menambah Paket
 
 1. Tentukan edisi dan arsitektur.
 2. Tambahkan nama paket Debian ke daftar yang sesuai.
@@ -563,7 +598,7 @@ Aturan penamaan paket:
 4. Tidak ada paket dari repository Kali.
 5. Paket yang hanya tersedia di backports harus diberi komentar dan alasan.
 
-## 20. Menambah Edisi atau Arsitektur
+## 21. Menambah Edisi atau Arsitektur
 
 Edisi baru memerlukan:
 
@@ -585,7 +620,7 @@ Arsitektur baru memerlukan:
 
 `build.sh` menolak kombinasi arsitektur dan edisi yang tidak tercantum di `SUPPORTED_COMBINATIONS`. Matriks rilis berisi tujuh artefak; Fase 1 membangun dan menguji amd64, sedangkan arm64 dan i386 divalidasi konfigurasinya dan dibangun pada Fase 10.
 
-## 21. Keamanan Build
+## 22. Keamanan Build
 
 1. Build host harus bersih dan hanya dipakai untuk build.
 2. Jangan menjalankan build sebagai root kecuali terpaksa.
@@ -595,7 +630,7 @@ Arsitektur baru memerlukan:
 6. Simpan log build dan `build-info` untuk audit.
 7. Tool vendored pada Fase 4 harus memiliki manifest, checksum, dan sumber.
 
-## 22. Exit Gate Fase 1
+## 23. Exit Gate Fase 1
 
 | Kriteria | Status |
 |---|---|
@@ -610,14 +645,14 @@ Arsitektur baru memerlukan:
 
 Fase 1 belum selesai sampai seluruh baris berstatus lulus.
 
-## 23. Status Fase 2 dan Fase 3
+## 24. Status Fase 2 dan Fase 3
 
 Fase 2 dan Fase 3 sudah memiliki implementasi statis: tema Kage, paket
 branding, konfigurasi Cinnamon, XFCE, dan LXQt, serta pemeriksaan otomatis.
 Exit gate runtime belum lulus karena ISO belum dibangun dan boot belum diuji.
 Rincian ada di [PHASE-2-3-REPORT.md](PHASE-2-3-REPORT.md).
 
-## 24. Status Fase 4 dan Fase 5
+## 25. Status Fase 4 dan Fase 5
 
 Fase 4 dan Fase 5 sudah memiliki implementasi statis: katalog tool 215 entri,
 41 manifest tool tier 1 dengan sumber terkunci, Arsenal, harness smoke test,
@@ -625,14 +660,23 @@ wordlist, toolchain user level dengan lock checksum, template proyek, dan
 konfigurasi container rootless. Exit gate runtime belum lulus karena ISO belum
 dibangun. Rincian ada di [PHASE-4-5-REPORT.md](PHASE-4-5-REPORT.md).
 
-## 25. Status Fase 6 dan Fase 7
+## 26. Status Fase 6 dan Fase 7
 
 Fase 6 dan Fase 7 sudah memiliki implementasi statis: konfigurasi penggunaan
 harian, diagnosis platform, installer Calamares dengan branding Kage,
 persistensi, dan perintah pemulihan. Exit gate runtime belum lulus karena ISO
 belum dibangun. Rincian ada di [PHASE-6-7-REPORT.md](PHASE-6-7-REPORT.md).
 
-## 26. Referensi
+## 27. Status Fase 8 dan Fase 9
+
+Fase 8 dan Fase 9 sudah memiliki implementasi statis: 16 paket Debian,
+repository APT bertanda tangan, snapshot rilis, jalur upgrade, checklist
+hardening, SBOM CycloneDX, penandatanganan artefak, pemindaian kerentanan,
+audit kepatuhan, dan pemeriksaan reproduksibilitas. Exit gate runtime belum
+lulus karena ISO belum dibangun. Rincian ada di
+[PHASE-8-9-REPORT.md](PHASE-8-9-REPORT.md).
+
+## 28. Referensi
 
 - [plan.md](../plan.md)
 - [ARCHITECTURE.md](ARCHITECTURE.md)
@@ -647,6 +691,12 @@ belum dibangun. Rincian ada di [PHASE-6-7-REPORT.md](PHASE-6-7-REPORT.md).
 - [VENDORING.md](VENDORING.md)
 - [PHASE-4-5-REPORT.md](PHASE-4-5-REPORT.md)
 - [PHASE-6-7-REPORT.md](PHASE-6-7-REPORT.md)
+- [PHASE-8-9-REPORT.md](PHASE-8-9-REPORT.md)
+- [PACKAGING.md](PACKAGING.md)
+- [REPOSITORY.md](REPOSITORY.md)
+- [QA-PLAN.md](QA-PLAN.md)
+- [HARDENING.md](HARDENING.md)
+- [COMPLIANCE.md](COMPLIANCE.md)
 - [DAILY.md](DAILY.md)
 - [HARDWARE.md](HARDWARE.md)
 - [INSTALL.md](INSTALL.md)

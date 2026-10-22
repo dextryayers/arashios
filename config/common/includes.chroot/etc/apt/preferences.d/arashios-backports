@@ -1,4 +1,14 @@
-// bookworm-backports is not used for automatic upgrades.
+// ArashiOS backports policy.
+//
+// Only the kernel and the Go toolchain may come from bookworm-backports.
+// Every other package stays on stable so the daily driver workflow does not
+// change under the user.
+Package: linux-image-* linux-headers-* linux-modules-* golang* golang-*
+Pin: release n=bookworm-backports
+Pin-Priority: 500
+
+// All other packages keep the default priority and are not taken from
+// backports.
 Package: *
 Pin: release n=bookworm-backports
 Pin-Priority: 100

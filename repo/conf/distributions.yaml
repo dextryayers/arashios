@@ -1,0 +1,61 @@
+# aptly configuration for the ArashiOS repository.
+#
+# The local builder in scripts/build-repo.py produces the same layout and is
+# the default because it needs no extra tool. Use aptly on the release host
+# when mirroring to a public server.
+#
+# Replace every ARASHIOS_REPO_ROOT placeholder with the absolute path of the
+# repository directory on the release host, for example
+# /srv/arashios/repo.
+
+ARASHIOS_REPO_ROOT: "/srv/arashios/repo"
+
+gpg:
+  # The signing key lives in the dedicated key home and never in the image.
+  homedir: "ARASHIOS_REPO_ROOT/keys/gnupg"
+
+aptly:
+  rootDir: "ARASHIOS_REPO_ROOT/aptly"
+  downloadConcurrency: 4
+  downloadSpeedLimit: 0
+  acquireLockDelay: 10
+  architectures:
+    - amd64
+    - arm64
+    - i386
+
+  publishEndpoints:
+    deb:
+      - "file:ARASHIOS_REPO_ROOT/public"
+
+  # Signs the Release and InRelease files with the archive key.
+  signing:
+    skip: false
+    gpgKey: "ARASHIOS_REPO_ROOT/keys/arashios-archive.fingerprint"
+    batch: true
+    passphrase: ""
+
+  # Local publish layout: pool/main/<letter>/<package>.
+  fileSystemLayout: "symlink"
+
+  sources:
+    arashios:
+      - "dir:ARASHIOS_REPO_ROOT/public/pool"
+
+# Distribution definitions.
+distributions:
+  stable:
+    description: "ArashiOS stable"
+    component: "main"
+    arches: ["amd64", "arm64", "i386"]
+    publishEndpoint: "file:ARASHIOS_REPO_ROOT/public"
+  edge:
+    description: "ArashiOS edge"
+    component: "main"
+    arches: ["amd64", "arm64", "i386"]
+    publishEndpoint: "file:ARASHIOS_REPO_ROOT/public"
+  nightly:
+    description: "ArashiOS nightly"
+    component: "main"
+    arches: ["amd64", "arm64", "i386"]
+    publishEndpoint: "file:ARASHIOS_REPO_ROOT/public"

@@ -188,6 +188,17 @@ else
     fail "berkas .sha512 tidak ditemukan"
 fi
 
+sbom_file="${ISO}.sbom.json"
+if [ -f "$sbom_file" ]; then
+    if python3 "$ROOT/scripts/check-sbom.py" "$sbom_file" >/dev/null 2>&1; then
+        ok "SBOM CycloneDX valid"
+    else
+        fail "SBOM CycloneDX tidak valid"
+    fi
+else
+    fail "berkas .sbom.json tidak ditemukan"
+fi
+
 sig_file="${ISO}.sig"
 if [ -f "$sig_file" ]; then
     if command -v minisign >/dev/null 2>&1; then

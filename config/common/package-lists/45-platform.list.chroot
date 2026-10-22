@@ -35,3 +35,6 @@ lm-sensors
 # Everyday desktop helpers
 seahorse
 xclip
+
+# Optional sandboxing, available but disabled by default
+firejail

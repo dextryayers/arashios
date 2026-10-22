@@ -1,0 +1,108 @@
+{
+  "codename": "Shizukesa",
+  "config_hash": "4e28106d78b76adbf72b30978fd32f6090f6ed64934b57665391fd9a10ad9586",
+  "package_count": 16,
+  "packages": [
+    {
+      "bytes": 19764,
+      "file": "arashios-arsenal_1.10.21-1_all.deb",
+      "name": "arashios-arsenal",
+      "sha256": "116671e55f862b8fd5bf5c5e758974a6d75bf3c752c854683984c69b5d03759e"
+    },
+    {
+      "bytes": 1388,
+      "file": "arashios-branding_1.10.21-1_all.deb",
+      "name": "arashios-branding",
+      "sha256": "1730ea73b558f8cf5ed94ed2fe0bc679b0ebb7346b9cd5327a29776c1f4b6d92"
+    },
+    {
+      "bytes": 3344,
+      "file": "arashios-desktop-cinnamon_1.10.21-1_all.deb",
+      "name": "arashios-desktop-cinnamon",
+      "sha256": "74e99693614ebcfb12419905052216b141b0dfd14b4695b43d08bc2bd2f95d5f"
+    },
+    {
+      "bytes": 15172,
+      "file": "arashios-desktop-common_1.10.21-1_all.deb",
+      "name": "arashios-desktop-common",
+      "sha256": "e1ec5cc8b831fe5c363e7f353d8544674a29e3673f8ebceb5f3d9ae06feec7e6"
+    },
+    {
+      "bytes": 8852,
+      "file": "arashios-desktop-lxqt_1.10.21-1_all.deb",
+      "name": "arashios-desktop-lxqt",
+      "sha256": "42def5b0d8fccf2db7dd8ef96975a272ee665d068c10d16586c476847e83c18e"
+    },
+    {
+      "bytes": 4436,
+      "file": "arashios-desktop-xfce_1.10.21-1_all.deb",
+      "name": "arashios-desktop-xfce",
+      "sha256": "343f523bdca553be5be36fc4b29f0726ee7c88058c8d83f5ea874c396d7aecbd"
+    },
+    {
+      "bytes": 4816,
+      "file": "arashios-icons_1.10.21-1_all.deb",
+      "name": "arashios-icons",
+      "sha256": "c7ed78eabb7751490c80ae8a9f8e4c7221307e534223c6218ba1024741420e5d"
+    },
+    {
+      "bytes": 1624,
+      "file": "arashios-meta-daily_1.10.21-1_all.deb",
+      "name": "arashios-meta-daily",
+      "sha256": "8796657f0ff009a18fadbaa458676cce9ca23a6f403086912f4db304fb12a8ff"
+    },
+    {
+      "bytes": 1572,
+      "file": "arashios-meta-dev_1.10.21-1_all.deb",
+      "name": "arashios-meta-dev",
+      "sha256": "f17e6783e22b3fb15145d9609f697c681f8f0831d27f469667f65bebf68e3265"
+    },
+    {
+      "bytes": 1840,
+      "file": "arashios-meta-redteam_1.10.21-1_all.deb",
+      "name": "arashios-meta-redteam",
+      "sha256": "1834120edbf4c0ef0600bde1f996bbfbc2f21f9486aab46b80e89422b13e5951"
+    },
+    {
+      "bytes": 2644,
+      "file": "arashios-repo-keyring_1.10.21-1_all.deb",
+      "name": "arashios-repo-keyring",
+      "sha256": "678a3faf00138a641b4d4ed484bb3ea0e43928c8939623a9cb326792f9331768"
+    },
+    {
+      "bytes": 9572,
+      "file": "arashios-theme-cinnamon_1.10.21-1_all.deb",
+      "name": "arashios-theme-cinnamon",
+      "sha256": "0a745401982e51e75df8c7c601861f5e46f4d0a9f632ec6aef0cbdf0b43306aa"
+    },
+    {
+      "bytes": 7660,
+      "file": "arashios-theme-gtk_1.10.21-1_all.deb",
+      "name": "arashios-theme-gtk",
+      "sha256": "b2b05c666ff88866a17ff2b9837f05e0cf2c910a8e6da2a397572c976f9223e6"
+    },
+    {
+      "bytes": 2264,
+      "file": "arashios-theme-openbox_1.10.21-1_all.deb",
+      "name": "arashios-theme-openbox",
+      "sha256": "0bcb2a1f2b71a0be1e8ae8d431ce0737b37d61bc2db4aa3da36b42e331d462e7"
+    },
+    {
+      "bytes": 11076,
+      "file": "arashios-theme-qt_1.10.21-1_all.deb",
+      "name": "arashios-theme-qt",
+      "sha256": "1b95f4c6d4c6177fdbae920951150b23ceb23855f3a07e7b984a12faa45d3ba8"
+    },
+    {
+      "bytes": 9772,
+      "file": "arashios-theme-xfce_1.10.21-1_all.deb",
+      "name": "arashios-theme-xfce",
+      "sha256": "753c9fd566d132f09de56bccedd28a169f7ab60713075f297d8569e7739d14ca"
+    }
+  ],
+  "repo_key_fingerprint": "04D3397E795ADB94067D782D3C2CF6464F082804",
+  "repo_suite": "stable",
+  "repo_uri": "${REPO_URI:-https://repo.arashios.example}",
+  "schema_version": 1,
+  "version": "V1.10.21"
+}

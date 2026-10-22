@@ -238,7 +238,7 @@ bahasa lulus dan empat dilewati karena kompilatornya tidak terpasang:
 
 | Pemeriksaan | Hasil |
 |---|---|
-| Katalog toolstack dan manifest | 6720 pemeriksaan lulus |
+| Katalog toolstack dan manifest | 6732 pemeriksaan lulus |
 | Wordlist dan checksum | 31 pemeriksaan lulus |
 | Metadata lisensi | 156 pemeriksaan lulus |
 | Katalog runtime toolstack | sinkron |

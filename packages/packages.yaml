@@ -1,0 +1,273 @@
+# ArashiOS package set.
+#
+# Each entry becomes one Debian package built by scripts/build-packages.py.
+# The builder is deterministic: file order is fixed, timestamps come from
+# SOURCE_DATE_EPOCH, and the payload is copied from the pinned source tree.
+#
+# Payload rules:
+#   from   path relative to the repository root, may contain one glob
+#   to     destination path inside the package
+#   strip  number of leading path components removed from the copied name
+
+schema_version: 1
+
+common:
+  section: misc
+  priority: optional
+  architecture: all
+  maintainer: "ArashiOS Project <maintainers@arashios.example>"
+  homepage: "https://arashios.example"
+  bugs: "https://arashios.example/bugs"
+  license: "GPL-3.0-or-later"
+  standards_version: "3.9.8 (2021-02-12)"
+  depends:
+    - debianutils
+  recommends: []
+  conflicts: []
+  breaks: []
+  provides: []
+
+packages:
+  - name: arashios-branding
+    external: true
+    section: x11
+    description: "ArashiOS Kage branding, desktop themes, and boot assets"
+    long_description: |
+      The package installs the ArashiKage GTK, Cinnamon, XFWM, Openbox, and
+      Kvantum themes plus the Kage wallpaper, icon, GRUB, and Plymouth assets.
+      It is built locally from the pinned design tokens during each image build.
+    depends:
+      - fonts-inter
+      - fonts-jetbrains-mono
+    payload: []
+
+  - name: arashios-theme-gtk
+    description: "ArashiOS GTK2, GTK3, GTK4, and libadwaita theme"
+    long_description: |
+      Provides the ArashiKage and ArashiKage-HC GTK themes, the GTK4 style
+      override, and the cursor and icon settings used by the Kage design.
+    depends:
+      - gtk2-engines-murrine
+      - libadwaita-1-0
+    payload:
+      - from: build/theme/themes/ArashiKage/gtk-2.0
+        to: usr/share/themes/ArashiKage/gtk-2.0
+      - from: build/theme/themes/ArashiKage/gtk-3.0
+        to: usr/share/themes/ArashiKage/gtk-3.0
+      - from: build/theme/themes/ArashiKage/gtk-4.0
+        to: usr/share/themes/ArashiKage/gtk-4.0
+      - from: build/theme/themes/ArashiKage-HC/gtk-2.0
+        to: usr/share/themes/ArashiKage-HC/gtk-2.0
+      - from: build/theme/themes/ArashiKage-HC/gtk-3.0
+        to: usr/share/themes/ArashiKage-HC/gtk-3.0
+      - from: build/theme/themes/ArashiKage-HC/gtk-4.0
+        to: usr/share/themes/ArashiKage-HC/gtk-4.0
+      - from: config/common/includes.chroot/etc/gtk-4.0/gtk.css
+        to: etc/xdg/gtk-4.0/gtk.css
+
+  - name: arashios-theme-cinnamon
+    description: "ArashiOS Cinnamon shell theme"
+    long_description: |
+      Provides the Cinnamon stylesheet for the ArashiKage and ArashiKage-HC
+      themes so the shell matches the rest of the Kage visual language.
+    depends:
+      - cinnamon-common
+    payload:
+      - from: build/theme/themes/ArashiKage/cinnamon
+        to: usr/share/themes/ArashiKage/cinnamon
+      - from: build/theme/themes/ArashiKage-HC/cinnamon
+        to: usr/share/themes/ArashiKage-HC/cinnamon
+
+  - name: arashios-theme-qt
+    description: "ArashiOS Kvantum theme and Qt application settings"
+    long_description: |
+      Provides the Kvantum theme for ArashiOS together with the qt5ct
+      configuration that keeps Qt applications aligned with the Kage palette.
+    depends:
+      - qt5-style-kvantum
+      - qt5ct
+    payload:
+      - from: build/theme/Kvantum/ArashiKage
+        to: usr/share/Kvantum/ArashiKage
+      - from: build/theme/Kvantum/ArashiKage-HC
+        to: usr/share/Kvantum/ArashiKage-HC
+      - from: config/common/includes.chroot/etc/xdg/qt5ct/qt5ct.conf
+        to: etc/xdg/qt5ct/qt5ct.conf
+      - from: config/common/includes.chroot/etc/xdg/Kvantum/kvantum.kvconfig
+        to: etc/xdg/Kvantum/kvantum.kvconfig
+
+  - name: arashios-theme-xfce
+    description: "ArashiOS XFCE window manager theme and terminal profile"
+    long_description: |
+      Provides the xfwm4 theme for ArashiOS and the terminal color profile
+      that matches the Kage palette on XFCE.
+    depends:
+      - xfwm4
+    payload:
+      - from: build/theme/themes/ArashiKage/xfwm4
+        to: usr/share/themes/ArashiKage/xfwm4
+      - from: build/theme/themes/ArashiKage-HC/xfwm4
+        to: usr/share/themes/ArashiKage-HC/xfwm4
+      - from: config/common/includes.chroot/etc/skel/.config/xfce4/terminal/terminalrc
+        to: etc/skel/.config/xfce4/terminal/terminalrc
+
+  - name: arashios-theme-openbox
+    description: "ArashiOS Openbox window manager theme"
+    long_description: |
+      Provides the Openbox theme for ArashiOS with the vermilion border and
+      the Kage title layout used on the LXQt edition.
+    depends:
+      - openbox
+    payload:
+      - from: build/theme/themes/ArashiKage/openbox-3
+        to: usr/share/themes/ArashiKage/openbox-3
+      - from: build/theme/themes/ArashiKage-HC/openbox-3
+        to: usr/share/themes/ArashiKage-HC/openbox-3
+
+  - name: arashios-icons
+    description: "ArashiOS application icons"
+    long_description: |
+      Provides the ArashiOS application icon in the standard hicolor theme
+      directories so the brand appears in menus, launchers, and the file
+      manager.
+    depends:
+      - hicolor-icon-theme
+    payload:
+      - from: branding/logo/hicolor
+        to: usr/share/icons
+        strip: 0
+
+  - name: arashios-desktop-common
+    description: "ArashiOS shared desktop configuration and user skeleton"
+    long_description: |
+      Provides the shared user skeleton for the ArashiOS desktops: Zsh, tmux,
+      Neovim, Git, ripgrep, bat, terminal profiles, the accessibility helper,
+      and the daily use diagnostics.
+    depends:
+      - zsh
+      - neovim
+      - tmux
+    payload:
+      - from: config/common/includes.chroot/etc/skel
+        to: etc/skel
+        strip: 0
+      - from: config/common/includes.chroot/usr/local/bin/arashios-accessibility
+        to: usr/local/bin/arashios-accessibility
+      - from: config/common/includes.chroot/usr/local/bin/kage-contrast
+        to: usr/local/bin/kage-contrast
+      - from: config/common/includes.chroot/usr/local/bin/arashios-wallpaper
+        to: usr/local/bin/arashios-wallpaper
+      - from: config/common/includes.chroot/usr/local/bin/arashios-doctor
+        to: usr/local/bin/arashios-doctor
+      - from: config/common/includes.chroot/usr/local/bin/arashios-help
+        to: usr/local/bin/arashios-help
+      - from: config/common/includes.chroot/usr/local/bin/arashios-daily
+        to: usr/local/bin/arashios-daily
+      - from: config/common/includes.chroot/usr/local/bin/arashios-hardware-report
+        to: usr/local/bin/arashios-hardware-report
+
+  - name: arashios-desktop-cinnamon
+    description: "ArashiOS Cinnamon desktop configuration"
+    long_description: |
+      Provides the Cinnamon panel, dconf defaults, Nemo, and terminal settings
+      for the ArashiOS Cinnamon edition.
+    depends:
+      - cinnamon
+      - nemo
+    payload:
+      - from: config/editions/cinnamon/includes.chroot/etc
+        to: etc
+        strip: 0
+
+  - name: arashios-desktop-xfce
+    description: "ArashiOS XFCE desktop configuration"
+    long_description: |
+      Provides the XFCE panel, xfconf settings, Thunar, and terminal
+      settings for the ArashiOS XFCE edition.
+    depends:
+      - xfce4
+      - thunar
+    payload:
+      - from: config/editions/xfce/includes.chroot/etc
+        to: etc
+        strip: 0
+
+  - name: arashios-desktop-lxqt
+    description: "ArashiOS LXQt desktop configuration"
+    long_description: |
+      Provides the LXQt panel, Openbox, PCManFM, and terminal settings for
+      the ArashiOS LXQt edition.
+    depends:
+      - lxqt-core
+      - openbox
+    payload:
+      - from: config/editions/lxqt/includes.chroot/etc
+        to: etc
+        strip: 0
+
+  - name: arashios-meta-redteam
+    description: "ArashiOS red team workstation metapackage"
+    long_description: |
+      Installs the tier 0 security toolset that covers the twelve ArashiOS
+      workflows. The tool list is generated from the audited package lists so
+      the metapackage always matches the image.
+    depends:
+      - arashios-arsenal
+    depends_from_lists:
+      - config/common/package-lists/20-security.list.chroot
+    payload: []
+
+  - name: arashios-meta-dev
+    description: "ArashiOS development toolchain metapackage"
+    long_description: |
+      Installs the compilers, interpreters, editors, and command line tools
+      used by the ArashiOS coding workflow.
+    depends:
+      - arashios-desktop-common
+    depends_from_lists:
+      - config/common/package-lists/30-dev-core.list.chroot
+      - config/arches/amd64/package-lists/31-dev-modern.list.chroot
+    payload: []
+
+  - name: arashios-meta-daily
+    description: "ArashiOS daily driver metapackage"
+    long_description: |
+      Installs the browser, office, media, printing, and maintenance
+      applications used by the ArashiOS daily driver workflow.
+    depends:
+      - arashios-desktop-common
+    depends_from_lists:
+      - config/common/package-lists/40-daily.list.chroot
+      - config/common/package-lists/42-daily-apps.list.chroot
+      - config/common/package-lists/45-platform.list.chroot
+    payload: []
+
+  - name: arashios-arsenal
+    description: "ArashiOS tool catalog and arsenal command"
+    long_description: |
+      Provides the arashios-arsenal command and the toolstack catalog used
+      to list, install, verify, and remove the ArashiOS security tools.
+    depends:
+      - python3
+    payload:
+      - from: config/common/includes.chroot/usr/local/bin/arashios-arsenal
+        to: usr/local/bin/arashios-arsenal
+      - from: config/common/includes.chroot/usr/local/bin/arashios-tool-smoke
+        to: usr/local/bin/arashios-tool-smoke
+      - from: config/common/includes.chroot/usr/local/lib/arashios/toolstack.py
+        to: usr/local/lib/arashios/toolstack.py
+      - from: config/common/includes.chroot/usr/share/arashios/toolstack/catalog.json
+        to: usr/share/arashios/toolstack/catalog.json
+
+  - name: arashios-repo-keyring
+    section: admin
+    description: "ArashiOS repository signing key"
+    long_description: |
+      Provides the public key used to verify the ArashiOS APT repository.
+      The key is generated during the release process and its fingerprint is
+      published with the release notes.
+    depends: []
+    payload:
+      - from: repo/keys/arashios-archive-keyring.gpg
+        to: usr/share/keyrings/arashios-archive-keyring.gpg
+        optional: true

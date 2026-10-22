@@ -103,6 +103,31 @@ jobs:
       - name: Validate installer and recovery
         run: ./tests/installer.sh
 
+      - name: Build package set
+        run: |
+          ./scripts/build-branding-package.sh
+          python3 ./scripts/build-packages.py --all
+
+      - name: Build local repository
+        run: python3 ./scripts/build-repo.py --packages build/packages --output repo/public
+
+      - name: Validate packaging standard
+        run: python3 ./scripts/check-packages.py
+
+      - name: Validate hardening checklist
+        run: python3 ./scripts/check-hardening.py --config
+
+      - name: Validate compliance
+        run: python3 ./scripts/check-compliance.py
+
+      - name: Generate and validate SBOM
+        run: |
+          python3 ./scripts/generate-sbom.py --output build/arashios.sbom.json
+          python3 ./scripts/check-sbom.py build/arashios.sbom.json
+
+      - name: Validate upgrade path
+        run: ./tests/upgrade-path.sh
+
       - name: Validate build configuration
         run: ./scripts/validate-config.sh
 

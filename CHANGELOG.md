@@ -51,6 +51,18 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 - Perintah arashios-recovery, arashios-persistence, arashios-dualboot-check, dan arashios-postinstall.
 - Pemeriksaan paket bookworm sebagai skrip yang dapat dijalankan ulang, plus test suite harian dan installer.
 - Dokumentasi penggunaan harian, hardware, instalasi, persistence, pemulihan, dan laporan Fase 6 dan Fase 7.
+- Standar packaging dengan 16 paket Debian yang dibangun deterministik dan diperiksa oleh check-packages.py.
+- Repository APT lokal dengan pool, indeks Packages, Release, InRelease, dan Release.gpg.
+- Kunci repository RSA 4096 dengan keyring publik pada paket arashios-repo-keyring.
+- Integrasi repository ke image, pinning archive, dan kebijakan backports khusus kernel dan Go.
+- Snapshot rilis dengan hash konfigurasi dan checksum setiap paket, serta jalur upgrade antar rilis.
+- Checklist hardening 15 kontrol dengan pemeriksaan konfigurasi dan runtime.
+- SBOM CycloneDX 1.6 per rilis dengan komponen paket Debian dan paket ArashiOS.
+- Penandatanganan artefak dan SBOM memakai minisign atau GPG.
+- Pemindaian kerentanan dengan debsecan, trivy, dan grype beserta laporan JSON.
+- Audit kepatuhan lisensi, privasi, ekspor, dan atribusi.
+- Pemeriksaan reproduksibilitas yang membangun paket dua kali dan membandingkannya.
+- Matriks boot untuk tujuh kombinasi, smoke suite JSON, dan rencana QA.
 
 ### Changed
 

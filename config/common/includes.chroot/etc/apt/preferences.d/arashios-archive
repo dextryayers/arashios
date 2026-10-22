@@ -1,0 +1,14 @@
+// ArashiOS APT pinning.
+//
+// The ArashiOS repository has the same priority as Debian stable so that a
+// package from the archive cannot be silently replaced by a different
+// version from the distribution.
+Package: *
+Pin: origin repo.arashios.example
+Pin-Priority: 500
+
+// The archive never downgrades a package. A newer version in the archive is
+// accepted, an older version is kept.
+Package: *
+Pin: origin repo.arashios.example
+Pin-Priority: 500

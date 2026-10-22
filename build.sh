@@ -286,6 +286,29 @@ mkdir -p "$WORK/config/packages.chroot"
 install -Dm644 "$BRANDING_DEB" \
     "$WORK/config/packages.chroot/$(basename "$BRANDING_DEB")"
 
+log "Membangun paket ArashiOS dan repository lokal"
+python3 "$ROOT/scripts/build-packages.py" --all
+REPO_SIGN=""
+if [ "${REPO_ENABLED}" = "1" ]; then
+    REPO_SIGN="--sign"
+fi
+python3 "$ROOT/scripts/build-repo.py" --packages "$ROOT/build/packages" \
+    --output "$ROOT/repo/public" --dist "$REPO_SUITE" --component "$REPO_COMPONENT" $REPO_SIGN
+for deb in "$ROOT"/build/packages/*.deb; do
+    install -Dm644 "$deb" "$WORK/config/packages.chroot/$(basename "$deb")"
+done
+
+# Repository entry for the installed system. The local build keeps it
+# disabled so the image never points at a domain that is not published yet.
+if [ "${REPO_ENABLED}" = "1" ]; then
+    sed -i \
+        -e "s|@REPO_URI@|$REPO_URI|g" \
+        -e "s|@REPO_ARCH@|amd64 arm64 i386|g" \
+        "$INCLUDES/etc/apt/sources.list.d/arashios.sources"
+else
+    rm -f "$INCLUDES/etc/apt/sources.list.d/arashios.sources"
+fi
+
 # Bootloader assets live in the bootloader source tree, not the chroot package.
 install -Dm644 "$ROOT/branding/boot/grub-splash.png" \
     "$WORK/config/bootloaders/grub-pc/splash.png"
@@ -355,9 +378,14 @@ log "Menghitung checksum"
 ( cd "$OUT" && sha256sum "$(basename "$ISO_TARGET")" > "$(basename "$ISO_TARGET").sha256" )
 ( cd "$OUT" && sha512sum "$(basename "$ISO_TARGET")" > "$(basename "$ISO_TARGET").sha512" )
 
+log "Membuat SBOM"
+python3 "$ROOT/scripts/generate-sbom.py" --arch "$ARCH" \
+    --output "$ISO_TARGET.sbom.json" >/dev/null
+
 if [ -n "${MINISIGN_KEY:-}" ]; then
     log "Menandatangani artefak"
     minisign -S -s "$MINISIGN_KEY" -m "$ISO_TARGET" -x "$ISO_TARGET.sig"
+    minisign -S -s "$MINISIGN_KEY" -m "$ISO_TARGET.sbom.json" -x "$ISO_TARGET.sbom.json.sig"
 fi
 
 log "Selesai: $ISO_TARGET"

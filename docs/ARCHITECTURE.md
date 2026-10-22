@@ -27,6 +27,9 @@ Batasan yang memengaruhi arsitektur:
 | Daily use dan installer                                         |
 | Calamares, persistence, recovery, policy platform, locale         |
 +------------------------------------------------------------------+
+| Packages dan repository                                         |
+| 16 paket Debian, repo APT bertanda tangan, snapshot rilis         |
++------------------------------------------------------------------+
 | Desktop                                                          |
 | Cinnamon / XFCE / LXQt, LightDM, tema Kage                       |
 +------------------------------------------------------------------+
@@ -148,7 +151,32 @@ Perintah operasional yang berasal dari lapisan ini:
 | `arashios-recovery` | mount, LUKS, LVM, GRUB, dan pemulihan EFI |
 | `arashios-postinstall` | pasos yang berjalan di sistem terpasang |
 
-### 3.4 Lapisan Toolstack dan Toolchain
+### 3.4 Lapisan Paket dan Repository
+
+```text
+packages/
+├── packages.yaml            spesifikasi 16 paket Debian
+repo/
+├── conf/distributions.yaml  konfigurasi aptly
+├── keys/                    kunci repo, keyring publik, fingerprint
+├── manifest.json            snapshot rilis dengan checksum paket
+└── public/                  pool, dists, Release, InRelease
+```
+
+Alur paket dan repository:
+
+```text
+scripts/build-packages.py     -> build/packages/*.deb
+scripts/build-repo.py         -> repo/public (pool, Packages, Release)
+scripts/generate-repo-key.sh  -> repo/keys (kunci RSA 4096 dan keyring)
+scripts/snapshot-manifest.py  -> repo/manifest.json
+scripts/check-packages.py     -> audit standar packaging
+```
+
+Semua paket memakai arsitektur all, tidak mengakses jaringan pada skrip
+pemelihara, dan dibangun dengan timestamp tetap sehingga reproducible.
+
+### 3.5 Lapisan Toolstack dan Toolchain
 
 Fase 4 dan Fase 5 menambah dua lapis konfigurasi yang berada di luar overlay
 live-build. Keduanya berbasis berkas sumber yang dapat diaudit.
