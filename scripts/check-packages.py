@@ -9,6 +9,7 @@ network access in maintainer scripts, and idempotent post installation.
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -162,6 +163,24 @@ def check_determinism() -> None:
         )
 
 
+def check_private_keys() -> None:
+    """A private key must never live inside the repository tree."""
+    key_dir = ROOT / "repo" / "keys"
+    gnupg = key_dir / "gnupg"
+    check(not gnupg.exists(), "repo/keys/gnupg ada di dalam repository")
+    check(not (key_dir / "key-params").exists(), "repo/keys/key-params ada di dalam repository")
+    for path in sorted(key_dir.glob("*")):
+        if not path.is_file():
+            continue
+        data = path.read_bytes()
+        check(b"PRIVATE KEY BLOCK" not in data, f"{path.name} memuat blok kunci privat")
+    for path in sorted(ROOT.glob("repo/**/*")):
+        if not path.is_file() or path.stat().st_size > 5_000_000:
+            continue
+        if path.suffix in {".key", ".rev"}:
+            check(False, f"berkas kunci {path.relative_to(ROOT)} tidak boleh ada di repository")
+
+
 def check_repository() -> None:
     release = REPO / "dists" / "stable" / "Release"
     if not release.is_file():
@@ -171,6 +190,26 @@ def check_repository() -> None:
     for field in ("Origin:", "Suite: stable", "Components: main", "Architectures:", "MD5Sum:", "SHA256:"):
         check(field in text, f"Release repository tidak memuat {field}")
     inrelease = REPO / "dists" / "stable" / "InRelease"
+    release_file = REPO / "dists" / "stable" / "Release"
+    if inrelease.is_file() and release_file.is_file():
+        signed_payload = subprocess.run(
+            ["gpg", "--batch", "--yes", "--decrypt", str(inrelease)],
+            capture_output=True,
+            text=True,
+            check=False,
+            env={
+                **os.environ,
+                "GNUPGHOME": os.environ.get(
+                    "ARASHIOS_GNUPG_HOME",
+                    str(Path.home() / ".local" / "share" / "arashios" / "gnupg"),
+                ),
+            },
+        )
+        if signed_payload.returncode == 0:
+            check(
+                signed_payload.stdout.strip() == release_file.read_text(encoding="utf-8").strip(),
+                "InRelease tidak sama dengan Release yang dipublikasikan",
+            )
     if inrelease.is_file():
         keyring = ROOT / "repo" / "keys" / "arashios-archive-keyring.gpg"
         if keyring.is_file():
@@ -201,6 +240,7 @@ def main() -> int:
     if not args.skip_built:
         check_built()
         check_determinism()
+        check_private_keys()
         check_repository()
 
     if errors:

@@ -9,42 +9,42 @@ Version: 1.0
 Architectures: amd64 arm64 i386
 Components: main
 Description: ArashiOS package repository
-Date: Thu, 22 Oct 2026 01:41:26 UTC
+Date: Thu, 22 Oct 2026 01:55:17 UTC
 Acquire-By-Hash: no
 MD5Sum:
- 158d07234b0761a00825dc833376781f 13690 main/binary-amd64/Packages
- 6bb9e07dc038464133f2fb7fd3616bcc 4598 main/binary-amd64/Packages.gz
- 158d07234b0761a00825dc833376781f 13690 main/binary-arm64/Packages
- 6bb9e07dc038464133f2fb7fd3616bcc 4598 main/binary-arm64/Packages.gz
- 158d07234b0761a00825dc833376781f 13690 main/binary-i386/Packages
- 6bb9e07dc038464133f2fb7fd3616bcc 4598 main/binary-i386/Packages.gz
+ a678ba1bd66a7c234216e6b6ecb5d61a 13690 main/binary-amd64/Packages
+ d70113b1742c4052ac91111e5520cd48 4597 main/binary-amd64/Packages.gz
+ a678ba1bd66a7c234216e6b6ecb5d61a 13690 main/binary-arm64/Packages
+ d70113b1742c4052ac91111e5520cd48 4597 main/binary-arm64/Packages.gz
+ a678ba1bd66a7c234216e6b6ecb5d61a 13690 main/binary-i386/Packages
+ d70113b1742c4052ac91111e5520cd48 4597 main/binary-i386/Packages.gz
 SHA1:
- bcec09617fd3452cfa56e0e3e6f0733f3d379bad 13690 main/binary-amd64/Packages
- 58825686b9098e61c5d3215a8b316ba52882b3d1 4598 main/binary-amd64/Packages.gz
- bcec09617fd3452cfa56e0e3e6f0733f3d379bad 13690 main/binary-arm64/Packages
- 58825686b9098e61c5d3215a8b316ba52882b3d1 4598 main/binary-arm64/Packages.gz
- bcec09617fd3452cfa56e0e3e6f0733f3d379bad 13690 main/binary-i386/Packages
- 58825686b9098e61c5d3215a8b316ba52882b3d1 4598 main/binary-i386/Packages.gz
+ 00d43aa542f48940d56ac48699ac6a43eefb1cd1 13690 main/binary-amd64/Packages
+ c99370a2a7c00ee093121ca4188aeebbc73223dc 4597 main/binary-amd64/Packages.gz
+ 00d43aa542f48940d56ac48699ac6a43eefb1cd1 13690 main/binary-arm64/Packages
+ c99370a2a7c00ee093121ca4188aeebbc73223dc 4597 main/binary-arm64/Packages.gz
+ 00d43aa542f48940d56ac48699ac6a43eefb1cd1 13690 main/binary-i386/Packages
+ c99370a2a7c00ee093121ca4188aeebbc73223dc 4597 main/binary-i386/Packages.gz
 SHA256:
- 0ed819c3d17519560f48633881eba53e7a7ded4aaf44ea86e83ff88d8343ade4 13690 main/binary-amd64/Packages
- 23ed987f0663aa29d46153ece351e7d9a67ceb4d3de0959ff246ae494edc4890 4598 main/binary-amd64/Packages.gz
- 0ed819c3d17519560f48633881eba53e7a7ded4aaf44ea86e83ff88d8343ade4 13690 main/binary-arm64/Packages
- 23ed987f0663aa29d46153ece351e7d9a67ceb4d3de0959ff246ae494edc4890 4598 main/binary-arm64/Packages.gz
- 0ed819c3d17519560f48633881eba53e7a7ded4aaf44ea86e83ff88d8343ade4 13690 main/binary-i386/Packages
- 23ed987f0663aa29d46153ece351e7d9a67ceb4d3de0959ff246ae494edc4890 4598 main/binary-i386/Packages.gz
+ e4db2951e840150379f7c2fc80073bedb3b1aa4d32c01e45cb8b021cca28e154 13690 main/binary-amd64/Packages
+ 5769fa2c3c05807efe39156ad981783411582974ab190cb47b2cf2923ffb1851 4597 main/binary-amd64/Packages.gz
+ e4db2951e840150379f7c2fc80073bedb3b1aa4d32c01e45cb8b021cca28e154 13690 main/binary-arm64/Packages
+ 5769fa2c3c05807efe39156ad981783411582974ab190cb47b2cf2923ffb1851 4597 main/binary-arm64/Packages.gz
+ e4db2951e840150379f7c2fc80073bedb3b1aa4d32c01e45cb8b021cca28e154 13690 main/binary-i386/Packages
+ 5769fa2c3c05807efe39156ad981783411582974ab190cb47b2cf2923ffb1851 4597 main/binary-i386/Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEBNM5fnla25QGfXgtPCz2Rk8IKAQFAmrZacYACgkQPCz2Rk8I
-KAR/rw//W1crTGSoAOY644O5ewLMC5R/9hOeZdOYq5oRq0F3pzzE504VU3MRxhTm
-dIdAMBJeQn/SDouIVyihuoQebrY03hCQ/gj9oEqBO4GcqQU2dn2nTOj/UDrqm2ok
-3rF2RvWx9f05v1XgtxrD0qjsL2QbMakmXc2QmcTQXFhS75jMMxhAn+FZM8SJMsxb
-pHNP8UXFN98T7WOg1bM8snSauZmReYnE9qsQeUVki9esnYAct/MGvkOv13qrbLhF
-lg4g8bbX5DCTy8WFQo3ZqTdN00pMdm9O7F/74IKj7gUVy8aDsEV4edJNfRL3BUVf
-DyPFrFdP6rJYMwzHsYkw69JrVuqOyTQz4WIrknBEsa4gWwg9Oj+1WrRZiomtjd0g
-TsmQrOQOEYy9KRgFAHHMhzuNKFXTZ1R+XHL8qDk3ud3YELBrKjHGqeua3IqORq0b
-pGOJK135/b8DBEfMyxNw9LFhdsoVxeRVTQok7iV67FlDao01NKU0II5gGBGtNWHa
-FScxHZjuem6mbi3dyosa/ioT5LNepklTdsT0Mf5zdAyX2J2hHJze3JzUpfntDj4G
-4EErfzZiFHYmygD1DwwJhCDjmU9+6tyZw8Ub2s8w5ZHOZyg9P4susvCQppfbBjD2
-MCM4hnmkD5cAmf4bmwPa4ZteAHmCb6umJ4zb+ExNBk54iPvgM2s=
-=3QfE
+iQIzBAEBCgAdFiEEBNM5fnla25QGfXgtPCz2Rk8IKAQFAmrZbQYACgkQPCz2Rk8I
+KASI2w/+KMCF9MmM5B+E+hRLNqLGmR9Rh7NNq0D1K81AAqPs17k57AszF8uC1AmB
+9yaXqDGkS+s6MbDChkXxST08nWFzjwc8x6+ZkxeT2kG0JY059fS/5SJU5azCaGua
+0MOepqZATLMWe5aJHTJMds1IzCUdNbigDz+nvD0LARnzE+eCLUs4z9kNdmcJ491I
+fY2vCcULCkEDKYHO8kw/o8vACMtRcY6SkLTwDP3gd60MD6EgGGdYa8Qtb5ZXCuDo
+ZdFOMpDEmZ35MX4SkXYCSYG8S13ZiisrjLzB6lmRSwHFMVwJK0M4W22AYlbuyq7v
+Gwk90s+FPU1cBkAlXrYBNqFOeLuFIeG2UIWAM06VRWHWcBH5UpVYoo5Tkxc3NnWu
+C3td82frlqVc+pilyRARpSe2FqT2EmIZztepbmDr2hpug0nZQdzwoOU8c87k/95K
+aihT+IkZBSBjdNMhqLqCTqCiHLlbeyibb5gPvss6OMBoci7v4daADsnpYeNxMSyu
+cj4TjeczLfG0uAZJi0l9ZQf/61mJ6B6sVebBBXmkaXPBXFEwALKTBjMx+XMtILX+
+xmzD2Yc+pYyWsbcQP/FZrBNzTW0KX6u1tEOA6kOvMd0Vx2Y7n3+PX1hQskDL1yr6
+whaFbiKTXh1o0rkRqT1/HunfggdyHvY5o4Oc2sIfVGs86e0z29I=
+=lemf
 -----END PGP SIGNATURE-----

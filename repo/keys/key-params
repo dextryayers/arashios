@@ -1,9 +1,0 @@
-%no-protection
-Key-Type: RSA
-Key-Length: 4096
-Key-Usage: sign
-Name-Real: ArashiOS Archive
-Name-Comment: ArashiOS Archive Signing Key
-Name-Email: maintainers@arashios.example
-Expire-Date: 3y
-%commit

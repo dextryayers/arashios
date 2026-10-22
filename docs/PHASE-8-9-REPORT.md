@@ -177,7 +177,7 @@ paket identik. Laporan ditulis di `build/reproducibility-report.json`.
 
 | Pemeriksaan | Hasil |
 |---|---|
-| Standar packaging | 304 pemeriksaan lulus |
+| Standar packaging | 310 pemeriksaan lulus |
 | Checklist hardening konfigurasi | 18 pemeriksaan lulus |
 | Audit kepatuhan | 133 pemeriksaan lulus |
 | SBOM CycloneDX | 361 komponen valid |
@@ -186,6 +186,7 @@ paket identik. Laporan ditulis di `build/reproducibility-report.json`.
 | Repository | InRelease terverifikasi dengan kunci repo |
 | Repository offline | apt membaca repo bertanda tangan dan pool membangun ulang indeks yang identik |
 | Reproduksibilitas | paket identik antar dua build |
+| Repository offline | apt membaca repo bertanda tangan, pool membangun indeks identik |
 | Dokumen | 458 berkas lulus |
 | Traceability | 58 requirement, 52 test case |
 
@@ -214,6 +215,10 @@ python3 scripts/scan-vulnerabilities.sh --output build/vulnerability-report.json
 3. Repository belum dipublikasikan karena domain final belum ditetapkan.
 4. Kunci repository yang ada di host ini adalah kunci pengembangan tanpa
    passphrase. Kunci rilis harus dibuat dengan passphrase pada media offline.
+5. Kunci privat sempat berada di dalam pohon repository pada build awal.
+   Kunci sudah dipindahkan ke luar repository, aturan ignore dan pemeriksaan
+   `check-packages.py` mencegah kunci privat masuk kembali. Kunci pengembangan ini
+   tidak dipakai untuk rilis dan sebaiknya dicabut.
 5. Audit ekspor formal dan pemeriksaan merek dagang belum diulang sebelum
    rilis publik.
 6. Laporan kepatuhan otomatis belum menggantikan review hukum.

@@ -92,7 +92,8 @@ packages:
 	./scripts/build-branding-package.sh
 	python3 ./scripts/build-packages.py --all
 
-repo:
+repo: packages
+	./scripts/generate-repo-key.sh
 	python3 ./scripts/build-repo.py --packages build/packages --output repo/public --sign
 
 repo-check:
@@ -150,7 +151,7 @@ test: verify
 smoke:
 	./tests/smoke.sh
 
-lint: theme
+lint: theme packages repo
 	bash -n build.sh
 	bash -n scripts/*.sh
 	bash -n tests/*.sh

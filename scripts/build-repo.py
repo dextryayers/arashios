@@ -191,7 +191,10 @@ def main() -> int:
             release_lines.append(f" {digest(path, algorithm)} {len(path.read_bytes())} {relative}")
 
     release_text = "\n".join(release_lines) + "\n"
-    (dists / "Release").write_text(release_text, encoding="utf-8")
+    release_path = dists / "Release"
+    temporary = dists / "Release.tmp"
+    temporary.write_text(release_text, encoding="utf-8")
+    temporary.replace(release_path)
 
     signed = False
     if args.sign:
@@ -201,7 +204,9 @@ def main() -> int:
         else:
             fingerprint = fingerprint_file.read_text(encoding="utf-8").strip()
             env = dict(os.environ)
-            env["GNUPGHOME"] = str(KEY_DIR / "gnupg")
+            env["GNUPGHOME"] = os.environ.get(
+                "ARASHIOS_GNUPG_HOME", str(Path.home() / ".local" / "share" / "arashios" / "gnupg")
+            )
             passphrase = os.environ.get("ARASHIOS_REPO_KEY_PASSPHRASE", "")
             for command in (
                 [
@@ -233,6 +238,8 @@ def main() -> int:
             if (dists / "InRelease").is_file() and (dists / "Release.gpg").is_file():
                 signed = True
                 log(f"repository ditandatangani dengan kunci {fingerprint}")
+            else:
+                log("PERINGATAN: repository tidak ditandatangani")
 
     log(f"{len(debs)} paket, {len(architectures)} arsitektur, output {output}")
     log(f"signature: {'ada' if signed else 'tidak ada'}")

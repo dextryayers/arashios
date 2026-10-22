@@ -8,7 +8,8 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 KEY_DIR="$ROOT/repo/keys"
-GNUPG_HOME="$KEY_DIR/gnupg"
+# The private key never lives inside the repository tree.
+GNUPG_HOME="${ARASHIOS_GNUPG_HOME:-$HOME/.local/share/arashios/gnupg}"
 FINGERPRINT_FILE="$KEY_DIR/arashios-archive.fingerprint"
 
 command -v gpg >/dev/null 2>&1 || {
@@ -63,5 +64,6 @@ chmod 0644 "$KEY_DIR/arashios-archive-keyring.asc" "$KEY_DIR/arashios-archive-ke
 chmod 0600 "$KEY_DIR/key-params" 2>/dev/null || true
 
 log "keyring publik: repo/keys/arashios-archive-keyring.gpg"
+log "kunci privat  : $GNUPG_HOME"
 log "fingerprint   : $FINGERPRINT"
 printf '%s\n' "$FINGERPRINT"
