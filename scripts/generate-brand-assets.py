@@ -596,6 +596,82 @@ def build_favicon_raster(size: int, palette: dict[str, Color]) -> bytes:
     return encode_png(size, size, rows, 6)
 
 
+def build_banner(palette: dict[str, Color], width: int = 1024, height: int = 128) -> bytes:
+    """Installer banner: enso mark, hairline, and seal. No text, no renderer."""
+    rows = [bytearray(width * 4) for _ in range(height)]
+    for y in range(height):
+        row = rows[y]
+        for x in range(width):
+            offset = x * 4
+            row[offset : offset + 4] = bytes((*palette["sumi.900"], 255))
+    center_x = height * 0.5
+    center_y = height * 0.5
+    radius = height * 0.32
+    ring_width = max(1.5, height * 0.055)
+    for y in range(height):
+        row = rows[y]
+        for x in range(int(center_x - radius - ring_width), int(center_x + radius + ring_width) + 1):
+            if not 0 <= x < width:
+                continue
+            dx = x - center_x
+            dy = y - center_y
+            distance = math.hypot(dx, dy)
+            angle = math.degrees(math.atan2(dy, dx))
+            if abs(distance - radius) <= ring_width / 2 and not (-140 < angle < -50):
+                offset = x * 4
+                row[offset : offset + 4] = bytes((*palette["washi.100"], 255))
+    seal = max(3, int(height * 0.16))
+    seal_x = int(center_x + radius * 0.62)
+    seal_y = int(center_y + radius * 0.62)
+    for y in range(seal_y, min(seal_y + seal, height)):
+        for x in range(seal_x, min(seal_x + seal, width)):
+            offset = x * 4
+            rows[y][offset : offset + 4] = bytes((*palette["vermilion.500"], 255))
+    line_y = int(height * 0.72)
+    line_start = int(height * 1.25)
+    line_end = int(width * 0.62)
+    for y in range(line_y - 1, line_y + 2):
+        if not 0 <= y < height:
+            continue
+        row = rows[y]
+        for x in range(line_start, min(line_end, width)):
+            offset = x * 4
+            row[offset : offset + 4] = bytes((*palette["ash.500"], 255))
+    return encode_png(width, height, rows, 6)
+
+
+def build_welcome(palette: dict[str, Color], width: int = 480, height: int = 240) -> bytes:
+    """Installer welcome image: centered enso mark on a sumi field."""
+    rows = [bytearray(width * 4) for _ in range(height)]
+    for y in range(height):
+        row = rows[y]
+        for x in range(width):
+            offset = x * 4
+            row[offset : offset + 4] = bytes((*palette["sumi.800"], 255))
+    center_x = width / 2
+    center_y = height / 2
+    radius = min(width, height) * 0.3
+    ring_width = max(1.5, min(width, height) * 0.03)
+    for y in range(height):
+        row = rows[y]
+        for x in range(width):
+            dx = x - center_x
+            dy = y - center_y
+            distance = math.hypot(dx, dy)
+            angle = math.degrees(math.atan2(dy, dx))
+            if abs(distance - radius) <= ring_width / 2 and not (-140 < angle < -50):
+                offset = x * 4
+                row[offset : offset + 4] = bytes((*palette["washi.100"], 255))
+    seal = max(4, int(min(width, height) * 0.07))
+    seal_x = int(center_x + radius * 0.6)
+    seal_y = int(center_y + radius * 0.6)
+    for y in range(seal_y, min(seal_y + seal, height)):
+        for x in range(seal_x, min(seal_x + seal, width)):
+            offset = x * 4
+            rows[y][offset : offset + 4] = bytes((*palette["vermilion.500"], 255))
+    return encode_png(width, height, rows, 6)
+
+
 def build_boot_assets(palette: dict[str, Color]) -> dict[Path, bytes]:
     return {
         BOOT_DIR / "splash.png": build_splash(palette, 640, 480),
@@ -624,6 +700,8 @@ def generate() -> dict[Path, bytes]:
         for size in (16, 32, 48, 64, 128, 256)
     ]
     files[LOGO_DIR / "arashios-favicon.ico"] = encode_ico(ico_images)
+    files[LOGO_DIR / "arashios-banner.png"] = build_banner(palette)
+    files[LOGO_DIR / "arashios-welcome.png"] = build_welcome(palette)
     files.update(build_boot_assets(palette))
     return files
 

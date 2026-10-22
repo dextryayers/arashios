@@ -26,6 +26,14 @@ Teks lisensi lengkap tersedia di /usr/share/wordlists/arashios/LICENSE dan
 https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
 --------------------------------------------------------------------------
+Installer ArashiOS
+
+Installer memakai Calamares yang berlisensi GPL-3.0-or-later, dikembangkan oleh
+KDE dan kontributor. Teks lisensi tersedia di
+/usr/share/doc/calamares/copyright pada sistem terpasang. Branding installer
+ArashiOS memakai aset Kage yang berlisensi CC-BY-SA-4.0.
+
+--------------------------------------------------------------------------
 Tool tier 1 ArashiOS
 
 Tool yang dibangun dari sumber upstream dikunci pada commit tertentu dan

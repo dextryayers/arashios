@@ -1,0 +1,19 @@
+# ArashiOS daily use applications, tier T0.
+# Applied on every edition. Each package is available in Debian bookworm for
+# amd64, arm64, and i386.
+
+# Browser and mail localisation
+firefox-esr-l10n-id
+firefox-esr-l10n-ja
+thunderbird-l10n-id
+thunderbird-l10n-ja
+
+# Media playback
+mpv
+playerctl
+
+# Documents, spellcheck, and localisation
+pandoc
+hunspell-id
+libreoffice-l10n-id
+libreoffice-l10n-ja

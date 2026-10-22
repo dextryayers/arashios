@@ -1,0 +1,3 @@
+# arm64 bootloader package for the Calamares installer.
+# arm64 only supports UEFI, so grub-efi-arm64 is required.
+grub-efi-arm64

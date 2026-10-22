@@ -1,0 +1,73 @@
+#!/bin/sh
+# ArashiOS platform preparation for daily use. Runs inside the build chroot.
+#
+# The hook enables the services that the daily driver workflow needs, keeps
+# the print and network policy consistent, and prepares the persistence
+# helper for the live session.
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+
+enable_unit() {
+    systemctl enable "$1" >/dev/null 2>&1 || true
+}
+
+disable_unit() {
+    systemctl disable "$1" >/dev/null 2>&1 || true
+}
+
+# Daily use services.
+enable_unit NetworkManager.service
+enable_unit bluetooth.service
+enable_unit avahi-daemon.service
+enable_unit fwupd.service
+enable_unit tlp.service
+enable_unit zram-swap.service
+enable_unit earlyoom.service
+enable_unit cups.socket
+
+# Services that must stay off.
+disable_unit cups.service
+disable_unit ssh.service
+
+# Locale. The three supported locales are generated for every edition.
+if command -v locale-gen >/dev/null 2>&1; then
+    for locale in en_US.UTF-8 id_ID.UTF-8 ja_JP.UTF-8; do
+        if ! grep -q "^${locale} UTF-8" /etc/locale.gen; then
+            printf '%s UTF-8\n' "$locale" >> /etc/locale.gen
+        fi
+    done
+    locale-gen >/dev/null 2>&1 || true
+fi
+
+# The live session keeps its own user, the installed system is handled by the
+# installer post install script.
+if id arashi >/dev/null 2>&1; then
+    mkdir -p /home/arashi/.local/share/arashios
+    chown -R arashi:arashi /home/arashi/.local 2>/dev/null || true
+fi
+
+# Persistence helper for the live session.
+mkdir -p /usr/share/arashios/persistence
+cat > /usr/share/arashios/persistence/README <<'EOF'
+Live session persistence.
+
+Create a partition with the label "persistence" and a file persistence.conf
+that contains the line:
+
+    / union
+
+The helper command arashios-persistence prepares such a partition:
+
+    sudo arashios-persistence setup /dev/sdXN
+
+The live system then writes changes to that partition instead of discarding
+them at shutdown.
+EOF
+
+chmod 0755 /usr/local/bin/arashios-persistence 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-recovery 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-dualboot-check 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-daily 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-hardware-report 2>/dev/null || true
+
+sync

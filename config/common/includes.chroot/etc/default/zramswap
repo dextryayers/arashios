@@ -1,0 +1,10 @@
+# ArashiOS compressed swap in RAM.
+# The swap size is a percentage of physical memory with a fixed floor and cap.
+
+ALGO=zstd
+PERCENT=25
+SIZE=256M
+PRIORITY=100
+
+# Keep the file system and the RAM disk clean.
+FILESIZE=256M

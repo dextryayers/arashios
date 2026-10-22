@@ -1,0 +1,23 @@
+# ArashiOS installer support, tier T0.
+# These packages run in the live session so the installer can partition
+# disks, install a bootloader, and write the target system. They are removed
+# from the installed system by the post install script.
+
+calamares
+calamares-settings-debian
+
+# Partitioning and filesystem tools
+parted
+dosfstools
+e2fsprogs
+btrfs-progs
+cryptsetup
+lvm2
+os-prober
+efibootmgr
+mokutil
+util-linux
+
+# Networking during installation
+
+# Cleanup helpers for the live session

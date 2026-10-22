@@ -1,0 +1,4 @@
+# amd64 bootloader packages for the Calamares installer.
+# grub-pc covers BIOS, grub-efi-amd64 covers UEFI.
+grub-pc
+grub-efi-amd64

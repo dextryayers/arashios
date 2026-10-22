@@ -4,9 +4,6 @@ firefox-esr
 thunderbird
 
 libreoffice
-libreoffice-l10n-id
-libreoffice-l10n-ja
-pandoc
 
 vlc
 gimp
@@ -30,8 +27,4 @@ sane-utils
 
 bluez
 blueman
-tlp
-zram-tools
-earlyoom
-fwupd
 flatpak

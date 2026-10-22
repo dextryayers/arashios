@@ -1,0 +1,66 @@
+#!/bin/sh
+# ArashiOS installer preparation. Runs inside the build chroot.
+#
+# The hook finalises the Calamares configuration, copies the Kage branding
+# images into the installer branding directory, and makes sure the installer
+# only runs from the live session.
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+
+BRANDING_DIR="/usr/share/calamares/branding/arashios"
+VERSION="$(cat /etc/arashios/version 2>/dev/null || printf 'V1.0.0')"
+
+# Version placeholders in the installer configuration.
+for file in /etc/calamares/settings.conf "$BRANDING_DIR/branding.desc"; do
+    if [ -f "$file" ]; then
+        sed -i "s/@VERSION@/$VERSION/g" "$file"
+    fi
+done
+
+# Branding images produced by the asset generator.
+if [ -f /usr/share/icons/hicolor/256x256/apps/arashios.png ]; then
+    install -Dm644 /usr/share/icons/hicolor/256x256/apps/arashios.png \
+        "$BRANDING_DIR/arashios-icon.png"
+fi
+if [ -f /usr/share/arashios/branding/arashios-banner.png ]; then
+    install -Dm644 /usr/share/arashios/branding/arashios-banner.png \
+        "$BRANDING_DIR/arashios-banner.png"
+fi
+if [ -f /usr/share/arashios/branding/arashios-welcome.png ]; then
+    install -Dm644 /usr/share/arashios/branding/arashios-welcome.png \
+        "$BRANDING_DIR/arashios-welcome.png"
+fi
+if [ -f /usr/share/backgrounds/arashios/kage-sumi.png ]; then
+    install -Dm644 /usr/share/backgrounds/arashios/kage-sumi.png \
+        "$BRANDING_DIR/arashios-wallpaper.png"
+fi
+
+# The installer is started by the user from the live session. It must never
+# start automatically.
+if [ -f /usr/share/applications/calamares.desktop ]; then
+    if grep -q "^NoDisplay=" /usr/share/applications/calamares.desktop; then
+        sed -i 's/^NoDisplay=.*/NoDisplay=false/' /usr/share/applications/calamares.desktop
+    else
+        printf '%s\n' 'NoDisplay=false' >> /usr/share/applications/calamares.desktop
+    fi
+    sed -i 's/^Name=.*/Name=Install ArashiOS/' /usr/share/applications/calamares.desktop
+    sed -i 's/^Icon=.*/Icon=arashios/' /usr/share/applications/calamares.desktop
+fi
+
+# The autostart entry of the live session must not launch the installer.
+rm -f /etc/xdg/autostart/calamares.desktop 2>/dev/null || true
+
+chmod 0755 "$BRANDING_DIR" 2>/dev/null || true
+chmod 0644 "$BRANDING_DIR"/* 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-postinstall 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-dualboot-check 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-persistence 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-recovery 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-daily 2>/dev/null || true
+chmod 0755 /usr/local/bin/arashios-hardware-report 2>/dev/null || true
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database /usr/share/applications >/dev/null 2>&1 || true
+fi
+
+sync

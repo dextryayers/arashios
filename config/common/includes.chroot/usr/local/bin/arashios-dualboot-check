@@ -1,0 +1,178 @@
+#!/usr/bin/env bash
+# ArashiOS dual boot pre-flight check.
+#
+# The script inspects the disks before the installer touches them. It reports
+# other installed systems, Windows features that make partitioning unsafe
+# such as BitLocker and Fast Startup, and the state of Secure Boot.
+set -Eeuo pipefail
+
+PROBLEMS=0
+WARNINGS=0
+JSON=0
+INFO_LINES=""
+PROBLEM_LINES=""
+WARNING_LINES=""
+
+log() {
+    printf '%s\n' "$*"
+}
+
+add_info() {
+    while IFS= read -r line; do
+        [ -n "$line" ] || continue
+        INFO_LINES="${INFO_LINES}${line}
+"
+    done
+}
+
+problem() {
+    PROBLEM_LINES="${PROBLEM_LINES}${1}
+"
+    PROBLEMS=$((PROBLEMS + 1))
+}
+
+warning() {
+    WARNING_LINES="${WARNING_LINES}${1}
+"
+    WARNINGS=$((WARNINGS + 1))
+}
+
+info() {
+    INFO_LINES="${INFO_LINES}${1}
+"
+}
+
+usage() {
+    cat <<'EOF'
+Pemakaian: arashios-dualboot-check [opsi]
+
+Opsi:
+  --json      Keluaran JSON.
+  -h, --help  Tampilkan bantuan ini.
+EOF
+}
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --json) JSON=1; shift ;;
+        -h|--help) usage; exit 0 ;;
+        *) printf 'ERROR: argumen tidak dikenal: %s\n' "$1" >&2; exit 2 ;;
+    esac
+done
+
+detect_windows() {
+    local found=0
+    if command -v lsblk >/dev/null 2>&1; then
+        if lsblk -o NAME,FSTYPE,LABEL,PARTLABEL,MOUNTPOINT 2>/dev/null | grep -qi 'ntfs\|fuseblk'; then
+            found=1
+        fi
+    fi
+    if [ -d /boot/microsoft ] || [ -d /mnt/microsoft ]; then
+        found=1
+    fi
+    if [ "$found" -eq 1 ]; then
+        info "partisi Windows terdeteksi"
+        if command -v lsblk >/dev/null 2>&1; then
+            lsblk -o NAME,SIZE,FSTYPE,LABEL,PARTLABEL,MOUNTPOINT 2>/dev/null | \
+                grep -Ei 'ntfs|fuseblk|windows|recovery' | add_info || true
+        fi
+    fi
+    return 0
+}
+
+detect_fast_startup() {
+    local found=0
+    if command -v lsblk >/dev/null 2>&1; then
+        if lsblk -o NAME,PARTLABEL 2>/dev/null | grep -qi 'basic data'; then
+            found=1
+        fi
+    fi
+    if [ "$found" -eq 1 ]; then
+        warning "Windows Fast Startup dapat merusak sistem file NTFS"
+        warning "matikan Fast Startup di Windows sebelum melanjutkan partisi"
+    fi
+    return 0
+}
+
+detect_bitlocker() {
+    if [ -d /boot/microsoft ] || [ -d /mnt/microsoft ]; then
+        problem "BitLocker terdeteksi pada partisi Microsoft"
+        problem "buka kunci BitLocker di Windows sebelum membagi partisi disk"
+    fi
+    return 0
+}
+
+detect_other_linux() {
+    if command -v os-prober >/dev/null 2>&1; then
+        info "os-prober tersedia, GRUB dapat mendeteksi Linux lain"
+    fi
+    if command -v lsblk >/dev/null 2>&1; then
+        lsblk -o NAME,SIZE,FSTYPE,LABEL 2>/dev/null | grep -Ei 'ext4|btrfs|xfs' | add_info || true
+    fi
+    return 0
+}
+
+detect_secure_boot() {
+    if command -v mokutil >/dev/null 2>&1; then
+        local state
+        state="$(mokutil --sb-state 2>/dev/null || true)"
+        if [ -n "$state" ]; then
+            info "Secure Boot: ${state}"
+            case "$state" in
+                *enabled*) warning "Secure Boot aktif, kernel ArashiOS belum ditandatangani" ;;
+            esac
+        fi
+    else
+        info "mokutil tidak tersedia, status Secure Boot tidak diperiksa"
+    fi
+    return 0
+}
+
+detect_firmware() {
+    if [ -d /sys/firmware/efi ]; then
+        info "sistem boot UEFI"
+    else
+        info "sistem boot BIOS"
+    fi
+    return 0
+}
+
+main() {
+    detect_firmware
+    detect_windows
+    detect_fast_startup
+    detect_bitlocker
+    detect_other_linux
+    detect_secure_boot
+
+    if [ "$JSON" -eq 1 ]; then
+        python3 - "$PROBLEMS" "$WARNINGS" "$INFO_LINES" "$PROBLEM_LINES" "$WARNING_LINES" <<'PYJSON'
+import json
+import sys
+
+problems, warnings, info, problem_lines, warning_lines = sys.argv[1:6]
+payload = {
+    "problems": int(problems),
+    "warnings": int(warnings),
+    "info": [line for line in info.splitlines() if line],
+    "problem_details": [line for line in problem_lines.splitlines() if line],
+    "warning_details": [line for line in warning_lines.splitlines() if line],
+}
+print(json.dumps(payload, indent=2, sort_keys=True))
+PYJSON
+    else
+        printf '%s' "$INFO_LINES"
+        printf '%s' "$WARNING_LINES"
+        printf '%s' "$PROBLEM_LINES"
+        if [ "$PROBLEMS" -gt 0 ]; then
+            printf '\n%d masalah,%d peringatan. Partisi tidak boleh dilanjutkan.\n' \
+                "$PROBLEMS" "$WARNINGS"
+        else
+            printf '\nTidak ada masalah yang terdeteksi,%d peringatan.\n' "$WARNINGS"
+        fi
+    fi
+
+    [ "$PROBLEMS" -eq 0 ]
+}
+
+main

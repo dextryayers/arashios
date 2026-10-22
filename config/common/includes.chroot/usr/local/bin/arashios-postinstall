@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# ArashiOS post installation script.
+#
+# The script runs inside the installed system through the Calamares
+# shellprocess job. It removes the live session artefacts, restores a normal
+# login flow, and enables the services that the daily driver workflow needs.
+set -eu
+
+LOG="/var/log/arashios-postinstall.log"
+
+log() {
+    printf '[postinstall] %s\n' "$*" >>"$LOG" 2>/dev/null || true
+    printf '[postinstall] %s\n' "$*"
+}
+
+run() {
+    log "run: $*"
+    "$@" >>"$LOG" 2>&1 || log "gagal: $*"
+}
+
+log "mulai post install"
+
+# 1. Autologin hanya berlaku untuk sesi live.
+for file in /etc/lightdm/lightdm.conf.d/50-arashios.conf /etc/lightdm/lightdm.conf.d/60-arashios.conf; do
+    if [ -f "$file" ]; then
+        sed -i \
+            -e 's/^autologin-user=.*/# autologin dinonaktifkan pada sistem terpasang/' \
+            -e 's/^autologin-session=.*/# autologin dinonaktifkan pada sistem terpasang/' \
+            "$file"
+    fi
+done
+if [ -f /etc/lightdm/lightdm.conf.d/50-arashios.conf ]; then
+    if ! grep -q '^# autologin dinonaktifkan' /etc/lightdm/lightdm.conf.d/50-arashios.conf; then
+        printf '%s\n' '# autologin dinonaktifkan pada sistem terpasang' \
+            >> /etc/lightdm/lightdm.conf.d/50-arashios.conf
+    fi
+fi
+
+# 2. User live tidak boleh ada pada sistem terpasang.
+#    Pemeriksaan memakai home agar akun yang dibuat installer tidak terhapus.
+if id arashi >/dev/null 2>&1; then
+    live_home="$(getent passwd arashi | cut -d: -f6)"
+    if [ "$live_home" = "/home/arashi" ]; then
+        run userdel --remove arashi
+    fi
+fi
+
+# 3. Installer hanya hidup di sesi live.
+run dpkg --purge --force-depends calamares-settings-debian
+run dpkg --purge --force-depends calamares
+rm -rf /etc/calamares /usr/share/calamares/branding/arashios 2>/dev/null || true
+
+# 4. Layanan harian.
+for unit in NetworkManager.service lightdm.service bluetooth.service \
+            avahi-daemon.service fwupd.service tlp.service zram-swap.service \
+            earlyoom.service cups.socket apt-daily.timer apt-daily-upgrade.timer \
+            fstrim.timer; do
+    if [ -e "/etc/systemd/system/$unit" ] || [ -e "/lib/systemd/system/$unit" ]; then
+        run systemctl enable "$unit"
+    fi
+done
+for unit in ssh.service ssh.socket; do
+    run systemctl mask "$unit"
+done
+run systemctl set-default graphical.target
+
+# 5. Timeshift snapshot pertama.
+if command -v timeshift >/dev/null 2>&1; then
+    run timeshift --create --comments "ArashiOS fresh install"
+fi
+
+# 6. Cache dan berkas sementara.
+run apt-get clean
+rm -rf /var/lib/apt/lists/* 2>/dev/null || true
+rm -f /etc/ssh/ssh_host_* 2>/dev/null || true
+find /var/log -type f -name '*.log' -exec truncate -s 0 {} \; 2>/dev/null || true
+rm -f /root/.bash_history 2>/dev/null || true
+
+# 7. Izin dan basis data aplikasi.
+run update-desktop-database /usr/share/applications
+if command -v update-alternatives >/dev/null 2>&1; then
+    run update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+fi
+if command -v fc-cache >/dev/null 2>&1; then
+    run fc-cache -f
+fi
+
+log "selesai post install"
+exit 0

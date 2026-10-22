@@ -324,5 +324,43 @@ else
     fail 'smoke test bahasa gagal'
 fi
 
+printf '\nPenggunaan harian dan installer:\n'
+for tool in arashios-daily arashios-hardware-report arashios-dualboot-check \
+            arashios-persistence arashios-recovery; do
+    check_cmd "$tool"
+done
+check_file /etc/NetworkManager/conf.d/99-arashios.conf
+check_file /etc/tlp.conf
+check_file /etc/default/zramswap
+check_file /etc/default/earlyoom
+if [ -d /etc/calamares ]; then
+    check_file /etc/calamares/settings.conf
+    check_file /etc/calamares/modules.conf
+    check_file /usr/share/calamares/branding/arashios/branding.desc
+    check_file /usr/share/calamares/branding/arashios/show.qml
+    check_file /usr/share/calamares/branding/arashios/stylesheet.qss
+    check_cmd calamares
+fi
+check_file /usr/share/arashios/persistence/README
+check_cmd os-prober
+check_cmd cryptsetup
+check_cmd lvm
+check_cmd mokutil
+check_cmd parted
+if locale -a 2>/dev/null | grep -qi '^id_ID.utf8$'; then pass 'locale id_ID.utf8'; else fail 'locale id_ID.utf8 tidak tersedia'; fi
+if locale -a 2>/dev/null | grep -qi '^ja_JP.utf8$'; then pass 'locale ja_JP.utf8'; else fail 'locale ja_JP.utf8 tidak tersedia'; fi
+if [ -f /etc/lightdm/lightdm.conf.d/50-arashios.conf ]; then
+    if grep -q '^autologin-user=' /etc/lightdm/lightdm.conf.d/50-arashios.conf; then
+        fail 'autologin masih aktif pada sistem terpasang'
+    else
+        pass 'autologin dimatikan pada sistem terpasang'
+    fi
+fi
+if arashios-daily --json >/dev/null 2>&1; then
+    pass 'diagnosis harian berjalan'
+else
+    fail 'diagnosis harian gagal'
+fi
+
 printf '\nRingkasan: %s lulus, %s gagal.\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

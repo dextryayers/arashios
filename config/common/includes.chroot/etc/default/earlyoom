@@ -1,0 +1,11 @@
+# ArashiOS early out of memory policy.
+# The daemon terminates the largest memory consumer before the kernel OOM
+# killer picks a random process.
+
+EARLYOOM_IGNORE_KERNEL_REGRESSION=1
+EARLYOOM_IGNORE_OOMD_SCORE=1
+EARLYOOM_MEMORY_AVAILABLE=15
+EARLYOOM_SWAP_AVAILABLE=10
+EARLYOOM_PERCENT_SWAP=10
+EARLYOOM_NOTIFY=1
+EARLYOOM_FATAL_OOM=1

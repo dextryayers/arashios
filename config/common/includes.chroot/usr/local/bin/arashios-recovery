@@ -1,0 +1,235 @@
+#!/usr/bin/env bash
+# ArashiOS recovery helper.
+#
+# The helper covers the recovery paths that matter after an installation:
+# inspecting the boot state, mounting a broken system, opening encrypted
+# volumes, reinstalling GRUB, and restoring the EFI directory.
+set -Eeuo pipefail
+
+ROOT_MOUNT="/mnt/arashios"
+EFI_MOUNT="/mnt/arashios/boot/efi"
+
+usage() {
+    cat <<'EOF'
+Pemakaian: arashios-recovery <perintah> [argumen]
+
+Perintah:
+  diagnose                  Ringkasan kondisi boot, disk, EFI, dan Secure Boot.
+  journal                   Tampilkan error terakhir dari journal boot.
+  list-disks                Tampilkan disk dan partisi yang terdeteksi.
+  luks-open <nama> <perangkat>  Buka volume terenkripsi.
+  lvm-scan                  Aktifkan dan tampilkan volume LVM.
+  chroot [perintah]         Mount sistem target lalu masuk ke chroot.
+  grub-install [sistem]     Pasang ulang GRUB pada sistem target.
+  grub-update [sistem]      Bangun ulang konfigurasi GRUB.
+  backup-efi <direktori>    Salin partisi EFI ke direktori cadangan.
+  restore-efi <direktori>   Pulihkan partisi EFI dari direktori cadangan.
+
+Perintah yang mengubah disk membutuhkan hak root.
+EOF
+}
+
+die() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+log() {
+    printf '%s\n' "$*"
+}
+
+require_root() {
+    if [ "$(id -u)" -ne 0 ]; then
+        die "perintah ini membutuhkan hak root. Jalankan dengan sudo."
+    fi
+}
+
+command_diagnose() {
+    log "== sistem"
+    uname -a
+    log ""
+    log "== firmware"
+    if [ -d /sys/firmware/efi ]; then
+        log "boot UEFI"
+    else
+        log "boot BIOS"
+    fi
+    if command -v mokutil >/dev/null 2>&1; then
+        log "Secure Boot: $(mokutil --sb-state 2>/dev/null || printf 'tidak diketahui')"
+    fi
+    log ""
+    log "== disk"
+    if command -v lsblk >/dev/null 2>&1; then
+        lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINT
+    fi
+    log ""
+    log "== partisi EFI"
+    if command -v efibootmgr >/dev/null 2>&1; then
+        efibootmgr -v 2>/dev/null | sed -n '1,20p' || true
+    fi
+    log ""
+    log "== grub"
+    for path in /boot/grub/grub.cfg /boot/grub2/grub.cfg; do
+        if [ -f "$path" ]; then
+            log "konfigurasi: $path"
+            grep -c "^menuentry" "$path" 2>/dev/null | sed 's/^/entri menu: /' || true
+        fi
+    done
+    if [ -f /etc/default/grub ]; then
+        log "pengaturan /etc/default/grub:"
+        grep -E "^GRUB_(THEME|TIMEOUT|DEFAULT|DISABLE_OS_PROBER)" /etc/default/grub 2>/dev/null || true
+    fi
+    log ""
+    log "== last failed boot"
+    if command -v journalctl >/dev/null 2>&1; then
+        journalctl -b -1 -p err --no-pager 2>/dev/null | tail -20 || true
+    fi
+}
+
+command_journal() {
+    if ! command -v journalctl >/dev/null 2>&1; then
+        die "journalctl tidak tersedia"
+    fi
+    journalctl -b -p err --no-pager | tail -50
+}
+
+command_list_disks() {
+    if ! command -v lsblk >/dev/null 2>&1; then
+        die "lsblk tidak tersedia"
+    fi
+    lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,PARTLABEL,MOUNTPOINT
+}
+
+command_luks_open() {
+    require_root
+    local name="${1:-}" device="${2:-}"
+    [ -n "$name" ] || die "nama volume belum diisi"
+    [ -n "$device" ] || die "perangkat belum diisi"
+    [ -b "$device" ] || die "perangkat tidak ditemukan: $device"
+    if command -v cryptsetup >/dev/null 2>&1; then
+        cryptsetup open "$device" "$name"
+    else
+        die "cryptsetup tidak tersedia"
+    fi
+    log "volume $name dibuka dari $device"
+}
+
+command_lvm_scan() {
+    require_root
+    if ! command -v pvs >/dev/null 2>&1; then
+        die "lvm2 tidak tersedia"
+    fi
+    log "== physical volumes"
+    pvs 2>/dev/null || true
+    log ""
+    log "== volume groups"
+    vgs 2>/dev/null || true
+    log ""
+    log "== logical volumes"
+    lvs 2>/dev/null || true
+    if command -v vgchange >/dev/null 2>&1; then
+        vgchange -ay 2>/dev/null || true
+    fi
+}
+
+mount_target() {
+    require_root
+    local system="${1:-$ROOT_MOUNT}"
+    [ -d "$system" ] || die "direktori sistem tidak ditemukan: $system"
+    mountpoint -q "$system" || mount "$system" "$system"
+    for path in proc sys dev dev/pts run; do
+        if [ -d "$system/$path" ]; then
+            mountpoint -q "$system/$path" || mount --bind "/$path" "$system/$path"
+        fi
+    done
+    if [ -d "$system/boot/efi" ]; then
+        mkdir -p "$EFI_MOUNT"
+        mountpoint -q "$EFI_MOUNT" || mount "$system/boot/efi" "$EFI_MOUNT"
+    fi
+    log "sistem target dipasang di $system"
+}
+
+command_chroot() {
+    require_root
+    local system="${1:-$ROOT_MOUNT}"
+    shift || true
+    mount_target "$system"
+    if [ "$#" -gt 0 ]; then
+        chroot "$system" /bin/bash -lc "$*"
+    else
+        printf 'Masuk ke chroot %s. Perintah: exit\n' "$system"
+        chroot "$system" /bin/bash
+    fi
+}
+
+command_grub_install() {
+    require_root
+    local system="${1:-$ROOT_MOUNT}"
+    mount_target "$system"
+    if [ -d /sys/firmware/efi ]; then
+        if [ -f "$system/usr/bin/grub-install" ] || [ -f "$system/usr/sbin/grub-install" ]; then
+            chroot "$system" grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ArashiOS
+        else
+            chroot "$system" apt-get install --reinstall -y grub-efi-amd64
+            chroot "$system" grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ArashiOS
+        fi
+    else
+        if [ -f "$system/usr/sbin/grub-install" ]; then
+            chroot "$system" grub-install --target=i386-pc --recheck
+        else
+            chroot "$system" apt-get install --reinstall -y grub-pc
+            chroot "$system" grub-install --target=i386-pc --recheck
+        fi
+    fi
+    command_grub_update "$system"
+}
+
+command_grub_update() {
+    require_root
+    local system="${1:-$ROOT_MOUNT}"
+    mountpoint -q "$system" || mount_target "$system"
+    chroot "$system" grub-mkconfig -o /boot/grub/grub.cfg
+    log "konfigurasi GRUB diperbarui"
+}
+
+command_backup_efi() {
+    require_root
+    local target="${1:-}"
+    [ -n "$target" ] || die "direktori tujuan belum diisi"
+    mkdir -p "$target"
+    if mountpoint -q /boot/efi; then
+        cp -a /boot/efi/. "$target/"
+    else
+        die "partisi EFI belum dipasang di /boot/efi"
+    fi
+    log "cadangan EFI tersimpan di $target"
+}
+
+command_restore_efi() {
+    require_root
+    local source="${1:-}"
+    [ -n "$source" ] || die "direktori cadangan belum diisi"
+    [ -d "$source" ] || die "direktori cadangan tidak ditemukan: $source"
+    mountpoint -q /boot/efi || die "partisi EFI belum dipasang di /boot/efi"
+    cp -a "$source"/. /boot/efi/
+    log "partisi EFI dipulihkan dari $source"
+}
+
+[ "$#" -ge 1 ] || { usage; exit 1; }
+command_name="$1"
+shift
+
+case "$command_name" in
+    diagnose) command_diagnose ;;
+    journal) command_journal ;;
+    list-disks) command_list_disks ;;
+    luks-open) command_luks_open "$@" ;;
+    lvm-scan) command_lvm_scan ;;
+    chroot) command_chroot "$@" ;;
+    grub-install) command_grub_install "$@" ;;
+    grub-update) command_grub_update "$@" ;;
+    backup-efi) command_backup_efi "$@" ;;
+    restore-efi) command_restore_efi "$@" ;;
+    -h|--help|help) usage ;;
+    *) usage; exit 1 ;;
+esac

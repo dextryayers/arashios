@@ -1,0 +1,58 @@
+# ArashiOS installer branding.
+# The Kage palette is used for the installer so the visual language stays
+# consistent from the live session to the installed system.
+---
+componentName: arashios
+
+# Wording
+welcomeStyleCalamares: true
+welcomeExpandingLogo: true
+
+# Window behaviour
+windowExpanding: normal
+windowSize: 900px,600px
+windowPlacement: center
+
+# Panels
+sidebar: widget
+navigation: widget
+
+# Strings
+strings:
+    productName: "ArashiOS"
+    shortProductName: "ArashiOS"
+    version: "@VERSION@"
+    shortVersion: "@VERSION@"
+    versionedName: "ArashiOS @VERSION@"
+    shortVersionedName: "ArashiOS"
+    bootloaderEntryName: "ArashiOS"
+    productUrl: "https://arashios.example"
+    supportUrl: "https://arashios.example/docs"
+    knownIssuesUrl: "https://arashios.example/docs/known-issues"
+    releaseNotesUrl: "https://arashios.example/releases"
+    donateUrl: ""
+
+# Images are placed in this directory by the installer hook.
+images:
+    productBanner: "arashios-banner.png"
+    productIcon: "arashios-icon.png"
+    productLogo: "arashios-icon.png"
+    productWallpaper: "arashios-wallpaper.png"
+    productWelcome: "arashios-welcome.png"
+
+# Kage colors
+style:
+    sidebarBackground: "#0A0A0C"
+    sidebarText: "#EDE8DE"
+    sidebarTextSelect: "#0A0A0C"
+    sidebarTextHighlight: "#BF4432"
+
+# Slideshow shown while the installer writes the disk.
+slideshow: "show.qml"
+slideshowAPI: 2
+
+# Log upload is disabled. ArashiOS does not send data to third party servers.
+uploadServer:
+    type: "none"
+    url: ""
+    sizeLimit: -1

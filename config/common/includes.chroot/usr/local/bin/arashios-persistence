@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+# ArashiOS live persistence helper.
+#
+# The helper prepares and inspects the persistence partition used by the
+# live session. A persistence partition holds a persistence.conf file with
+# the union directive so the live system writes changes back to disk.
+set -Eeuo pipefail
+
+LABEL="persistence"
+CONF="/persistence.conf"
+DEVICE=""
+
+usage() {
+    cat <<'EOF'
+Pemakaian: arashios-persistence <perintah> [argumen]
+
+Perintah:
+  status                 Periksa partisi persistensi yang terdeteksi.
+  list                   Tampilkan kandidat partisi yang dapat dipakai.
+  setup <perangkat>      Siapkan partisi persistensi pada perangkat.
+  verify <perangkat>     Periksa isi persistence.conf pada perangkat.
+
+Catatan: setup dan verify membutuhkan hak root.
+EOF
+}
+
+die() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+log() {
+    printf '%s\n' "$*"
+}
+
+require_root() {
+    if [ "$(id -u)" -ne 0 ]; then
+        die "perintah ini membutuhkan hak root. Jalankan dengan sudo."
+    fi
+}
+
+blkid_value() {
+    local device="$1" field="$2"
+    blkid -o export "$device" 2>/dev/null | sed -n "s/^${field}=//p" | tr -d '"\\'
+}
+
+list_partitions() {
+    lsblk -nrp -o NAME,TYPE 2>/dev/null | awk '$2 == "part" { print $1 }'
+}
+
+find_persistence() {
+    local device
+    while IFS= read -r device; do
+        [ -n "$device" ] || continue
+        if [ "$(blkid_value "$device" LABEL)" = "$LABEL" ]; then
+            printf '%s\n' "$device"
+        fi
+    done < <(list_partitions)
+}
+
+command_status() {
+    local found=0 device
+    while IFS= read -r device; do
+        [ -n "$device" ] || continue
+        found=1
+        log "perangkat : $device"
+        log "label    : $(blkid_value "$device" LABEL)"
+        log "filesystem: $(blkid_value "$device" TYPE)"
+        log "ukuran   : $(lsblk -dno SIZE "$device" 2>/dev/null | tr -d ' ')"
+        if mountpoint -q "/run/live/persistence" 2>/dev/null; then
+            log "status   : partisi sedang dipakai sesi live"
+        else
+            log "status   : belum dipasang"
+        fi
+    done < <(find_persistence)
+    if [ "$found" -eq 0 ]; then
+        log "Tidak ada partisi berlabel $LABEL yang terdeteksi."
+        log "Jalankan arashios-persistence list untuk melihat kandidat."
+        return 1
+    fi
+    return 0
+}
+
+command_list() {
+    local device fstype size
+    printf '%-12s %-10s %-10s %s\n' PERANGKAT FILESYSTEM UKURAN LABEL
+    while IFS= read -r device; do
+        [ -n "$device" ] || continue
+        fstype="$(blkid_value "$device" TYPE)"
+        size="$(lsblk -dno SIZE "$device" 2>/dev/null | tr -d ' ')"
+        printf '%-12s %-10s %-10s %s\n' "$device" "${fstype:-tidak dikenal}" "${size:-?}" \
+            "$(blkid_value "$device" LABEL)"
+    done < <(list_partitions)
+}
+
+command_setup() {
+    require_root
+    [ -n "$DEVICE" ] || die "perangkat belum ditentukan"
+    [ -b "$DEVICE" ] || die "perangkat tidak ditemukan: $DEVICE"
+
+    if [ -n "$(blkid_value "$DEVICE" LABEL)" ]; then
+        die "perangkat sudah punya partisi. Partisi yang ada tidak diubah."
+    fi
+
+    log "membuat sistem berkas ext4 pada $DEVICE"
+    mkfs.ext4 -q -L "$LABEL" "$DEVICE"
+
+    local mountpoint
+    mountpoint="$(mktemp -d)"
+    mount "$DEVICE" "$mountpoint"
+    printf '/ union\n' > "$mountpoint$CONF"
+    sync
+    umount "$mountpoint"
+    rmdir "$mountpoint"
+
+    log "partisi persistensi siap pada $DEVICE"
+    log "boot live session dengan partisi ini terpasang untuk menyimpan perubahan"
+}
+
+command_verify() {
+    require_root
+    [ -n "$DEVICE" ] || die "perangkat belum ditentukan"
+    [ -b "$DEVICE" ] || die "perangkat tidak ditemukan: $DEVICE"
+
+    local mountpoint
+    mountpoint="$(mktemp -d)"
+    mount "$DEVICE" "$mountpoint"
+    if [ -f "$mountpoint$CONF" ]; then
+        log "isi $CONF:"
+        sed -n '1,10p' "$mountpoint$CONF"
+        if grep -q '^/ union' "$mountpoint$CONF"; then
+            log "status: konfigurasi union aktif"
+        else
+            log "status: direktif union tidak ditemukan"
+        fi
+    else
+        log "status: $CONF tidak ditemukan pada partisi"
+    fi
+    umount "$mountpoint"
+    rmdir "$mountpoint"
+}
+
+[ "$#" -ge 1 ] || { usage; exit 1; }
+command_name="$1"
+shift
+
+case "$command_name" in
+    status) command_status ;;
+    list) command_list ;;
+    setup)
+        DEVICE="${1:-}"
+        command_setup
+        ;;
+    verify)
+        DEVICE="${1:-}"
+        command_verify
+        ;;
+    -h|--help|help) usage ;;
+    *) usage; exit 1 ;;
+esac

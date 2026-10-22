@@ -6,7 +6,6 @@
 avahi-daemon
 avahi-utils
 mtr-tiny
-iwd
 wpasupplicant
 
 # Power and thermal
@@ -23,24 +22,16 @@ xsane
 # Audio
 alsa-utils
 libasound2-plugins
-playerctl
 
 # Locale and spellcheck
-hunspell-id
-hunspell-en-us
 
 # Firmware and hardware inventory
 fwupd
 firmware-sof-signed
 gsmartcontrol
-usbutils
-pciutils
 lshw
 lm-sensors
 
-# Desktop integration helpers
+# Everyday desktop helpers
 seahorse
 xclip
-appstream
-appstream-util
-menhir

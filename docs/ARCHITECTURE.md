@@ -24,6 +24,9 @@ Batasan yang memengaruhi arsitektur:
 | Toolstack dan toolchain                                         |
 | katalog tool, manifest vendor, arsenal, toolchain user level      |
 +------------------------------------------------------------------+
+| Daily use dan installer                                         |
+| Calamares, persistence, recovery, policy platform, locale         |
++------------------------------------------------------------------+
 | Desktop                                                          |
 | Cinnamon / XFCE / LXQt, LightDM, tema Kage                       |
 +------------------------------------------------------------------+
@@ -111,7 +114,41 @@ Angka ini adalah irisan paket dari daftar, bukan ukuran image terpasang. Depende
 
 Lab virtual pada amd64 memakai QEMU dan qemu-utils. libvirt dan virt-manager ditunda ke Fase 4 sebagai paket opsional pada sistem terpasang agar image live tidak menjalankan daemon tambahan.
 
-### 3.3 Lapisan Toolstack dan Toolchain
+### 3.3 Lapisan Daily Use dan Installer
+
+Fase 6 dan Fase 7 menambah konfigurasi yang governs pemakaian harian dan
+proses instalasi. Semua berkas berada di `config/common` sehingga konsisten
+pada ketiga edisi.
+
+```text
+config/common/
+├── package-lists/
+│   ├── 42-daily-apps.list.chroot   locale aplikasi dan media playback
+│   ├── 45-platform.list.chroot      jaringan, daya, cetak, audio, firmware
+│   └── 70-installer.list.chroot     paket installer dan bootloader
+├── includes.chroot/
+│   ├── etc/calamares/               konfigurasi installer Calamares
+│   ├── etc/NetworkManager/          policy jaringan
+│   ├── etc/tlp.conf                 policy daya
+│   ├── etc/default/                 zram dan earlyoom
+│   └── usr/share/calamares/         branding Kage installer
+└── hooks/live/
+    ├── 0400-platform.chroot         layanan harian dan locale
+    └── 0500-installer.chroot         versi dan aset branding installer
+```
+
+Perintah operasional yang berasal dari lapisan ini:
+
+| Perintah | Fungsi |
+|---|---|
+| `arashios-daily` | diagnosis jaringan, audio, daya, cetak, locale, firmware |
+| `arashios-hardware-report` | laporan QA hardware JSON dan Markdown |
+| `arashios-dualboot-check` | pemeriksaan Windows, BitLocker, Fast Startup, Secure Boot |
+| `arashios-persistence` | partisi persistensi untuk sesi live |
+| `arashios-recovery` | mount, LUKS, LVM, GRUB, dan pemulihan EFI |
+| `arashios-postinstall` | pasos yang berjalan di sistem terpasang |
+
+### 3.4 Lapisan Toolstack dan Toolchain
 
 Fase 4 dan Fase 5 menambah dua lapis konfigurasi yang berada di luar overlay
 live-build. Keduanya berbasis berkas sumber yang dapat diaudit.

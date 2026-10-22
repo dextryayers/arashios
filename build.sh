@@ -312,11 +312,20 @@ install -Dm644 "$ROOT/docs/TRADEMARK.md" "$INCLUDES/usr/share/doc/arashios/TRADE
 install -Dm755 "$ROOT/tests/smoke.sh" "$INCLUDES/usr/local/bin/arashios-smoke"
 
 # Dokumentasi offline toolstack, toolchain, dan container.
-for doc in TOOLSTACK CODING ARSENAL CONTAINERS VENDORING LICENSES; do
+for doc in TOOLSTACK CODING ARSENAL CONTAINERS VENDORING LICENSES DAILY HARDWARE \
+           INSTALL PERSISTENCE RECOVERY; do
     install -Dm644 "$ROOT/docs/$doc.md" "$INCLUDES/usr/share/doc/arashios/$doc.md"
 done
 install -Dm644 "$ROOT/SECURITY.md" "$INCLUDES/usr/share/doc/arashios/SECURITY.md"
 install -Dm644 "$ROOT/docs/TOOLSTACK.md" "$INCLUDES/usr/share/doc/arashios/copyright-TOOLSTACK.md"
+
+# Installer branding images are produced by the asset generator.
+for asset in arashios-banner.png arashios-welcome.png; do
+    if [ -f "$ROOT/branding/logo/$asset" ]; then
+        install -Dm644 "$ROOT/branding/logo/$asset" \
+            "$INCLUDES/usr/share/arashios/branding/$asset"
+    fi
+done
 
 log "Konfigurasi siap di $WORK/config"
 

@@ -71,11 +71,11 @@ line yang bergerak.
 | Package | `arashios-branding` |
 | Version | `1.10.21-1` |
 | Architecture | `all` |
-| Ukuran | 724216 byte |
+| Ukuran | 724608 byte |
 | File payload | 214 file |
 | Maintainer | `maintainers@arashios.example` |
 | Reproducible | Ya, dengan `SOURCE_DATE_EPOCH` |
-| Hash contoh | `e159268a5f67a70a8414b6271ce9c0d6186cf235b9f9db1ba09fc51fe7125685` |
+| Hash contoh | `465b9ff044fa28df55f38e7a2e7d656470250be7ccb4a19c140e2d06e6c423bd` |
 
 Paket berisi tema, wallpaper, ikon, aset GRUB, aset Plymouth, token, manifest,
 dokumentasi lisensi termasuk `NOTICE`, dan changelog. Paket tidak memasang

@@ -8,7 +8,8 @@ BOOT_MODE ?= uefi
 
 .PHONY: help env env-strict tokens brand-assets theme theme-check desktop-check \
         package package-check design config config-matrix build verify test smoke lint clean distclean \
-        toolstack toolstack-check wordlists licenses toolchain-lock toolchain-check coding-check
+        toolstack toolstack-check wordlists licenses toolchain-lock toolchain-check coding-check \
+        daily-check installer-check package-audit
 
 help:
 	@printf '%s\n' \
@@ -76,6 +77,15 @@ toolchain-check:
 coding-check:
 	./tests/coding.sh
 
+daily-check:
+	./tests/daily.sh
+
+installer-check:
+	./tests/installer.sh
+
+package-audit:
+	./scripts/check-packages-bookworm.py --index-dir $(INDEX_DIR) --fetch
+
 env:
 	./scripts/check-env.sh
 
@@ -115,6 +125,8 @@ lint: theme
 	./tests/branding-package.sh
 	./tests/toolstack.sh
 	./tests/coding.sh
+	./tests/daily.sh
+	./tests/installer.sh
 
 clean:
 	rm -rf build out

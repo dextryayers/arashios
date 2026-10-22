@@ -27,8 +27,12 @@ TOPICS = {
     "vendor": ("VENDORING.md", "Kebijakan vendoring tool tier 1"),
     "licenses": ("LICENSES.md", "Matriks lisensi tool"),
     "security": ("SECURITY.md", "Kebijakan keamanan dan pelaporan kerentanan"),
-    "install": ("INSTALL.md", "Panduan instalasi dan pemeliharaan"),
+    "install": ("INSTALL.md", "Panduan instalasi, enkripsi, dan boot ganda"),
     "desktop": ("DESKTOP.md", "Integrasi desktop dan tema"),
+    "daily": ("DAILY.md", "Penggunaan harian, jaringan, audio, dan daya"),
+    "hardware": ("HARDWARE.md", "Dukungan hardware dan checklist QA"),
+    "persistence": ("PERSISTENCE.md", "Persistensi sesi live"),
+    "recovery": ("RECOVERY.md", "Pemulihan sistem dan GRUB"),
     "privacy": ("PRIVACY.md", "Kebijakan privasi"),
 }
 

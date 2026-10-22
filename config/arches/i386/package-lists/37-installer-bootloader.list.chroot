@@ -1,0 +1,3 @@
+# i386 bootloader package for the Calamares installer.
+# i386 has no UEFI support in ArashiOS v1, so only grub-pc is used.
+grub-pc

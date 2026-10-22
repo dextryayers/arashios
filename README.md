@@ -14,8 +14,8 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 | 3 | Tiga edisi desktop dan matriks QA | Integrasi statis selesai, QA runtime menunggu ISO |
 | 4 | Arsenal tool keamanan, termasuk tool vendored | Implementasi statis selesai, artefak T1 dan runtime menunggu ISO |
 | 5 | Toolchain coding lengkap dan container | Implementasi statis selesai, runtime menunggu ISO |
-| 6 | Aplikasi harian dan printer | Direncanakan |
-| 7 | Calamares, enkripsi, persistence, recovery | Direncanakan |
+| 6 | Aplikasi harian, jaringan, audio, daya, cetak, dan locale | Implementasi statis selesai, QA hardware menunggu ISO |
+| 7 | Calamares, enkripsi, persistence, dan recovery | Implementasi statis selesai, skenario instalasi menunggu ISO |
 | 8 | Update, repository, dan mirror | Direncanakan |
 | 9 | Hardening rilis, signing, dan supply chain | Direncanakan |
 | 10 | arm64, i386, dan aksesibilitas | Direncanakan |
@@ -188,6 +188,21 @@ make lint
 
 `make lint` menghasilkan ulang tema, menjalankan shellcheck, pemeriksaan sintaks Python, pemeriksaan dokumen, traceability requirement, validasi token, validasi konfigurasi live-build, parser CSS GTK3 dan GTK4, pemeriksaan desktop, pemeriksaan paket branding, pemeriksaan toolstack, dan pemeriksaan lingkungan coding. `make package` membangun paket branding lokal secara terpisah.
 
+## Penggunaan Harian dan Installer
+
+```bash
+arashios-daily                 diagnosis jaringan, audio, daya, cetak, locale, firmware
+arashios-hardware-report        laporan QA hardware dalam JSON atau Markdown
+arashios-dualboot-check         pemeriksaan Windows, BitLocker, Fast Startup, Secure Boot
+arashios-persistence            partisi persistensi untuk sesi live
+arashios-recovery               mount, LUKS, LVM, GRUB, dan pemulihan EFI
+```
+
+Installer memakai Calamares dengan branding Kage, enkripsi LUKS2, partisi EFI
+512 MiB, dan-ext4 sebagai filesystem bawaan. Modul LVM disiapkan manual
+karena Calamares 3.2 belum menyediakannya, dan langkahnya terdokumentasi di
+[docs/INSTALL.md](docs/INSTALL.md).
+
 ## Toolstack dan Arsenal
 
 Katalog tool adalah sumber kebenaran tunggal di `tools/catalog.yaml`. Katalog
@@ -297,6 +312,12 @@ Kode berlisensi GPL-3.0-or-later. Aset visual berlisensi CC-BY-SA-4.0. Dokumenta
 - [Container dan lab](docs/CONTAINERS.md)
 - [Kebijakan vendoring](docs/VENDORING.md)
 - [Matriks lisensi](docs/LICENSES.md)
+- [Penggunaan harian](docs/DAILY.md)
+- [Dukungan hardware](docs/HARDWARE.md)
+- [Panduan instalasi](docs/INSTALL.md)
+- [Persistensi sesi live](docs/PERSISTENCE.md)
+- [Pemulihan sistem](docs/RECOVERY.md)
+- [Laporan Fase 6 dan 7](docs/PHASE-6-7-REPORT.md)
 - [Laporan Fase 4 dan 5](docs/PHASE-4-5-REPORT.md)
 - [Architecture Decision Records](docs/adr/README.md)
 - [Kontribusi](CONTRIBUTING.md)
@@ -308,7 +329,8 @@ Kode berlisensi GPL-3.0-or-later. Aset visual berlisensi CC-BY-SA-4.0. Dokumenta
 - Build yang divalidasi adalah amd64. arm64 dan i386 disiapkan pada konfigurasi dan diuji pada Fase 10.
 - ISO belum dibangun pada host ini karena toolchain `lb`, `debootstrap`, `xorriso`, dan QEMU belum tersedia.
 - Boot GRUB, Plymouth, LightDM, login desktop, panel XFCE, Openbox, dan rendering Kvantum belum diuji pada sesi nyata.
-- Calamares belum tersedia, sehingga ISO hanya berjalan sebagai live session.
+- Installer Calamares sudah dikonfigurasi dengan branding Kage, tetapi belum dijalankan karena ISO belum dibangun.
+- Checklist hardware tiga mesin dan skenario instalasi belum dijalankan.
 - Artefak binary tool T1 belum dibangun, sehingga `artifact.sha256` pada manifest masih kosong.
 - Signing produksi belum aktif.
 - Repository ArashiOS dan mekanisme update mandiri belum aktif.

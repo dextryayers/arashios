@@ -43,6 +43,14 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 - Harness hello world untuk sepuluh bahasa dengan status lulus, dilewati, dan gagal yang terpisah.
 - Perintah arashios-doctor untuk pemeriksaan kesehatan sistem dan arashios-help untuk dokumentasi offline.
 - Dokumentasi toolstack, arsenal, coding, container, vendoring, lisensi, dan laporan Fase 4 dan Fase 5.
+- Konfigurasi penggunaan harian: policy NetworkManager, TLP, zram, earlyoom, locale tiga bahasa, dan paket platform.
+- Perintah arashios-daily untuk diagnosis jaringan, audio, daya, cetak, locale, dan firmware.
+- Perintah arashios-hardware-report untuk laporan QA hardware JSON dan Markdown.
+- Installer Calamares dengan branding Kage, lima belas modul, dan konfigurasi tervalidasi terhadap skema Calamares 3.2.
+- Partisi EFI, enkripsi LUKS2, partisi persistence, dan pemeriksaan dual boot Windows dengan deteksi BitLocker serta Fast Startup.
+- Perintah arashios-recovery, arashios-persistence, arashios-dualboot-check, dan arashios-postinstall.
+- Pemeriksaan paket bookworm sebagai skrip yang dapat dijalankan ulang, plus test suite harian dan installer.
+- Dokumentasi penggunaan harian, hardware, instalasi, persistence, pemulihan, dan laporan Fase 6 dan Fase 7.
 
 ### Changed
 
@@ -73,6 +81,7 @@ Format mengikuti Keep a Changelog dan Semantic Versioning untuk dokumen. Versi p
 - Image lab juice-shop belum memiliki digest terkunci dan ditolak sampai digest tersedia.
 - Host pengembangan tidak memasang Podman sehingga diagnosis container menandai masalah.
 - Empat bahasa dilewati pada smoke test karena kompilatornya tidak terpasang pada host.
+- Skenario instalasi dan checklist hardware belum dijalankan karena image ISO belum dibangun.
 - ISO amd64 belum dibangun pada host ini karena toolchain build belum terpasang.
 - Calamares, tool vendored, repository mandiri, dan signing produksi belum aktif.
 - Tema Kage sudah dihasilkan dan dikemas, tetapi rendering GTK4, Cinnamon, XFCE, Openbox, Kvantum, LightDM, dan Plymouth belum diuji pada sesi nyata.

@@ -1,0 +1,287 @@
+#!/usr/bin/env python3
+"""ArashiOS daily use diagnostics.
+
+The command inspects the subsystems that matter for daily driving: network,
+audio, power, printing, locale, and firmware. It never changes system state
+and never contacts the network.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+CHECKS = ("network", "audio", "power", "print", "locale", "firmware")
+
+
+def run(command: list[str], timeout: int = 15) -> tuple[int, str]:
+    if shutil.which(command[0]) is None:
+        return (127, "")
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return (124, "")
+    return (result.returncode, (result.stdout + result.stderr).strip())
+
+
+def have(command: str) -> bool:
+    return shutil.which(command) is not None
+
+
+def read_file(path: str) -> str:
+    try:
+        return Path(path).read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
+def desktop() -> str:
+    value = os.environ.get("XDG_CURRENT_DESKTOP", "") + os.environ.get("DESKTOP_SESSION", "")
+    for name in ("Cinnamon", "XFCE", "LXQt"):
+        if name.lower() in value.lower():
+            return name.lower()
+    if read_file("/etc/arashios/edition"):
+        return read_file("/etc/arashios/edition")
+    return "unknown"
+
+
+def check_network() -> dict:
+    result: dict = {"area": "network", "status": "ok", "details": {}, "problems": []}
+    if not have("nmcli"):
+        result["status"] = "missing"
+        result["problems"].append("NetworkManager tidak tersedia")
+        return result
+    code, output = run(["nmcli", "-t", "general", "status"])
+    if code == 0:
+        result["details"]["status"] = output
+        if "connected" not in output.lower() and "full" not in output.lower():
+            result["problems"].append("tidak ada koneksi jaringan aktif")
+    code, output = run(["nmcli", "-t", "device", "status"])
+    if code == 0:
+        devices = [line for line in output.splitlines() if line.strip()]
+        result["details"]["devices"] = devices
+    code, output = run(["nmcli", "-t", "connection", "show", "--active"])
+    if code == 0:
+        result["details"]["active"] = [line for line in output.splitlines() if line.strip()]
+    if have("bluetoothctl"):
+        code, output = run(["bluetoothctl", "show"])
+        if code == 0:
+            powered = re.search(r"Powered: (\w+)", output)
+            result["details"]["bluetooth"] = powered.group(1) if powered else "unknown"
+    if have("rfkill"):
+        code, output = run(["rfkill", "list"])
+        if code == 0:
+            result["details"]["rfkill"] = output.splitlines()[:6]
+    if result["problems"]:
+        result["status"] = "warn"
+    return result
+
+
+def check_audio() -> dict:
+    result: dict = {"area": "audio", "status": "ok", "details": {}, "problems": []}
+    result["details"]["desktop"] = desktop()
+    if not have("pactl"):
+        result["status"] = "missing"
+        result["problems"].append("pactl tidak tersedia")
+        return result
+    code, output = run(["pactl", "info"])
+    if code != 0:
+        result["status"] = "fail"
+        result["problems"].append("PulseAudio server tidak merespons")
+        return result
+    for key in ("Server Name", "Server Version", "Default Sink", "Default Source"):
+        match = re.search(rf"{re.escape(key)}:\s*(.+)", output)
+        if match:
+            result["details"][key.lower().replace(" ", "_")] = match.group(1).strip()
+    code, output = run(["pactl", "list", "sinks", "short"])
+    if code == 0:
+        sinks = [line for line in output.splitlines() if line.strip()]
+        result["details"]["sinks"] = sinks
+        if not sinks:
+            result["problems"].append("tidak ada sink audio yang terdeteksi")
+    code, output = run(["pactl", "list", "sources", "short"])
+    if code == 0:
+        result["details"]["sources"] = [line for line in output.splitlines() if line.strip()]
+    server = result["details"].get("server_name", "")
+    if "PulseAudio" in server and desktop() == "lxqt":
+        result["problems"].append("LXQt seharusnya memakai PipeWire, bukan PulseAudio")
+    if "PipeWire" in server and desktop() == "xfce":
+        result["details"]["note"] = "XFCE memakai PipeWire melalui PipeWire-Pulse"
+    if result["problems"]:
+        result["status"] = "warn"
+    return result
+
+
+def check_power() -> dict:
+    result: dict = {"area": "power", "status": "ok", "details": {}, "problems": []}
+    if have("tlp-stat"):
+        code, output = run(["tlp-stat", "-s", "-b", "-p"], timeout=25)
+        if code == 0:
+            result["details"]["tlp"] = output.splitlines()[:12]
+    else:
+        result["problems"].append("TLP tidak terpasang")
+    if Path("/sys/block/zram0").is_dir():
+        result["details"]["zram"] = read_file("/sys/block/zram0/mm_used")
+    elif have("zramctl"):
+        code, output = run(["zramctl"])
+        if code == 0:
+            result["details"]["zram"] = output.splitlines()[:3]
+    else:
+        result["problems"].append("zram tidak aktif")
+    if have("earlyoom"):
+        result["details"]["earlyoom"] = "terpasang"
+    else:
+        result["problems"].append("earlyoom tidak terpasang")
+    for unit in ("tlp.service", "zram-swap.service", "earlyoom.service"):
+        if shutil.which("systemctl"):
+            code, _ = run(["systemctl", "is-active", "--quiet", unit])
+            result["details"][unit] = "active" if code == 0 else "inactive"
+    for battery in sorted(Path("/sys/class/power_supply").glob("BAT*")):
+        result["details"]["battery"] = {
+            "name": battery.name,
+            "status": read_file(str(battery / "status")),
+            "capacity": read_file(str(battery / "capacity")),
+        }
+    if result["problems"]:
+        result["status"] = "warn"
+    return result
+
+
+def check_print() -> dict:
+    result: dict = {"area": "print", "status": "ok", "details": {}, "problems": []}
+    if not have("lpstat"):
+        result["status"] = "missing"
+        result["problems"].append("CUPS tidak terpasang")
+        return result
+    code, output = run(["lpstat", "-t"])
+    if code == 0:
+        result["details"]["printers"] = output.splitlines() or ["tidak ada printer"]
+        if "printer" not in output.lower():
+            result["problems"].append("tidak ada printer yang terdaftar")
+    else:
+        result["problems"].append("CUPS tidak merespons")
+    if have("scanimage"):
+        code, output = run(["scanimage", "-L"])
+        if code == 0:
+            result["details"]["scanners"] = [line for line in output.splitlines() if line.strip()]
+    if shutil.which("systemctl"):
+        code, _ = run(["systemctl", "is-active", "--quiet", "cups.socket"])
+        result["details"]["cups_socket"] = "active" if code == 0 else "inactive"
+    if result["problems"]:
+        result["status"] = "warn"
+    return result
+
+
+def check_locale() -> dict:
+    result: dict = {"area": "locale", "status": "ok", "details": {}, "problems": []}
+    code, output = run(["locale", "-a"])
+    if code == 0:
+        available = [line.strip() for line in output.splitlines() if line.strip()]
+        result["details"]["available"] = available
+        for required in ("en_US.utf8", "id_ID.utf8", "ja_JP.utf8"):
+            if required not in available:
+                result["problems"].append(f"locale {required} tidak tersedia")
+    result["details"]["timezone"] = read_file("/etc/timezone")
+    result["details"]["environment"] = {
+        key: value
+        for key, value in os.environ.items()
+        if key in {"LANG", "LANGUAGE", "LC_ALL", "TZ"}
+    }
+    if not have("localectl"):
+        result["problems"].append("systemd-localectl tidak tersedia")
+    else:
+        code, output = run(["localectl", "status"])
+        if code == 0:
+            result["details"]["localectl"] = output.splitlines()[:6]
+    if result["problems"]:
+        result["status"] = "warn"
+    return result
+
+
+def check_firmware() -> dict:
+    result: dict = {"area": "firmware", "status": "ok", "details": {}, "problems": []}
+    if have("fwupdmgr"):
+        code, output = run(["fwupdmgr", "--version"])
+        if code == 0:
+            result["details"]["fwupd"] = output.splitlines()[0]
+        else:
+            result["problems"].append("fwupdmgr tidak merespons")
+    else:
+        result["problems"].append("fwupd tidak terpasang")
+    if have("mokutil"):
+        code, output = run(["mokutil", "--sb-state"])
+        if code == 0:
+            result["details"]["secure_boot"] = output.strip()
+    packages = []
+    for path in sorted(Path("/usr/lib/firmware").glob("*")):
+        if path.is_dir():
+            packages.append(path.name)
+    result["details"]["firmware_vendors"] = len(packages)
+    if shutil.which("systemctl"):
+        code, _ = run(["systemctl", "is-active", "--quiet", "fwupd.service"])
+        result["details"]["fwupd_service"] = "active" if code == 0 else "inactive"
+    if result["problems"]:
+        result["status"] = "warn"
+    return result
+
+
+RUNNERS = {
+    "network": check_network,
+    "audio": check_audio,
+    "power": check_power,
+    "print": check_print,
+    "locale": check_locale,
+    "firmware": check_firmware,
+}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Diagnosis penggunaan harian ArashiOS")
+    parser.add_argument("area", nargs="?", choices=(*CHECKS, "all"), default="all")
+    parser.add_argument("--json", action="store_true", help="keluaran JSON")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="keluar dengan status 1 bila ada masalah yang ditemukan",
+    )
+    args = parser.parse_args()
+
+    areas = CHECKS if args.area == "all" else (args.area,)
+    results = [RUNNERS[area]() for area in areas]
+    problems = sum(len(item["problems"]) for item in results)
+    payload = {
+        "areas": [item["area"] for item in results],
+        "results": results,
+        "problems": problems,
+    }
+
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        for item in results:
+            print(f"{item['status']:<8} {item['area']}")
+            for key, value in item["details"].items():
+                if isinstance(value, (list, dict)):
+                    print(f"  {key}: {json.dumps(value, ensure_ascii=False)[:160]}")
+                else:
+                    print(f"  {key}: {value}")
+            for problem in item["problems"]:
+                print(f"  MASALAH {problem}")
+        print(f"\n{len(results)} area diperiksa, {problems} masalah.")
+    return 1 if (problems and args.strict) else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

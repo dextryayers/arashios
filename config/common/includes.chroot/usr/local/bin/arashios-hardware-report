@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+"""Collect an ArashiOS hardware QA report.
+
+The report is the evidence format for the three machine checklist of Phase 6.
+It gathers inventory and state without changing anything and never contacts
+the network.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime
+import json
+import os
+import platform
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+
+def run(command: list[str], timeout: int = 30) -> str:
+    if shutil.which(command[0]) is None:
+        return ""
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return ""
+    return (result.stdout + result.stderr).strip()
+
+
+def read_file(path: str) -> str:
+    try:
+        return Path(path).read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
+def collect() -> dict:
+    report = {
+        "schema_version": 1,
+        "generated": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "system": {
+            "kernel": platform.release(),
+            "architecture": platform.machine(),
+            "os_release": read_file("/etc/os-release").splitlines()[:3],
+            "edition": read_file("/etc/arashios/edition"),
+            "version": read_file("/etc/arashios/version"),
+            "hostname": platform.node(),
+        },
+        "cpu": {
+            "model": read_file("/proc/cpuinfo").split("model name")[1].split("\n")[0].strip()
+            if "model name" in read_file("/proc/cpuinfo")
+            else "",
+            "cores": os.cpu_count(),
+        },
+        "memory": {
+            "total_kib": next(
+                (
+                    int(line.split()[1])
+                    for line in read_file("/proc/meminfo").splitlines()
+                    if line.startswith("MemTotal")
+                ),
+                0,
+            ),
+        },
+        "graphics": {
+            "glxinfo": run(["glxinfo", "-B"])[:600],
+            "lspci_gfx": run(["lspci", "-nnk"])[:2000],
+        },
+        "network": {
+            "lspci": run(["lspci", "-nn", "-d", "0200:"])[:600],
+            "nmcli": run(["nmcli", "-t", "device", "status"])[:1200],
+            "rfkill": run(["rfkill", "list"])[:800],
+        },
+        "audio": {
+            "lspci": run(["lspci", "-nn", "-d", "0403:"])[:600],
+            "pactl": run(["pactl", "info"])[:800],
+            "sinks": run(["pactl", "list", "sinks", "short"])[:600],
+        },
+        "storage": {
+            "lsblk": run(["lsblk", "-o", "NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,MODEL"])[:2000],
+            "smart": run(["smartctl", "--scan"])[:600],
+        },
+        "power": {
+            "tlp": run(["tlp-stat", "-s", "-b", "-p"])[:1500],
+            "acpi": run(["acpi", "-V"])[:400],
+        },
+        "printers": {
+            "lpstat": run(["lpstat", "-t"])[:800],
+            "scanners": run(["scanimage", "-L"])[:600],
+        },
+        "firmware": {
+            "fwupd": run(["fwupdmgr", "--version"])[:200],
+            "secure_boot": run(["mokutil", "--sb-state"])[:200],
+        },
+        "suspend": {
+            "mem_sleep": read_file("/sys/power/mem_sleep"),
+            "states": read_file("/sys/power/state"),
+        },
+    }
+    return report
+
+
+def to_markdown(report: dict) -> str:
+    lines = [
+        "# Laporan QA hardware ArashiOS",
+        "",
+        f"Waktu: {report['generated']}",
+        "",
+        "## Sistem",
+        "",
+    ]
+    for key, value in report["system"].items():
+        lines.append(f"- {key}: {value}")
+    for area, data in report.items():
+        if area in {"schema_version", "generated", "system"}:
+            continue
+        lines.extend(["", f"## {area.title()}", ""])
+        for key, value in data.items():
+            if isinstance(value, list):
+                value = " ".join(str(item) for item in value)
+            if not value:
+                value = "tidak ada data"
+            lines.append(f"### {key}")
+            lines.append("")
+            lines.append("```text")
+            lines.append(str(value))
+            lines.append("```")
+            lines.append("")
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", help="tulis laporan ke berkas")
+    parser.add_argument("--format", choices=("json", "markdown"), default="json")
+    args = parser.parse_args()
+
+    report = collect()
+    if args.format == "markdown":
+        content = to_markdown(report)
+    else:
+        content = json.dumps(report, indent=2, sort_keys=True) + "\n"
+    if args.output:
+        path = Path(args.output)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+        print(f"laporan ditulis ke {path}")
+    else:
+        print(content, end="")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

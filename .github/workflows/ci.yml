@@ -97,6 +97,12 @@ jobs:
       - name: Validate coding environment
         run: ./tests/coding.sh
 
+      - name: Validate daily use configuration
+        run: ./tests/daily.sh
+
+      - name: Validate installer and recovery
+        run: ./tests/installer.sh
+
       - name: Validate build configuration
         run: ./scripts/validate-config.sh
 
