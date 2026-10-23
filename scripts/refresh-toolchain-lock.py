@@ -124,14 +124,15 @@ def main() -> int:
             origin = "upstream"
             size = 0
             style = target.get("checksum_style", "")
-            if style == "go-index":
-                filename = url.rsplit("/", 1)[-1]
-                digest = checksum_from_go_index(target["checksum_url"], filename)
-            elif target.get("checksum_url"):
-                digest = checksum_from_sidecar(target["checksum_url"])
-            if digest is None and not args.check:
-                digest, size = checksum_from_download(url, cache)
-                origin = "computed"
+            if not args.check:
+                if style == "go-index":
+                    filename = url.rsplit("/", 1)[-1]
+                    digest = checksum_from_go_index(target["checksum_url"], filename)
+                elif target.get("checksum_url"):
+                    digest = checksum_from_sidecar(target["checksum_url"])
+                if digest is None:
+                    digest, size = checksum_from_download(url, cache)
+                    origin = "computed"
             if digest is None:
                 kept = (
                     previous.get("components", {})
