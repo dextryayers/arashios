@@ -1959,27 +1959,35 @@ Exit gate:
 
 ### Fase 10: Rilis dan Distribusi
 
-Tujuan: mempublikasikan rilis yang dapat diverifikasi dan didistribusikan.
+Tujuan: mempublikasikan rilis yang dapat diverifikasi, didistribusikan secara
+mandiri, dan didukung penuh setelah rilis.
 
-Durasi: 2 minggu. Effort: 2 person-week.
+Durasi: 3 minggu. Effort: 3 person-week.
 
 | ID | Sub-fase | Output | Estimasi |
 |---|---|---|---|
-| 10.1 | Versi dan changelog | CHANGELOG.md, release notes | 1 hari |
-| 10.2 | Build matrix | 7 artefak ISO | 2 hari |
-| 10.3 | Mirror dan torrent | Mirror, torrent, zsync | 2 hari |
-| 10.4 | Website dan docs | Install, dual boot, hardening, FAQ | 3 hari |
-| 10.5 | Kanal rilis | stable, edge, nightly | 1 hari |
-| 10.6 | Komunitas | Forum atau Matrix, Discussions | 1 hari |
-| 10.7 | Monitoring | Hotfix window 7 hari | 1 hari |
+| 10.1 | Tata kelola versi dan changelog | CHANGELOG.md, release notes, tag Git | 1 hari |
+| 10.2 | Matriks build dan pabrik artefak | 7 artefak ISO, log build | 2 hari |
+| 10.3 | Verifikasi artefak dan signing | checksum, SBOM, signature, laporan verifikasi | 2 hari |
+| 10.4 | Mirror, torrent, dan distribusi | mirror, torrent, zsync, daftar cermin | 2 hari |
+| 10.5 | Situs web dan dokumentasi publik | portal docs, halaman unduh, FAQ, panduan | 3 hari |
+| 10.6 | Kanal rilis | stable, edge, nightly dengan pinning | 1 hari |
+| 10.7 | Komunitas dan dukungan | forum atau Matrix, Discussions, template issue | 2 hari |
+| 10.8 | Pemantauan, hotfix, dan rollback | dasbor status, prosedur hotfix 7 hari | 1 hari |
+| 10.9 | Kandidat rilis dan rilis final | RC, tag, GitHub Release, arsip | 2 hari |
+| 10.10 | Audit pasca rilis | laporan rilis, bukti, daftar tindak lanjut | 1 hari |
 
 Exit gate:
 
-1. Artefak tier 1 tersedia.
-2. Checksum dan signature valid.
-3. Dokumentasi instalasi dan dual boot lengkap.
-4. Kanal update berfungsi.
-5. Tim siap hotfix 7 hari.
+1. Artefak tier 1 tersedia pada mirror utama dan cermin.
+2. Checksum SHA-256 dan SHA-512 cocok untuk seluruh artefak.
+3. Signature minisign atau GPG valid untuk ISO dan SBOM.
+4. Dokumentasi instalasi, dual boot, hardening, dan FAQ lengkap.
+5. Kanal update stable, edge, dan nightly dapat diakses.
+6. Forum atau Matrix, Discussions, dan template issue aktif.
+7. Prosedur hotfix 7 hari, rollback, dan komunikasi insiden terdokumentasi.
+8. Kandidat rilis dan rilis final ditandai dan diarsipkan.
+9. Audit pasca rilis selesai dengan daftar tindak lanjut.
 
 ### Fase 11: Pasca v1
 
@@ -1987,13 +1995,16 @@ Durasi: berkelanjutan.
 
 | ID | Sub-fase | Target |
 |---|---|---|
-| 11.1 | ARM SBC | Raspberry Pi 4 dan 5, Pine64 |
+| 11.1 | Image ARM SBC | Raspberry Pi 4 dan 5, Pine64 |
 | 11.2 | Secure Boot | Shim, MOK, kernel bertanda tangan |
-| 11.3 | Wayland | Hyprland atau Sway, eksperimental |
+| 11.3 | Wayland eksperimental | Labwc atau Sway, sesi uji |
 | 11.4 | Arsenal GUI | Control Center GTK4 |
-| 11.5 | Cloud dan WSL | Image cloud, rootfs WSL |
-| 11.6 | i386 | Evaluasi lanjut atau deprecation |
-| 11.7 | Rebase Debian 13 | ArashiOS v2 di trixie |
+| 11.5 | Image cloud dan rootfs WSL | cloud-init, rootfs WSL |
+| 11.6 | Evaluasi dan kebijakan i386 | lanjut atau deprecation |
+| 11.7 | Rebase ke Debian 13 | ArashiOS v2 di trixie |
+| 11.8 | Dukungan hardware dan firmware | driver baru, fwupd, cek kompatibilitas |
+| 11.9 | Lokalisasi dan aksesibilitas v2 | terjemahan baru, screen reader, kontras |
+| 11.10 | Dukungan jangka panjang | kanal update, cadangan kunci, rotasi |
 
 ---
 
