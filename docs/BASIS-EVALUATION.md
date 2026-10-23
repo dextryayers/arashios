@@ -1,11 +1,12 @@
-# Rebase ke Debian 13
+# Evaluasi Basis
 
-ArashiOS v2 direncanakan berbasis Debian 13 trixie.
+ArashiOS v1 tetap berbasis Debian 12 bookworm. Evaluasi basis berikutnya
+dilakukan tanpa mengubah basis v1.
 
 ## 1. Tujuan
 
-1. Memperbarui basis ke Debian 13.
-2. Memperbarui toolchain dan kernel.
+1. Menjaga stabilitas pada Debian 12.
+2. Mengevaluasi basis berikutnya pada waktu yang tepat.
 3. Mempertahankan kompatibilitas konfigurasi pengguna.
 
 ## 2. Alur
@@ -14,7 +15,7 @@ ArashiOS v2 direncanakan berbasis Debian 13 trixie.
 2. Perbarui pin snapshot.
 3. Bangun image uji.
 4. Jalankan matriks boot dan smoke test.
-5. Publikasikan sebagai major baru.
+5. Publikasikan sebagai major baru jika siap.
 
 ## 3. Risiko
 

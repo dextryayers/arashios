@@ -11,7 +11,8 @@ BOOT_MODE ?= uefi
         toolstack toolstack-check wordlists licenses toolchain-lock toolchain-check coding-check \
         daily-check installer-check package-audit \
         packages repo repo-check sbom hardening-check compliance-check \
-        vuln-scan reproducibility boot-matrix smoke-suite upgrade-check
+        vuln-scan reproducibility boot-matrix smoke-suite upgrade-check \
+        release-check mirror-check channel-check rc-check
 
 help:
 	@printf '%s\n' \
@@ -125,6 +126,18 @@ smoke-suite:
 
 upgrade-check:
 	./tests/upgrade-path.sh
+
+release-check:
+	./scripts/check-release.sh
+
+mirror-check:
+	./tests/mirror-check.sh
+
+channel-check:
+	./tests/channel-check.sh
+
+rc-check:
+	./scripts/rc-check.sh
 
 env:
 	./scripts/check-env.sh

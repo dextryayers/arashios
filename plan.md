@@ -257,7 +257,7 @@ Contoh: V1.10.21 berarti major 1, bulan 10, tanggal 21. Baseline proyek memakai 
 2. Rilis terakhir major mendapat 6 bulan tambahan.
 3. Debian 12 LTS berakhir Juni 2028.
 4. ArashiOS v1 mengikuti batas Debian 12.
-5. Rebase ke Debian 13 direncanakan pada v2.
+5. Evaluasi rebase basis dilakukan tanpa mengubah basis Debian 12 pada v1.
 
 ### 4.4 Kompatibilitas
 
@@ -2001,7 +2001,7 @@ Durasi: berkelanjutan.
 | 11.4 | Arsenal GUI | Control Center GTK4 |
 | 11.5 | Image cloud dan rootfs WSL | cloud-init, rootfs WSL |
 | 11.6 | Evaluasi dan kebijakan i386 | lanjut atau deprecation |
-| 11.7 | Rebase ke Debian 13 | ArashiOS v2 di trixie |
+| 11.7 | Evaluasi rebase basis | Tetap Debian 12 untuk v1, evaluasi basis berikutnya |
 | 11.8 | Dukungan hardware dan firmware | driver baru, fwupd, cek kompatibilitas |
 | 11.9 | Lokalisasi dan aksesibilitas v2 | terjemahan baru, screen reader, kontras |
 | 11.10 | Dukungan jangka panjang | kanal update, cadangan kunci, rotasi |
@@ -2120,7 +2120,7 @@ Biaya tenaga kerja tidak termasuk. Angka ini diperbarui pada Fase 0.5.
 | R-09 | Secure Boot tidak didukung | Tinggi | Rendah | Dokumentasi, roadmap MOK | Keluhan pengguna | Docs |
 | R-10 | Hardware tidak kompatibel | Sedang | Sedang | non-free-firmware, backports, 3 mesin | WiFi atau GPU gagal | QA |
 | R-11 | Konflik merek ArashiOS | Rendah | Tinggi | Pencarian merek dan domain | Nama terdaftar | Legal |
-| R-12 | Debian 12 EOL 2028 | Pasti | Sedang | Rebase v2 ke Debian 13 | Mendekati Juni 2028 | Lead |
+| R-12 | Debian 12 EOL 2028 | Pasti | Sedang | Evaluasi rebase basis, pertahankan Debian 12 sampai v2 siap | Mendekati Juni 2028 | Lead |
 | R-13 | Regresi tema setelah update | Sedang | Sedang | Snapshot visual, test tema | Screenshot berbeda | Design |
 | R-14 | Kehilangan kunci signing | Rendah | Tinggi | Dua YubiKey, backup offline, rotasi | Kunci tidak dapat diakses | Security |
 | R-15 | Dokumentasi tertinggal | Sedang | Sedang | Docs as code, review PR | Fitur tanpa docs | Docs |

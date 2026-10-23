@@ -1,0 +1,23 @@
+:root {
+  --sumi-900: #0a0a0c;
+  --sumi-800: #121215;
+  --washi-100: #ede8de;
+  --vermilion-500: #c9382e;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: var(--sumi-900);
+  color: var(--washi-100);
+}
+
+header, main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-family: "Shippori Mincho", serif;
+}

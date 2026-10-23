@@ -1,0 +1,6 @@
+#cloud-config
+users: []
+package_update: false
+package_upgrade: false
+runcmd:
+  - echo "ArashiOS cloud image ready"

@@ -18,8 +18,8 @@ Nama Arashi berarti badai. Arah visual Kage memakai minimalisme Jepang, ruang ko
 | 7 | Calamares, enkripsi, persistence, dan recovery | Implementasi statis selesai, skenario instalasi menunggu ISO |
 | 8 | Paket Debian, repository APT bertanda tangan, dan upgrade path | Implementasi statis selesai, repository publik menunggu domain |
 | 9 | QA, hardening, SBOM, signing, kepatuhan, dan reproduksibilitas | Implementasi statis selesai, runtime dan scan CVE menunggu ISO |
-| 10 | arm64, i386, dan aksesibilitas | Direncanakan |
-| 11 | Dokumentasi publik, situs, dan komunitas | Direncanakan |
+| 10 | Rilis dan distribusi | Implementasi statis selesai |
+| 11 | Pasca v1 | Implementasi statis selesai |
 | 12 | RC, rilis, dan pemeliharaan | Direncanakan |
 
 Fase 1 menargetkan ISO live yang dapat boot pada QEMU UEFI dan BIOS. Fase 2 dan Fase 3 sudah memiliki tema, paket branding, dan konfigurasi tiga desktop pada tingkat statis. Fase 4 dan Fase 5 menambahkan katalog tool 215 entri, 41 manifest tool tier 1 dengan sumber terkunci, Arsenal, wordlist, toolchain user level dengan checksum, template proyek, dan container rootless pada tingkat statis. Installer Calamares, artefak binary tier 1, signing produksi, dan validasi boot belum aktif. Rencana lengkap ada di [plan.md](plan.md). Status terperinci ada di [laporan Fase 0 dan 1](docs/PHASE-0-1-REPORT.md), [laporan Fase 2 dan 3](docs/PHASE-2-3-REPORT.md), dan [laporan Fase 4 dan 5](docs/PHASE-4-5-REPORT.md).
